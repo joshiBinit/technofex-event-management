@@ -1,0 +1,70 @@
+{
+  "events": [
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "price": 20
+    },
+    {
+      "id": "4",
+      "title": "Full Stack Development Conference",
+      "category": "Conference",
+      "description": "Explore full stack development trends, tools, and practices.",
+      "date": "2025-09-25",
+      "time": "8:30 AM",
+      "location": "Bhaktapur",
+      "totalTickets": 200,
+      "price": 100
+    },
+    {
+      "id": "5",
+      "title": "AI & Machine Learning Seminar",
+      "category": "Seminar",
+      "description": "Deep dive into AI and ML concepts with practical examples.",
+      "date": "2025-09-30",
+      "time": "2:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "price": 75
+    },
+    {
+      "id": "4ffa",
+      "title": "Test 1",
+      "category": "Test 1",
+      "description": "Test 1",
+      "date": "2025-08-29T18:15:00.000Z",
+      "time": "00:12",
+      "location": "Test 1",
+      "totalTickets": 200,
+      "price": 3000
+    },
+    {
+      "id": "5dca",
+      "title": "sdfsad",
+      "category": "asdasd",
+      "description": "asdasd",
+      "date": "2025-08-28T18:15:00.000Z",
+      "time": "12:31",
+      "location": "asdasd",
+      "totalTickets": 1123,
+      "price": 123123
+    },
+    {
+      "id": "a7b0",
+      "title": "asdasd",
+      "category": "asdasd",
+      "description": "asdasd",
+      "date": "2025-08-29T18:15:00.000Z",
+      "time": "12:31",
+      "location": "asdasd",
+      "totalTickets": 12,
+      "price": 123123
+    }
+  ]
+}

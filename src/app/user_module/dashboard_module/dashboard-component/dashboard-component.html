@@ -21,30 +21,32 @@
     </div>
   </div>
 
-  <!-- Upcoming Bookings List -->
-  <div class="bg-white p-4 rounded shadow">
-    <h2 class="text-xl font-bold mb-4">Upcoming Bookings</h2>
-    <mat-list>
-      <mat-list-item class="flex justify-between">
-        <div>
-          <p class="font-semibold">Angular Workshop</p>
-          <p class="text-sm text-gray-500">Aug 30, 2025 | Online</p>
-        </div>
-        <div class="flex gap-2">
-          <button mat-button color="accent">View</button>
-          <button mat-button color="warn">Cancel</button>
-        </div>
-      </mat-list-item>
-      <mat-list-item class="flex justify-between">
-        <div>
-          <p class="font-semibold">Tech Conference 2025</p>
-          <p class="text-sm text-gray-500">Sep 5, 2025 | Kathmandu</p>
-        </div>
-        <div class="flex gap-2">
-          <button mat-button color="accent">View</button>
-          <button mat-button color="warn">Cancel</button>
-        </div>
-      </mat-list-item>
-    </mat-list>
+  <!-- Upcoming Bookings -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <mat-card class="p-4 bg-white shadow-md">
+      <h2 class="text-lg font-semibold">Upcoming Event</h2>
+      <p class="font-medium mt-2">Title:</p>
+      <p>Music Concert</p>
+      <p class="font-medium mt-2">Category:</p>
+      <p>Music</p>
+      <p class="font-medium mt-2">Date & Time:</p>
+      <p>2025-09-01 | 19:00</p>
+      <p class="font-medium mt-2">Location:</p>
+      <p>Hall A</p>
+      <p class="font-medium mt-2">Tickets Booked:</p>
+      <p>2</p>
+      <p class="font-medium mt-2">Price:</p>
+      <p>$50</p>
+      <!-- Button to go to Booking List -->
+      <div class="mt-4">
+        <button
+          mat-raised-button
+          color="primary"
+          [routerLink]="'/user/bookings'"
+        >
+          View My Bookings
+        </button>
+      </div>
+    </mat-card>
   </div>
 </div>

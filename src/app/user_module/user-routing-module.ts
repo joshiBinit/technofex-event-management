@@ -5,10 +5,23 @@ import { DashboardModule } from './dashboard_module/dashboard-module';
 const routes: Routes = [
   {
     path: 'user',
-    loadChildren: () =>
-      import('./dashboard_module/dashboard-module').then(
-        (m) => DashboardModule
-      ),
+    children: [
+      {
+        path: '',
+
+        loadChildren: () =>
+          import('./dashboard_module/dashboard-module').then(
+            (m) => DashboardModule
+          ),
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./booking_module/booking-module').then(
+            (m) => m.BookingModule
+          ),
+      },
+    ],
   },
 ];
 

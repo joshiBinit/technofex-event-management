@@ -1,0 +1,50 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <!-- Dashboard Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">My Dashboard</h1>
+    <button mat-raised-button color="primary">Browse Events</button>
+  </div>
+
+  <!-- Booking Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="text-lg font-semibold">Upcoming Bookings</h2>
+      <p class="text-3xl mt-2">3</p>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="text-lg font-semibold">Past Bookings</h2>
+      <p class="text-3xl mt-2">8</p>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="text-lg font-semibold">Events Attended</h2>
+      <p class="text-3xl mt-2">5</p>
+    </div>
+  </div>
+
+  <!-- Upcoming Bookings List -->
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-bold mb-4">Upcoming Bookings</h2>
+    <mat-list>
+      <mat-list-item class="flex justify-between">
+        <div>
+          <p class="font-semibold">Angular Workshop</p>
+          <p class="text-sm text-gray-500">Aug 30, 2025 | Online</p>
+        </div>
+        <div class="flex gap-2">
+          <button mat-button color="accent">View</button>
+          <button mat-button color="warn">Cancel</button>
+        </div>
+      </mat-list-item>
+      <mat-list-item class="flex justify-between">
+        <div>
+          <p class="font-semibold">Tech Conference 2025</p>
+          <p class="text-sm text-gray-500">Sep 5, 2025 | Kathmandu</p>
+        </div>
+        <div class="flex gap-2">
+          <button mat-button color="accent">View</button>
+          <button mat-button color="warn">Cancel</button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>

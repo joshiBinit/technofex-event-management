@@ -13,12 +13,23 @@ export class SignupEffects {
   signup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SignupActions.signup),
-      mergeMap(action =>
-  this.authService.signup({ username: action.username, email: action.email, password: action.password }).pipe(
-    map(response => SignupActions.signupSuccess({ user: response.user, token: response.token })),
-    catchError(error => of(SignupActions.signupFailure({ error })))
-  )
-)
+      mergeMap((action) =>
+        this.authService
+          .signup({
+            username: action.username,
+            email: action.email,
+            password: action.password,
+          })
+          .pipe(
+            map(() =>
+              SignupActions.signupSuccess({
+                user: { username: action.username, email: action.email },
+                token: 'dummy-token',
+              })
+            ),
+            catchError((error) => of(SignupActions.signupFailure({ error })))
+          )
+      )
     )
   );
 }

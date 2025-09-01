@@ -33,7 +33,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatProgressSpinnerModule,
-
+    MatMenuModule,
+    MatDatepickerModule,
+    MatSidenavModule,
   ],
 })
 export class MaterialModule {}

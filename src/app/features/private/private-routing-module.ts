@@ -13,7 +13,11 @@ const routes: Routes = [
           import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
       },
       // { path: 'events', component: EventsComponent },
-      // { path: 'user', component: UserComponent },
+      {
+        path: 'user',
+        loadChildren: () =>
+          import('./user/user-module').then((m) => m.UserModule),
+      },
       { path: '', redirectTo: '', pathMatch: 'full' },
     ],
   },

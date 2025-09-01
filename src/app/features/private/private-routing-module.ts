@@ -4,7 +4,7 @@ import { SharedLayout } from './shared-layout/shared-layout';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'private',
     component: SharedLayout,
     children: [
       // { path: 'dashboard', component: DashboardComponent },

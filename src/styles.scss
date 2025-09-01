@@ -2,22 +2,23 @@
 /* Tailwind directives — MUST be at the top */
 /* --------------------------------- */
 @use "@angular/material" as mat;
-
+@use "tailwindcss";
 
 /* --------------------------------- */
 /* Angular Material 3 theming */
 /* --------------------------------- */
 
-
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 
 /* --------------------------------- */
@@ -32,6 +33,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }

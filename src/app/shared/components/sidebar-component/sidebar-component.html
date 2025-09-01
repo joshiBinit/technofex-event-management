@@ -1,7 +1,7 @@
 <mat-nav-list>
   <a
     mat-list-item
-    routerLink="/admindashboard"
+    (click)="dashboardRedirect()"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
   >
@@ -22,7 +22,7 @@
   <a
     *ngIf="role$ | async as role"
     mat-list-item
-    routerLink="/userlist"
+    routerLink="/admin/userlist"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
     [hidden]="role !== 'admin'"

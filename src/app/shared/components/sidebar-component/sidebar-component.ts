@@ -35,4 +35,14 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
+
+  dashboardRedirect(): void {
+    this.role$.subscribe((role) => {
+      if (role === 'admin') {
+        this.router.navigate(['/admin/dashboard']);
+      } else {
+        this.router.navigate(['/user/dashboard']);
+      }
+    });
+  }
 }

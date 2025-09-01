@@ -1,8 +1,7 @@
 <mat-nav-list>
-  <!-- Dashboard -->
   <a
     mat-list-item
-    routerLink="/dashboard"
+    routerLink="/admindashboard"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
   >
@@ -10,7 +9,6 @@
     <span>Dashboard</span>
   </a>
 
-  <!-- Events -->
   <a
     mat-list-item
     routerLink="/events"
@@ -21,32 +19,18 @@
     <span>Events</span>
   </a>
 
-  <!-- Users -->
   <a
+    *ngIf="role$ | async as role"
     mat-list-item
-    routerLink="/user"
+    routerLink="/userlist"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
+    [hidden]="role !== 'admin'"
   >
     <mat-icon>people</mat-icon>
     <span>Users</span>
   </a>
-
-  <!-- Divider -->
-  <!-- <mat-divider class="my-3"></mat-divider> -->
-
-  <!-- Settings -->
-  <a
-    mat-list-item
-    routerLink="/settings"
-    routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
-    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
-  >
-    <mat-icon>settings</mat-icon>
-    <span>Settings</span>
-  </a>
-
-  <!-- Logout -->
+  <ng-template #hideUser></ng-template>
   <a
     mat-list-item
     (click)="logout()"

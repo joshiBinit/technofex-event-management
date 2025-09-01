@@ -1,5 +1,8 @@
 <div class="flex flex-col h-screen">
-  <app-header-component (menuToggle)="toggleSidebar()"></app-header-component>
+  <app-header-component
+    (menuToggle)="toggleSidebar()"
+    class="border-b border-gray-300"
+  ></app-header-component>
 
   <div class="flex flex-1 overflow-hidden">
     <mat-sidenav-container class="flex-1">
@@ -7,7 +10,7 @@
         #sidenav
         mode="side"
         [opened]="isSidebarOpen"
-        class="w-64 bg-gray-100 p-4"
+        class="w-64 bg-gray-100 p-4 border-r border-gray-300"
       >
         <app-sidebar-component></app-sidebar-component>
       </mat-sidenav>

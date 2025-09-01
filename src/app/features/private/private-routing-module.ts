@@ -4,13 +4,17 @@ import { SharedLayout } from './shared-layout/shared-layout';
 
 const routes: Routes = [
   {
-    path: 'private',
+    path: '',
     component: SharedLayout,
     children: [
-      // { path: 'dashboard', component: DashboardComponent },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
+      },
       // { path: 'events', component: EventsComponent },
       // { path: 'user', component: UserComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: '', pathMatch: 'full' },
     ],
   },
 ];

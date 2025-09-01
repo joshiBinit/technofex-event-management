@@ -1,0 +1,27 @@
+<div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-2xl mt-6">
+  <h2 class="text-2xl font-bold mb-6 text-center">User Profile</h2>
+
+  <div *ngIf="user$ | async as user" class="space-y-4">
+    <!-- Username -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Username</mat-label>
+      <input matInput [value]="user.username" readonly />
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Email</mat-label>
+      <input matInput [value]="user.email" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Role</mat-label>
+      <input matInput [value]="user.role" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Password</mat-label>
+      <input matInput [value]="user.password" type="password" readonly />
+    </mat-form-field>
+  </div>
+</div>

@@ -8,6 +8,10 @@
   <!-- Summary Cards -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <mat-card class="p-4 text-center">
+      <h2 class="text-lg font-semibold">Upcoming Bookings</h2>
+      <p class="text-3xl mt-2">3</p>
+    </mat-card>
+    <mat-card class="p-4 text-center">
       <h2 class="text-lg font-semibold">Past Bookings</h2>
       <p class="text-3xl mt-2">8</p>
     </mat-card>
@@ -35,35 +39,20 @@
   <div>
     <h2 class="text-lg font-semibold mb-2">Recommended for You</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      @for( event of events; track $index){
+
       <mat-card class="p-4">
         <img src="concert.jpg" alt="Concert" class="rounded mb-2" />
-        <h3 class="font-semibold">Live Music Concert</h3>
-        <p class="text-sm text-gray-600">2025-09-15 | Hall B</p>
-        <p class="mt-2 font-medium">$30</p>
+        <h3 class="font-semibold">{{ event.title }}</h3>
+        <p class="text-sm text-gray-600">
+          {{ event.date }}| {{ event.location }}
+        </p>
+        <p class="mt-2 font-medium">{{ event.price | currency : "USA" }}</p>
         <button mat-raised-button color="primary" class="mt-2 w-full">
           Book Now
         </button>
       </mat-card>
-
-      <mat-card class="p-4">
-        <img src="tech.jpg" alt="Tech" class="rounded mb-2" />
-        <h3 class="font-semibold">Tech Conference</h3>
-        <p class="text-sm text-gray-600">2025-10-01 | Expo Center</p>
-        <p class="mt-2 font-medium">$99</p>
-        <button mat-raised-button color="primary" class="mt-2 w-full">
-          Book Now
-        </button>
-      </mat-card>
-
-      <mat-card class="p-4">
-        <img src="comedy.jpg" alt="Comedy" class="rounded mb-2" />
-        <h3 class="font-semibold">Comedy Night</h3>
-        <p class="text-sm text-gray-600">2025-09-25 | Club Lounge</p>
-        <p class="mt-2 font-medium">$15</p>
-        <button mat-raised-button color="primary" class="mt-2 w-full">
-          Book Now
-        </button>
-      </mat-card>
+      }
     </div>
   </div>
 

@@ -1,0 +1,91 @@
+<div class="p-6 bg-gray-100 min-h-screen space-y-6">
+  <!-- Dashboard Header -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">My Dashboard</h1>
+    <button mat-raised-button color="primary" [routerLink]="'/event/list'">
+      Browse Events
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <mat-card class="p-4 text-center">
+      <h2 class="text-lg font-semibold">Upcoming Bookings</h2>
+      <p class="text-3xl mt-2">3</p>
+    </mat-card>
+    <mat-card class="p-4 text-center">
+      <h2 class="text-lg font-semibold">Past Bookings</h2>
+      <p class="text-3xl mt-2">8</p>
+    </mat-card>
+    <mat-card class="p-4 text-center">
+      <h2 class="text-lg font-semibold">Events Attended</h2>
+      <p class="text-3xl mt-2">5</p>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <mat-card class="p-4">
+    <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
+    <div class="flex gap-4 flex-wrap">
+      <button
+        mat-stroked-button
+        color="primary"
+        [routerLink]="'/user/booking-list'"
+      >
+        My Bookings
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Event Recommendations -->
+  <div>
+    <h2 class="text-lg font-semibold mb-2">Recommended for You</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      @for( event of events; track $index){
+
+      <mat-card class="p-4">
+        <img src="concert.jpg" alt="Concert" class="rounded mb-2" />
+        <h3 class="font-semibold">{{ event.title }}</h3>
+        <p class="text-sm text-gray-600">
+          {{ event.date }}| {{ event.location }}
+        </p>
+        <p class="mt-2 font-medium">{{ event.price | currency : "USA" }}</p>
+        <button mat-raised-button color="primary" class="mt-2 w-full">
+          Book Now
+        </button>
+      </mat-card>
+      }
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <mat-card class="p-4">
+    <h2 class="text-lg font-semibold mb-4">Notifications</h2>
+    <mat-list>
+      <mat-list-item>Your ticket for Music Concert is confirmed.</mat-list-item>
+      <mat-list-item
+        >Comedy Night has been rescheduled to 2025-09-25.</mat-list-item
+      >
+      <mat-list-item
+        >Special Offer: Get 20% off on Tech Conference tickets.</mat-list-item
+      >
+    </mat-list>
+  </mat-card>
+
+  <!-- Profile Snapshot -->
+  <mat-card class="p-4">
+    <h2 class="text-lg font-semibold mb-4">Profile Snapshot</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <p><span class="font-medium">Name:</span> Puja Lakhe</p>
+        <p><span class="font-medium">Email:</span> puja@example.com</p>
+      </div>
+      <div>
+        <p><span class="font-medium">Membership:</span> Premium</p>
+        <button mat-stroked-button color="primary" class="mt-2">
+          Edit Profile
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>

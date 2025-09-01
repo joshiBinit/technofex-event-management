@@ -1,0 +1,54 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <div class="flex items-center mb-4 cursor-pointer">
+    <mat-icon class="mr-2" [routerLink]="'/user/booking-list'"
+      >arrow_back</mat-icon
+    >
+    <h1 class="text-2xl font-bold">Booking Details</h1>
+  </div>
+  <mat-card class="p-6 bg-white shadow-md max-w-2xl mx-auto">
+    <h2 class="text-xl font-semibold">Event Details</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <p class="font-medium">Title:</p>
+        <p>Music Concert</p>
+      </div>
+      <div>
+        <p class="font-medium">Category:</p>
+        <p>Music</p>
+      </div>
+      <div class="md:col-span-2">
+        <p class="font-medium">Description:</p>
+        <p>
+          A live music concert featuring top artists. Enjoy an evening of
+          amazing performances and vibrant atmosphere.
+        </p>
+      </div>
+      <div>
+        <p class="font-medium">Date:</p>
+        <p>2025-09-01</p>
+      </div>
+      <div>
+        <p class="font-medium">Time:</p>
+        <p>19:00</p>
+      </div>
+      <div>
+        <p class="font-medium">Location:</p>
+        <p>Hall A</p>
+      </div>
+      <div>
+        <p class="font-medium">Tickets Booked:</p>
+        <p>2</p>
+      </div>
+      <div>
+        <p class="font-medium">Price:</p>
+        <p>$50</p>
+      </div>
+    </div>
+
+    <div class="mt-6 flex gap-4">
+      <button mat-raised-button color="primary">Edit Booking</button>
+      <button mat-raised-button color="warn">Cancel Booking</button>
+    </div>
+  </mat-card>
+</div>

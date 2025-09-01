@@ -21,7 +21,13 @@
   <mat-card class="p-4">
     <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
     <div class="flex gap-4 flex-wrap">
-      <button mat-stroked-button color="primary">My Bookings</button>
+      <button
+        mat-stroked-button
+        color="primary"
+        [routerLink]="'/user/booking-list'"
+      >
+        My Bookings
+      </button>
     </div>
   </mat-card>
 

@@ -9,7 +9,22 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
   private localStorageKey = 'authData';
   private usersKey = 'users'; // store registered users
-  constructor(private router: Router) {}
+   private defaultAdmin: User = {
+    username: 'admin@test.com',
+    password: 'admin123',
+    role: 'admin'
+  };
+  constructor(private router: Router) {this.initAdmin();}
+
+   /** Initialize static admin in localStorage if not present */
+  private initAdmin(): void {
+    const users = this.getUsers();
+    const adminExists = users.some(u => u.username === this.defaultAdmin.username);
+    if (!adminExists) {
+      users.push(this.defaultAdmin);
+      localStorage.setItem(this.usersKey, JSON.stringify(users));
+    }
+  }
 
   login(user: User): boolean {
     const users = this.getUsers();
@@ -21,10 +36,13 @@ export class AuthService {
       const token = this.generateToken();
       const authData = {
         username: existingUser.username,
-        role: existingUser.role,
+        role: existingUser.role, // role is preserved from the user object
         token,
       };
+      // Store auth data in localStorage
       localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
+      // Log login data to console
+      console.log('User logged in:', { username: existingUser.username, role: existingUser.role });
       return true;
     }
 
@@ -39,14 +57,19 @@ export class AuthService {
       throw new Error('Username already exists'); // will be caught by effect
     }
 
-    users.push(user);
+    // Set default role to 'user' if not provided
+    const newUser = { ...user, role: user.role || 'user' };
+    users.push(newUser);
     localStorage.setItem(this.usersKey, JSON.stringify(users));
 
     const token = this.generateToken();
-    const authData = { username: user.username, role: user.role, token };
+    const authData = { username: newUser.username, role: newUser.role, token };
     localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
+    
+    // Log signup data to console
+    console.log('User signed up:', { username: newUser.username, email: newUser.email, role: newUser.role });
 
-    return of({ user, token });
+    return of({ user: newUser, token });
   }
 
   logout() {

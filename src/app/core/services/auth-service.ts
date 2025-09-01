@@ -27,7 +27,9 @@ export class AuthService {
           const authData = {
             token: this.generateToken(),
             username: existingUser.username,
-            role: existingUser.role
+            role: existingUser.role,
+            // Store additional user data if needed
+            email: existingUser.email || existingUser.username
           };
           localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
           console.log('Login successful with user:', existingUser);
@@ -58,7 +60,12 @@ export class AuthService {
         return this.http.post<User>(`${this.apiUrl}/users`, newUser).pipe(
           map(createdUser => {
             const token = this.generateToken();
-            const authData = { username: createdUser.username, role: createdUser.role, token };
+            const authData = { 
+              username: createdUser.username, 
+              role: createdUser.role, 
+              token,
+              email: createdUser.email || createdUser.username
+            };
             localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
             
             // Log signup data to console

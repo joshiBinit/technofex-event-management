@@ -29,7 +29,6 @@ export class EventListComponent {
 
   constructor(private store: Store<EventsState>) {
     this.events$ = this.store.select(selectAllEvents);
-    this.store.select(selectAllEvents).subscribe((res) => console.log(res));
     this.loading$ = this.store.select(selectEventLoading);
   }
   ngOnInit(): void {

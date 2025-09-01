@@ -15,7 +15,6 @@ export class LoginEffects {
     this.actions$.pipe(
       ofType(LoginActions.login),
       mergeMap((action) => {
-        // Use the AuthService to handle login
         const loginSuccess = this.authService.login({
           username: action.username,
           password: action.password,
@@ -23,16 +22,16 @@ export class LoginEffects {
         });
 
         if (loginSuccess) {
-          // Get auth data from localStorage
+          // ✅ Get auth data stored in localStorage by AuthService
           const authData = JSON.parse(localStorage.getItem('authData') || '{}');
           const token = authData.token;
           const role = authData.role;
 
           console.log('Login successful:', authData);
 
-          // 🔹 Navigate based on role
+          // ✅ Navigate based on role
           if (role === 'admin') {
-            this.router.navigate(['/admindashboard']);
+            this.router.navigate(['/admin-dashboard']);
           } else {
             this.router.navigate(['/event']);
           }
@@ -45,7 +44,7 @@ export class LoginEffects {
             })
           );
         } else {
-          // 🔹 Check if username exists but password is wrong
+          // ❌ Invalid credentials or user not found
           const users = JSON.parse(localStorage.getItem('users') || '[]');
           const userExists = users.some(
             (u: { username: string }) => u.username === action.username
@@ -53,6 +52,7 @@ export class LoginEffects {
           const errorMsg = userExists
             ? 'Invalid credentials'
             : 'User not found';
+
           console.log('Login failed:', action.username, errorMsg);
 
           return of(LoginActions.loginFailure({ error: errorMsg }));

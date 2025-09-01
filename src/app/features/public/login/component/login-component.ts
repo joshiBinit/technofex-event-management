@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+    localStorage.getItem('users')
 
     this.error$ = this.store.select(selectLoginError);
     this.loading$ = this.store.select(selectLoginLoading);

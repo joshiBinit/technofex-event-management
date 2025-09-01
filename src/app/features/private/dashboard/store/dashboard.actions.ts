@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { Event } from './dashboard.state';
 
 // Load events
 export const loadEvents = createAction('[Dashboard] Load Events');

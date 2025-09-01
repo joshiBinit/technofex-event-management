@@ -11,12 +11,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { ProfileComponent } from './components/profile/profile';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent],
+  declarations: [HeaderComponent, SidebarComponent, ProfileComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
+    MatFormFieldModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,

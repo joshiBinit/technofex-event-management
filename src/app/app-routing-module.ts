@@ -17,6 +17,18 @@ const routes: Routes = [
   // public routes (example)
   // { path: 'login', component: LoginComponent },
   // { path: 'register', component: RegisterComponent },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./features/public/login/login-module').then((m) => m.LoginModule),
+  },
+  {
+    path: 'signup',
+    loadChildren: () =>
+      import('./features/public/signup/signup-module').then(
+        (m) => m.SignupModule
+      ),
+  },
 
   // fallback route
   { path: '**', redirectTo: 'dashboard' },

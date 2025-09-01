@@ -21,10 +21,10 @@
       "role": "user"
     },
     {
-      "id": "7912",
-      "username": "Consequatur est ius",
-      "email": "bapubi@mailinator.com",
-      "password": "Pa$$w0rd!",
+      "id": "4aa2",
+      "username": "Binit Joshi",
+      "email": "binitjoshi4554@gmail.com",
+      "password": "binitjoshi",
       "role": "user"
     }
   ],
@@ -105,22 +105,6 @@
       "price": 200,
       "date": "2025-10-07T18:15:00.000Z",
       "time": "12:12"
-    }
-  ],
-  "user": [
-    {
-      "username": "john_doe",
-      "password": "password123",
-      "role": "user",
-      "email": "john.doe@example.com",
-      "id": "6ac9"
-    },
-    {
-      "username": "admin_user",
-      "password": "adminPass456",
-      "role": "admin",
-      "email": "admin@example.com",
-      "id": "00c7"
     }
   ]
 }

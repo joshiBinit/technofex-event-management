@@ -20,7 +20,7 @@ export class SidebarComponent {
   }
 
   logout() {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('authData');
     this.router.navigate(['/login']);
   }
 }

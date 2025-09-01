@@ -1,4 +1,33 @@
 {
+  "users": [
+    {
+      "id": "1",
+      "username": "admin@test.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "c332",
+      "username": "Eveniet quibusdam e",
+      "email": "hujefisafu@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    },
+    {
+      "id": "d667",
+      "username": "Doloremque placeat ",
+      "email": "funacyv@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    },
+    {
+      "id": "7912",
+      "username": "Consequatur est ius",
+      "email": "bapubi@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    }
+  ],
   "events": [
     {
       "id": "3",
@@ -65,6 +94,33 @@
       "location": "asdasd",
       "totalTickets": 12,
       "price": 123123
+    },
+    {
+      "id": "1255",
+      "title": "Test",
+      "category": "conference",
+      "description": "Test",
+      "location": "Test",
+      "totalTickets": 12,
+      "price": 200,
+      "date": "2025-10-07T18:15:00.000Z",
+      "time": "12:12"
+    }
+  ],
+  "user": [
+    {
+      "username": "john_doe",
+      "password": "password123",
+      "role": "user",
+      "email": "john.doe@example.com",
+      "id": "6ac9"
+    },
+    {
+      "username": "admin_user",
+      "password": "adminPass456",
+      "role": "admin",
+      "email": "admin@example.com",
+      "id": "00c7"
     }
   ]
 }

@@ -10,11 +10,32 @@ import { MatTableModule } from '@angular/material/table';
 
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardRoutingModule } from './dashboard-routing-module';
+import { AddEventComponent } from './component/add-event/add-event';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { UserComponent } from './component/user-component/user-component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, AddEventComponent, UserComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgApexchartsModule,
     MatCardModule,
     MatTableModule,

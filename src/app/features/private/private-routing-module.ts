@@ -8,15 +8,20 @@ const routes: Routes = [
     component: SharedLayout,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         loadChildren: () =>
           import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
       },
-      // { path: 'events', component: EventsComponent },
       {
         path: 'user',
         loadChildren: () =>
           import('./user/user-module').then((m) => m.UserModule),
+      },
+
+      {
+        path: 'event',
+        loadChildren: () =>
+          import('./events/event-module').then((m) => m.EventModule),
       },
       { path: '', redirectTo: '', pathMatch: 'full' },
     ],

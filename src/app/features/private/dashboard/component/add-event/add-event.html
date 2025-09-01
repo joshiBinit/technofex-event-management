@@ -1,0 +1,137 @@
+<div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
+  <h2 class="text-2xl font-bold mb-6 text-center">Add New Event</h2>
+
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="grid gap-6">
+    <!-- Title -->
+    <mat-form-field class="w-full">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter event title" />
+      <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+        Title is required
+      </mat-error>
+      <mat-error *ngIf="eventForm.get('title')?.hasError('maxlength')">
+        Maximum 30 characters allowed
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Category -->
+    <mat-form-field class="w-full">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option value="conference">Conference</mat-option>
+        <mat-option value="workshop">Workshop</mat-option>
+        <mat-option value="concert">Concert</mat-option>
+        <mat-option value="sports">Sports</mat-option>
+      </mat-select>
+      <mat-error *ngIf="eventForm.get('category')?.hasError('required')">
+        Category is required
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        formControlName="description"
+        placeholder="Enter event description"
+      ></textarea>
+      <mat-error *ngIf="eventForm.get('description')?.hasError('maxlength')">
+        Maximum 500 characters allowed
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Date & Time (Nested Group) -->
+    <div formGroupName="schedule" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <mat-form-field class="w-full">
+        <mat-label>Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="date"
+          placeholder="Choose a date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+
+        <mat-error *ngIf="eventForm.get('schedule.date')?.hasError('required')">
+          Date is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Time</mat-label>
+        <input
+          matInput
+          type="time"
+          formControlName="time"
+          placeholder="Select time"
+        />
+        <mat-error *ngIf="eventForm.get('schedule.time')?.hasError('required')">
+          Time is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Location -->
+    <mat-form-field class="w-full">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" placeholder="Event location" />
+      <mat-error *ngIf="eventForm.get('location')?.hasError('required')">
+        Location is required
+      </mat-error>
+      <mat-error *ngIf="eventForm.get('location')?.hasError('maxlength')">
+        Maximum 50 characters allowed
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Tickets & Price -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <mat-form-field class="w-full">
+        <mat-label>Total Tickets</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="totalTickets"
+          placeholder="Enter total tickets"
+        />
+        <mat-error *ngIf="eventForm.get('totalTickets')?.hasError('required')">
+          Total tickets is required
+        </mat-error>
+        <mat-error *ngIf="eventForm.get('totalTickets')?.hasError('min')">
+          Must be at least 1
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="price"
+          placeholder="Enter ticket price"
+        />
+        <mat-error *ngIf="eventForm.get('price')?.hasError('required')">
+          Price is required
+        </mat-error>
+        <mat-error *ngIf="eventForm.get('price')?.hasError('min')">
+          Must be 0 or greater
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Submit -->
+    <div class="flex justify-center">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="eventForm.invalid"
+        class="px-6 py-2 rounded-xl"
+      >
+        Create Event
+      </button>
+    </div>
+  </form>
+</div>

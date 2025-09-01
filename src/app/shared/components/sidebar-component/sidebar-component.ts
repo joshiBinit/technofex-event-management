@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { LoginState } from '../../../features/public/login/store/login-component.reducer';
+import { selectLoginRole } from '../../../features/public/login/store/login-component.selectors';
 
 @Component({
   selector: 'app-sidebar-component',
@@ -8,10 +12,15 @@ import { Router } from '@angular/router';
   styleUrl: './sidebar-component.scss',
 })
 export class SidebarComponent {
-  constructor(private router: Router) {}
+  role$: Observable<string | null>;
+
+  private store = inject(Store<{ login: LoginState }>);
+  constructor(private router: Router) {
+    this.role$ = this.store.select(selectLoginRole);
+  }
 
   logout() {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('authData');
     this.router.navigate(['/login']);
   }
 }

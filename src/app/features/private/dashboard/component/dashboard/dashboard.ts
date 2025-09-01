@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   ];
 
   chartOptions: ApexOptions = {
-    series: [], // must always be array
+    series: [],
     chart: { type: 'pie', width: 380 }, // must always be defined
     labels: [], // must always be array
     plotOptions: { pie: { expandOnClick: true } }, // must always be defined

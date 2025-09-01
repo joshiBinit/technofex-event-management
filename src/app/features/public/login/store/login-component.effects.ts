@@ -15,48 +15,60 @@ export class LoginEffects {
     this.actions$.pipe(
       ofType(LoginActions.login),
       mergeMap((action) => {
-        const loginSuccess = this.authService.login({
-          username: action.username,
-          password: action.password,
-          role: action.role,
-        });
+        return this.authService
+          .login({
+            username: action.username,
+            password: action.password,
+            role: action.role,
+          })
+          .pipe(
+            mergeMap((loginSuccess) => {
+              if (loginSuccess) {
+                // ✅ Get auth data stored in localStorage by AuthService
+                const authData = JSON.parse(
+                  localStorage.getItem('authData') || '{}'
+                );
+                const token = authData.token;
+                const role = authData.role;
+                const username = authData.username;
 
-        if (loginSuccess) {
-          // ✅ Get auth data stored in localStorage by AuthService
-          const authData = JSON.parse(localStorage.getItem('authData') || '{}');
-          const token = authData.token;
-          const role = authData.role;
+                console.log('Login successful:', authData);
 
-          console.log('Login successful:', authData);
+                // ✅ Navigate based on role
+                if (role === 'admin') {
+                  this.router.navigate(['/admindashboard']);
+                } else {
+                  this.router.navigate(['/admindashboard']);
+                }
 
-          // ✅ Navigate based on role
-          if (role === 'admin') {
-            this.router.navigate(['/admin-dashboard']);
-          } else {
-            this.router.navigate(['/event']);
-          }
+                return of(
+                  LoginActions.loginSuccess({
+                    token,
+                    role,
+                    username,
+                  })
+                );
+              } else {
+                // ❌ Invalid credentials or user not found
+                return this.authService.getUsers().pipe(
+                  mergeMap((users) => {
+                    const userExists = users.some(
+                      (u: { username: string; email?: string }) =>
+                        u.username === action.username ||
+                        (u.email && u.email === action.username)
+                    );
+                    const errorMsg = userExists
+                      ? 'Invalid credentials'
+                      : 'User not found';
 
-          return of(
-            LoginActions.loginSuccess({
-              token,
-              role,
-              username: action.username,
+                    console.log('Login failed:', action.username, errorMsg);
+
+                    return of(LoginActions.loginFailure({ error: errorMsg }));
+                  })
+                );
+              }
             })
           );
-        } else {
-          // ❌ Invalid credentials or user not found
-          const users = JSON.parse(localStorage.getItem('users') || '[]');
-          const userExists = users.some(
-            (u: { username: string }) => u.username === action.username
-          );
-          const errorMsg = userExists
-            ? 'Invalid credentials'
-            : 'User not found';
-
-          console.log('Login failed:', action.username, errorMsg);
-
-          return of(LoginActions.loginFailure({ error: errorMsg }));
-        }
       })
     )
   );

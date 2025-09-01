@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
 import { selectLoginRole } from '../../../features/public/login/store/login-component.selectors';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-sidebar-component',
@@ -11,16 +12,27 @@ import { selectLoginRole } from '../../../features/public/login/store/login-comp
   templateUrl: './sidebar-component.html',
   styleUrl: './sidebar-component.scss',
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   role$: Observable<string | null>;
 
   private store = inject(Store<{ login: LoginState }>);
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     this.role$ = this.store.select(selectLoginRole);
   }
 
   logout() {
-    localStorage.removeItem('authToken');
+    this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  ngOnInit(): void {
+    this.role$.subscribe((role) => {
+      console.log('Current role:', role);
+      if (role === 'admin') {
+        console.log('User is admin');
+      } else {
+        console.log('User is not admin');
+      }
+    });
   }
 }

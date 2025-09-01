@@ -6,6 +6,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -32,7 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatProgressSpinnerModule,
-    MatDatepickerModule,
+
   ],
 })
 export class MaterialModule {}

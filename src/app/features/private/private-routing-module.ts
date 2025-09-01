@@ -8,7 +8,7 @@ const routes: Routes = [
     component: SharedLayout,
     children: [
       {
-        path: '',
+        path: 'admin',
         loadChildren: () =>
           import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
       },

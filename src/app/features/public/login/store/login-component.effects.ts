@@ -36,9 +36,9 @@ export class LoginEffects {
 
                 // ✅ Navigate based on role
                 if (role === 'admin') {
-                  this.router.navigate(['/admindashboard']);
+                  this.router.navigate(['/admin/dashboard']);
                 } else {
-                  this.router.navigate(['/admindashboard']);
+                  this.router.navigate(['/user/dashboard']);
                 }
 
                 return of(

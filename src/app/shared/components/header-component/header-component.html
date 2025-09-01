@@ -2,45 +2,28 @@
   color="primary"
   class="flex justify-between items-center px-4 shadow-md"
 >
-  <!-- Left: Logo -->
   <div class="flex items-center space-x-2">
     <mat-icon>event</mat-icon>
     <span class="font-bold text-lg">Event Manager</span>
   </div>
 
-  <!-- Center: Navigation links -->
-  <!-- <div class="hidden md:flex space-x-6">
-    <a mat-button routerLink="/dashboard" class="hover:text-gray-200"
-      >Dashboard</a
-    >
-    <a mat-button routerLink="/events" class="hover:text-gray-200">Events</a>
-    <a mat-button routerLink="/about" class="hover:text-gray-200">About</a>
-    <a mat-button routerLink="/contact" class="hover:text-gray-200">Contact</a>
-  </div> -->
-
-  <!-- Right: Profile / Actions -->
   <div class="flex items-center space-x-2">
     <button mat-icon-button aria-label="Notifications">
       <mat-icon>notifications</mat-icon>
     </button>
 
-    <!-- Profile dropdown -->
     <button
       mat-button
       [matMenuTriggerFor]="menu"
       class="flex items-center space-x-1"
     >
       <mat-icon>account_circle</mat-icon>
-      <span class="hidden md:inline">Profile</span>
+      <span class="hidden md:inline">{{ (username$ | async) || "Guest" }}</span>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/profile">
         <mat-icon>person</mat-icon>
-        <span>My Profile</span>
-      </button>
-      <button mat-menu-item routerLink="/settings">
-        <mat-icon>settings</mat-icon>
-        <span>Settings</span>
+        <span (click)="goToProfile()">My Profile</span>
       </button>
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
@@ -48,20 +31,4 @@
       </button>
     </mat-menu>
   </div>
-
-  <!-- Mobile: Menu icon -->
-  <!-- <button mat-icon-button class="md:hidden" (click)="toggleMobileMenu()">
-    <mat-icon>menu</mat-icon>
-  </button>
-</mat-toolbar>
-
-<div
-  *ngIf="mobileMenuOpen"
-  class="md:hidden bg-blue-600 text-white px-4 py-2 space-y-2"
->
-  <a routerLink="/dashboard" class="block hover:text-gray-200">Dashboard</a>
-  <a routerLink="/events" class="block hover:text-gray-200">Events</a>
-  <a routerLink="/about" class="block hover:text-gray-200">About</a>
-  <a routerLink="/contact" class="block hover:text-gray-200">Contact</a>
-</div> -->
 </mat-toolbar>

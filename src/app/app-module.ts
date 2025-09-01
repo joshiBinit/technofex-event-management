@@ -7,10 +7,26 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './shared/components/header-component/header-component';
 import { SidebarComponent } from './shared/components/sidebar-component/sidebar-component';
+import { SharedLayout } from './features/private/shared-layout/shared-layout';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [App, HeaderComponent, SidebarComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  declarations: [App],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+  ],
   providers: [provideBrowserGlobalErrorListeners(), provideStoreDevtools()],
   bootstrap: [App],
 })

@@ -1,1 +1,58 @@
-<p>sidebar-component works!</p>
+<mat-nav-list>
+  <!-- Dashboard -->
+  <a
+    mat-list-item
+    routerLink="/dashboard"
+    routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
+    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
+  >
+    <mat-icon>dashboard</mat-icon>
+    <span>Dashboard</span>
+  </a>
+
+  <!-- Events -->
+  <a
+    mat-list-item
+    routerLink="/events"
+    routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
+    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
+  >
+    <mat-icon>event</mat-icon>
+    <span>Events</span>
+  </a>
+
+  <!-- Users -->
+  <a
+    mat-list-item
+    routerLink="/user"
+    routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
+    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
+  >
+    <mat-icon>people</mat-icon>
+    <span>Users</span>
+  </a>
+
+  <!-- Divider -->
+  <mat-divider class="my-3"></mat-divider>
+
+  <!-- Settings -->
+  <a
+    mat-list-item
+    routerLink="/settings"
+    routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
+    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
+  >
+    <mat-icon>settings</mat-icon>
+    <span>Settings</span>
+  </a>
+
+  <!-- Logout -->
+  <a
+    mat-list-item
+    (click)="logout()"
+    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-100 text-red-600 transition"
+  >
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </a>
+</mat-nav-list>

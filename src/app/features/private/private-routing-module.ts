@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedLayout } from './features/private/shared-layout/shared-layout';
+import { SharedLayout } from './shared-layout/shared-layout';
 
 const routes: Routes = [
   {
@@ -13,17 +13,10 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
-
-  // public routes (example)
-  // { path: 'login', component: LoginComponent },
-  // { path: 'register', component: RegisterComponent },
-
-  // fallback route
-  { path: '**', redirectTo: 'dashboard' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class PrivateRoutingModule {}

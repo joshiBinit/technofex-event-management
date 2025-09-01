@@ -7,7 +7,7 @@ import {
   selectAllEvents,
   selectTotalBookings,
   selectTotalUsers,
-} from '../../dashboard.selectors';
+} from '../../store/dashboard.selectors';
 import { map } from 'rxjs';
 
 export interface Event {

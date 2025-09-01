@@ -13,6 +13,11 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
+  },
 ];
 
 @NgModule({

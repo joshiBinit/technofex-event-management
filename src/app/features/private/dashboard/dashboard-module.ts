@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardRoutingModule } from './dashboard-routing-module';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -17,6 +18,7 @@ import { RouterModule, Routes } from '@angular/router';
     NgApexchartsModule,
     MatCardModule,
     MatTableModule,
+    DashboardRoutingModule,
     StoreModule.forFeature('events', eventReducer),
   ],
 })

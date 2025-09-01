@@ -1,78 +1,84 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../shared/model/user.model';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError, catchError, map, tap, mergeMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private localStorageKey = 'authData';
-  private usersKey = 'users'; // store registered users
-   private defaultAdmin: User = {
-    username: 'admin@test.com',
-    password: 'admin123',
-    role: 'admin'
-  };
-  constructor(private router: Router) {this.initAdmin();}
+  private apiUrl = 'http://localhost:3000'; // json-server default URL
+  
+  constructor(private router: Router, private http: HttpClient) {}
 
-   /** Initialize static admin in localStorage if not present */
-  private initAdmin(): void {
-    const users = this.getUsers();
-    const adminExists = users.some(u => u.username === this.defaultAdmin.username);
-    if (!adminExists) {
-      users.push(this.defaultAdmin);
-      localStorage.setItem(this.usersKey, JSON.stringify(users));
-    }
-  }
+  // Admin is already in db.json file
 
-  login(user: User): boolean {
-    const users = this.getUsers();
-    const existingUser = users.find(
-      (u) => u.username === user.username && u.password === user.password
+  login(user: any): Observable<boolean> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+      map(users => {
+        // Check if the user is trying to login with email or username
+        const existingUser = users.find(
+          (u: any) => (u.username === user.username || u.email === user.username) && u.password === user.password
+        );
+
+        if (existingUser) {
+          const authData = {
+            token: this.generateToken(),
+            username: existingUser.username,
+            role: existingUser.role
+          };
+          localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
+          console.log('Login successful with user:', existingUser);
+          return true;
+        }
+        console.log('Login failed, no matching user found');
+        return false;
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        return of(false);
+      })
     );
-
-    if (existingUser) {
-      const token = this.generateToken();
-      const authData = {
-        username: existingUser.username,
-        role: existingUser.role, // role is preserved from the user object
-        token,
-      };
-      // Store auth data in localStorage
-      localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
-      // Log login data to console
-      console.log('User logged in:', { username: existingUser.username, role: existingUser.role });
-      return true;
-    }
-
-    return false;
   }
 
   signup(user: User): Observable<{ user: User; token: string }> {
-    const users = this.getUsers();
-    const userExists = users.some((u) => u.username === user.username);
-
-    if (userExists) {
-      throw new Error('Username already exists'); // will be caught by effect
-    }
-
-    // Set default role to 'user' if not provided
-    const newUser = { ...user, role: user.role || 'user' };
-    users.push(newUser);
-    localStorage.setItem(this.usersKey, JSON.stringify(users));
-
-    const token = this.generateToken();
-    const authData = { username: newUser.username, role: newUser.role, token };
-    localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
-    
-    // Log signup data to console
-    console.log('User signed up:', { username: newUser.username, email: newUser.email, role: newUser.role });
-
-    return of({ user: newUser, token });
+    // First check if user already exists
+    return this.http.get<User[]>(`${this.apiUrl}/users?username=${user.username}`).pipe(
+      map(users => {
+        if (users.length > 0) {
+          throw new Error('Username already exists'); // will be caught by effect
+        }
+        
+        // Set default role to 'user' if not provided
+        const newUser = { ...user, role: user.role || 'user' };
+        
+        // Add user to db.json
+        return this.http.post<User>(`${this.apiUrl}/users`, newUser).pipe(
+          map(createdUser => {
+            const token = this.generateToken();
+            const authData = { username: createdUser.username, role: createdUser.role, token };
+            localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
+            
+            // Log signup data to console
+            console.log('User signed up:', { username: createdUser.username, email: createdUser.email, role: createdUser.role });
+            
+            return { user: createdUser, token };
+          })
+        );
+      }),
+      catchError(error => {
+        console.error('Signup error:', error);
+        return throwError(() => new Error(error.message || 'Username already exists'));
+      })
+    ).pipe(
+      // Flatten the nested Observable
+      mergeMap(obs => obs)
+    );
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem(this.localStorageKey);
     this.router.navigate(['/login']);
   }
@@ -90,8 +96,7 @@ export class AuthService {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 
-  private getUsers(): User[] {
-    const users = localStorage.getItem(this.usersKey);
-    return users ? JSON.parse(users) : [];
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
 }

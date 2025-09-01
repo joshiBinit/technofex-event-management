@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { AuthService } from '../../../../core/services/auth-service';
 import * as SignupActions from './signup-component.actions';
+import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -15,29 +15,34 @@ export class SignupEffects {
   signup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SignupActions.signup),
-      mergeMap((action) =>
-        this.authService
-          .signup({
+      mergeMap(action => {
+        try {
+          return this.authService.signup({
             username: action.username,
             email: action.email,
             password: action.password,
-            role: 'user', // Default role is user
-          })
-          .pipe(
-            map((response) =>
-              SignupActions.signupSuccess({
-                user: response.user, // Use the user from the response which includes the role
-                token: response.token,
-              })
-            ),
-            tap(() => {
+            role: 'user'
+          }).pipe(
+            map(response => {
               // Navigate to login page after successful signup
-              console.log('Signup successful, redirecting to login page');
               this.router.navigate(['/login']);
+              return SignupActions.signupSuccess({
+                user: response.user,
+                token: response.token,
+                email: action.email,
+                password: action.password
+              });
             }),
-            catchError((error) => of(SignupActions.signupFailure({ error })))
-          )
-      )
+            catchError(error => {
+              console.error('Signup error:', error);
+              return of(SignupActions.signupFailure({ error: error.message || 'Username already exists' }));
+            })
+          );
+        } catch (error: any) {
+          console.error('Signup error:', error);
+          return of(SignupActions.signupFailure({ error: error.message || 'Username already exists' }));
+        }
+      })
     )
   );
 }

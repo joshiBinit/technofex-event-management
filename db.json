@@ -1,4 +1,26 @@
 {
+  "users": [
+    {
+      "id": "1",
+      "username": "admin@test.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "c332",
+      "username": "Eveniet quibusdam e",
+      "email": "hujefisafu@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    },
+    {
+      "id": "d667",
+      "username": "Doloremque placeat ",
+      "email": "funacyv@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    }
+  ],
   "events": [
     {
       "id": "3",

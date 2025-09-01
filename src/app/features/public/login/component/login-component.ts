@@ -33,7 +33,16 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.store.dispatch(LoginActions.login({ username: email, password, role: 'user' }));
+      // Check if this is an admin login attempt
+      // Admin credentials are hardcoded in the auth service
+      const isAdminAttempt = email === 'admin@test.com';
+      const role = isAdminAttempt ? 'admin' : 'user';
+      
+      // Dispatch login action with appropriate role
+      this.store.dispatch(LoginActions.login({ username: email, password, role }));
+      
+      // Log login attempt to console
+      console.log('Login attempt:', { username: email, password, role });
     } else {
       this.loginForm.markAllAsTouched();
     }

@@ -12,7 +12,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
       },
-      // { path: 'events', component: EventsComponent },
+      {
+        path: 'event',
+        loadChildren: () =>
+          import('./events/event-module').then((m) => m.EventModule),
+      },
       // { path: 'user', component: UserComponent },
       { path: '', redirectTo: '', pathMatch: 'full' },
     ],

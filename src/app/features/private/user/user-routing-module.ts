@@ -1,10 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UserDashboardComponent } from './components/user-dashboard-component/user-dashboard-component';
+import { BookingListComponent } from './components/booking-list-component/booking-list-component';
+import { BookingDetailComponent } from './components/booking-detail-component/booking-detail-component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'dashboard',
+    component: UserDashboardComponent,
+  },
+  {
+    path: 'booking-list',
+    component: BookingListComponent,
+  },
+  {
+    path: 'booking-detail',
+    component: BookingDetailComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserRoutingModule { }
+export class UserRoutingModule {}

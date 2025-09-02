@@ -11,15 +11,15 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <mat-card class="p-4 text-center">
       <h2 class="text-lg font-semibold">Upcoming Bookings</h2>
-      <p class="text-3xl mt-2">3</p>
+      <p class="text-3xl mt-2">0</p>
     </mat-card>
     <mat-card class="p-4 text-center">
       <h2 class="text-lg font-semibold">Past Bookings</h2>
-      <p class="text-3xl mt-2">8</p>
+      <p class="text-3xl mt-2">0</p>
     </mat-card>
     <mat-card class="p-4 text-center">
       <h2 class="text-lg font-semibold">Events Attended</h2>
-      <p class="text-3xl mt-2">5</p>
+      <p class="text-3xl mt-2">0</p>
     </mat-card>
   </div>
 
@@ -50,42 +50,16 @@
           {{ event.date }}| {{ event.location }}
         </p>
         <p class="mt-2 font-medium">{{ event.price | currency : "USA" }}</p>
-        <button mat-raised-button color="primary" class="mt-2 w-full">
+        <button
+          mat-raised-button
+          color="primary"
+          class="mt-2 w-full"
+          (click)="onBookNow(event)"
+        >
           Book Now
         </button>
       </mat-card>
       }
     </div>
   </div>
-
-  <!-- Notifications -->
-  <mat-card class="p-4">
-    <h2 class="text-lg font-semibold mb-4">Notifications</h2>
-    <mat-list>
-      <mat-list-item>Your ticket for Music Concert is confirmed.</mat-list-item>
-      <mat-list-item
-        >Comedy Night has been rescheduled to 2025-09-25.</mat-list-item
-      >
-      <mat-list-item
-        >Special Offer: Get 20% off on Tech Conference tickets.</mat-list-item
-      >
-    </mat-list>
-  </mat-card>
-
-  <!-- Profile Snapshot -->
-  <mat-card class="p-4">
-    <h2 class="text-lg font-semibold mb-4">Profile Snapshot</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <p><span class="font-medium">Name:</span> Puja Lakhe</p>
-        <p><span class="font-medium">Email:</span> puja@example.com</p>
-      </div>
-      <div>
-        <p><span class="font-medium">Membership:</span> Premium</p>
-        <button mat-stroked-button color="primary" class="mt-2">
-          Edit Profile
-        </button>
-      </div>
-    </div>
-  </mat-card>
 </div>

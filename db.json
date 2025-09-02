@@ -33,9 +33,47 @@
       "email": "tirytuwi@mailinator.com",
       "password": "Pa$$w0rd!",
       "role": "user"
+    },
+    {
+      "id": "404d",
+      "username": "srijana",
+      "email": "srijana@gmail.com",
+      "password": "srijana",
+      "role": "user"
+    },
+    {
+      "id": "5536",
+      "username": "Numquam cillum et as",
+      "email": "fexi@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
     }
   ],
   "events": [
+    {
+      "id": "1",
+      "title": "Angular Workshop",
+      "category": "Workshop",
+      "description": "Hands-on workshop covering advanced Angular concepts.",
+      "date": "2025-09-15",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 40
+    },
+    {
+      "id": "2",
+      "title": "ReactJS Summit",
+      "category": "Conference",
+      "description": "A gathering of React developers sharing the latest updates.",
+      "date": "2025-09-18",
+      "time": "9:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 300,
+      "availableTickets": 300,
+      "price": 120
+    },
     {
       "id": "3",
       "title": "VueJS Meetup",
@@ -107,6 +145,90 @@
       "totalTickets": 150,
       "availableTickets": 150,
       "price": 25
+    },
+    {
+      "id": "9",
+      "title": "Blockchain Hackathon",
+      "category": "Hackathon",
+      "description": "48-hour hackathon focused on blockchain applications.",
+      "date": "2025-10-25",
+      "time": "9:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 120,
+      "availableTickets": 120,
+      "price": 0
+    },
+    {
+      "id": "10",
+      "title": "DevOps Bootcamp",
+      "category": "Bootcamp",
+      "description": "Intensive bootcamp on CI/CD, Docker, and Kubernetes.",
+      "date": "2025-10-28",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 80,
+      "availableTickets": 80,
+      "price": 60
+    },
+    {
+      "id": "11",
+      "title": "Digital Marketing Seminar",
+      "category": "Seminar",
+      "description": "Learn strategies for SEO, SEM, and social media marketing.",
+      "date": "2025-11-01",
+      "time": "1:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "availableTickets": 150,
+      "price": 40
+    },
+    {
+      "id": "12",
+      "title": "UI/UX Design Meetup",
+      "category": "Meetup",
+      "description": "Creative meetup for UI/UX designers to share insights.",
+      "date": "2025-11-05",
+      "time": "5:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 70,
+      "availableTickets": 70,
+      "price": 15
+    },
+    {
+      "id": "13",
+      "title": "E-commerce Summit",
+      "category": "Conference",
+      "description": "Conference on building and scaling e-commerce businesses.",
+      "date": "2025-11-10",
+      "time": "9:00 AM",
+      "location": "Bhaktapur",
+      "totalTickets": 200,
+      "availableTickets": 200,
+      "price": 90
+    },
+    {
+      "id": "14",
+      "title": "Cloud Computing Workshop",
+      "category": "Workshop",
+      "description": "Workshop on AWS, Azure, and Google Cloud essentials.",
+      "date": "2025-11-15",
+      "time": "11:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 55
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
     }
   ],
   "bookedEvents": [
@@ -133,6 +255,78 @@
       "totalTickets": 100,
       "availableTickets": 100,
       "price": 50
+    },
+    {
+      "id": "5",
+      "title": "AI & Machine Learning Seminar",
+      "category": "Seminar",
+      "description": "Deep dive into AI and ML concepts with practical examples.",
+      "date": "2025-09-30",
+      "time": "2:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "availableTickets": 150,
+      "price": 75
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "availableTickets": 50,
+      "price": 20
+    },
+    {
+      "id": "4",
+      "title": "Full Stack Development Conference",
+      "category": "Conference",
+      "description": "Explore full stack development trends, tools, and practices.",
+      "date": "2025-09-25",
+      "time": "8:30 AM",
+      "location": "Bhaktapur",
+      "totalTickets": 200,
+      "availableTickets": 200,
+      "price": 100
+    },
+    {
+      "id": "1",
+      "title": "Angular Workshop",
+      "category": "Workshop",
+      "description": "Hands-on workshop covering advanced Angular concepts.",
+      "date": "2025-09-15",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 40
+    },
+    {
+      "id": "10",
+      "title": "DevOps Bootcamp",
+      "category": "Bootcamp",
+      "description": "Intensive bootcamp on CI/CD, Docker, and Kubernetes.",
+      "date": "2025-10-28",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 80,
+      "availableTickets": 80,
+      "price": 60
+    },
+    {
+      "id": "7",
+      "title": "Startup Pitch Night",
+      "category": "Networking",
+      "description": "Connect with investors and showcase startup ideas.",
+      "date": "2025-10-12",
+      "time": "7:00 PM",
+      "location": "Bhaktapur",
+      "totalTickets": 80,
+      "availableTickets": 80,
+      "price": 30
     }
   ],
   "locations": [

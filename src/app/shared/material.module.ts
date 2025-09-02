@@ -15,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [],
@@ -36,6 +37,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatMenuModule,
     MatDatepickerModule,
     MatSidenavModule,
+    MatNativeDateModule,
   ],
 })
 export class MaterialModule {}

@@ -126,6 +126,59 @@
       "price": 200,
       "date": "2025-10-07T18:15:00.000Z",
       "time": "12:12"
+    },
+    {
+      "id": "14aa",
+      "title": "Test1",
+      "category": "workshop",
+      "description": "Test1",
+      "location": "Bhaktapur Garden Banquet",
+      "totalTickets": 50,
+      "price": 123,
+      "date": "2025-09-02T18:15:00.000Z",
+      "time": "12:12"
+    }
+  ],
+  "locations": [
+    {
+      "id": 1,
+      "name": "Hotel Yak & Yeti Conference Hall"
+    },
+    {
+      "id": 2,
+      "name": "Radisson Hotel Event Center"
+    },
+    {
+      "id": 3,
+      "name": "Bhrikuti Mandap Exhibition Hall"
+    },
+    {
+      "id": 4,
+      "name": "Gokarna Forest Resort"
+    },
+    {
+      "id": 5,
+      "name": "Lalitpur Event Plaza"
+    },
+    {
+      "id": 6,
+      "name": "Bhaktapur Garden Banquet"
+    },
+    {
+      "id": 7,
+      "name": "The Moods Event Hall"
+    },
+    {
+      "id": 8,
+      "name": "Kathmandu Marriott Hotel Ballroom"
+    },
+    {
+      "id": 19,
+      "name": "Patan Industrial Park Hall"
+    },
+    {
+      "id": 10,
+      "name": "Nagarkot Event Resort"
     }
   ]
 }

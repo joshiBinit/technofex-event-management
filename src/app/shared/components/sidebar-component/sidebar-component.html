@@ -11,7 +11,7 @@
 
   <a
     mat-list-item
-    routerLink="/event/list"
+    (click)="eventListRedirect()"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
   >
@@ -31,12 +31,4 @@
     <span>Users</span>
   </a>
   <ng-template #hideUser></ng-template>
-  <a
-    mat-list-item
-    (click)="logout()"
-    class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-100 text-red-600 transition"
-  >
-    <mat-icon>logout</mat-icon>
-    <span>Logout</span>
-  </a>
 </mat-nav-list>

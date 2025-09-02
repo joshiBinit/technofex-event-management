@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
 import { selectLoginRole } from '../../../features/public/login/store/login-component.selectors';
 import { AuthService } from '../../../core/services/auth-service';
@@ -42,6 +42,15 @@ export class SidebarComponent implements OnInit {
         this.router.navigate(['/admin/dashboard']);
       } else {
         this.router.navigate(['/user/dashboard']);
+      }
+    });
+  }
+  eventListRedirect(): void {
+    this.role$.pipe(take(1)).subscribe((role) => {
+      if (role === 'admin') {
+        this.router.navigate(['/admin/event/list']);
+      } else {
+        this.router.navigate(['/user/event/list']);
       }
     });
   }

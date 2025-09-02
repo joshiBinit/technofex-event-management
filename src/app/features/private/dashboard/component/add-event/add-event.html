@@ -77,12 +77,13 @@
     <!-- Location -->
     <mat-form-field class="w-full">
       <mat-label>Location</mat-label>
-      <input matInput formControlName="location" placeholder="Event location" />
+      <mat-select formControlName="location">
+        <mat-option *ngFor="let loc of locations" [value]="loc">
+          {{ loc }}
+        </mat-option>
+      </mat-select>
       <mat-error *ngIf="eventForm.get('location')?.hasError('required')">
         Location is required
-      </mat-error>
-      <mat-error *ngIf="eventForm.get('location')?.hasError('maxlength')">
-        Maximum 50 characters allowed
       </mat-error>
     </mat-form-field>
 

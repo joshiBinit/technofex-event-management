@@ -179,6 +179,30 @@
       "price": 200,
       "date": "2025-10-07T18:15:00.000Z",
       "time": "12:12"
+    },
+    {
+      "id": "7",
+      "title": "Startup Pitch Night",
+      "category": "Networking",
+      "description": "Connect with investors and showcase startup ideas.",
+      "date": "2025-10-12",
+      "time": "7:00 PM",
+      "location": "Bhaktapur",
+      "totalTickets": 80,
+      "availableTickets": 80,
+      "price": 30
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "availableTickets": 50,
+      "price": 20
     }
   ],
   "locations": [

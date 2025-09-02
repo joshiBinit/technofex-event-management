@@ -84,16 +84,6 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Actions</th>
         <td mat-cell *matCellDef="let event" class="px-4 py-2">
-          <<<<<<< HEAD
-          <button
-            mat-raised-button
-            color="primary"
-            class="rounded-lg"
-            (click)="onBookNow(event)"
-          >
-            Book Now
-          </button>
-          =======
           <!-- Admin Buttons -->
           <ng-container *ngIf="(role$ | async) === 'admin'">
             <button

@@ -10,6 +10,8 @@ import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
 import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-event-list-component',
   standalone: false,
@@ -21,7 +23,7 @@ export class EventListComponent {
   loading$: Observable<boolean>;
   role$: Observable<string | null>;
 
-  constructor(private store: Store<EventsState>) {
+  constructor(private store: Store<EventsState>, private router: Router) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
     this.role$ = this.store.select(selectLoginRole);
@@ -57,5 +59,9 @@ export class EventListComponent {
   }
   onBookNow(event: Event) {
     this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+  }
+
+  onAddEvent() {
+    this.router.navigate(['/admin/addevent']);
   }
 }

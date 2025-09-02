@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { combineLatest, map, Observable, of } from 'rxjs';
 import { User } from '../../model/user.model';
 import { Store } from '@ngrx/store';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
 import {
+  selectLoginEmail,
   selectLoginRole,
   selectLoginUsername,
 } from '../../../features/public/login/store/login-component.selectors';
@@ -30,18 +31,17 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get logged-in username and role from store
-    this.store.select(selectLoginUsername).subscribe((username) => {
-      this.store.select(selectLoginRole).subscribe((role) => {
-        if (username) {
-          this.user$ = of({
-            username,
-            email: `${username}@example.com`,
-            role: role as 'user' | 'admin',
-            password: '*****',
-          });
-        }
-      });
-    });
+    this.user$ = combineLatest([
+      this.store.select(selectLoginUsername),
+      this.store.select(selectLoginEmail),
+      this.store.select(selectLoginRole),
+    ]).pipe(
+      map(([username, email, role]) => ({
+        username: username ?? 'Guest',
+        email: email ?? 'guest@example.com', // ✅ only fallback for guest
+        role: (role as 'user' | 'admin') ?? 'user',
+        password: '*****',
+      }))
+    );
   }
 }

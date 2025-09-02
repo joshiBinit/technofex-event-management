@@ -8,7 +8,8 @@ import { Event } from '../../../shared/model/event.model';
 })
 export class EventService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/events'; // ✅ Your json-server endpoint
+  private apiUrl = 'http://localhost:3000/events';
+  locations: string[] = [];
 
   addEvent(event: Event): Observable<Event> {
     return this.http.post<Event>(this.apiUrl, event);
@@ -23,5 +24,8 @@ export class EventService {
         return events.sort(() => 0.5 - Math.random()).slice(0, limit);
       })
     );
+  }
+  loadLocations(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/locations');
   }
 }

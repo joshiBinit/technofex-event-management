@@ -5,7 +5,7 @@ import { AddEventComponent } from './component/add-event/add-event';
 import { UserComponent } from './component/user-component/user-component';
 
 const routes: Routes = [
-  { path: 'admindashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'addevent', component: AddEventComponent },
   { path: 'userlist', component: UserComponent },
 ];

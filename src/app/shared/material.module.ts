@@ -1,7 +1,7 @@
 // material.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
 // Angular Material modules
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -34,6 +34,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatProgressSpinnerModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatDatepickerModule,
     MatSidenavModule,
   ],
 })

@@ -3,19 +3,11 @@ import { ApexOptions } from 'ng-apexcharts';
 
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import {
-  selectAllEvents,
-  selectTotalBookings,
-  selectTotalUsers,
-} from '../../store/dashboard.selectors';
-import { map } from 'rxjs';
 
-export interface Event {
-  name: string;
-  date?: string;
-  location?: string;
-  bookings: number;
-}
+import { Event } from '../../../../../shared/model/event.model';
+import { EventService } from '../../../../../core/services/event/event-service';
+import { selectAllEvents } from '../../../events/store/events/event.selector';
+import { loadEvents } from '../../../events/store/events/event.action';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,14 +16,23 @@ export interface Event {
   styleUrls: ['./dashboard.scss'],
 })
 export class DashboardComponent implements OnInit {
+  // totalBookings$: Observable<number>;
   events$: Observable<Event[]>;
-  totalUsers$: Observable<number>;
-  totalBookings$: Observable<number>;
 
-  displayedColumns: string[] = ['name', 'date', 'location', 'bookings'];
+  displayedColumns: string[] = [
+    'id',
+    'title',
+    'category',
+    'description',
+    'date',
+    'time',
+    'location',
+    'totalTickets',
+    'price',
+  ];
 
   chartOptions: ApexOptions = {
-    series: [], // must always be array
+    series: [],
     chart: { type: 'pie', width: 380 }, // must always be defined
     labels: [], // must always be array
     plotOptions: { pie: { expandOnClick: true } }, // must always be defined
@@ -47,16 +48,18 @@ export class DashboardComponent implements OnInit {
     ],
   };
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private eventService:EventService) {
+    // this.totalBookings$ = this.store.select(selectTotalBookings);
     this.events$ = this.store.select(selectAllEvents);
-    this.totalUsers$ = this.store.select(selectTotalUsers);
-    this.totalBookings$ = this.store.select(selectTotalBookings);
   }
 
   ngOnInit(): void {
+    //dispatch action to loadevents
+    this.store.dispatch(loadEvents());
+
     this.events$.subscribe((events) => {
-      this.chartOptions.series = events?.map((e) => e.bookings) || [];
-      this.chartOptions.labels = events?.map((e) => e.name) || [];
+      this.chartOptions.series = events?.map((e) => e.totalTickets) || [];
+      this.chartOptions.labels = events?.map((e) => e.title) || [];
     });
   }
 }

@@ -33,11 +33,11 @@ export class EventListComponent implements OnInit {
     'price',
     'actions',
   ];
-
   // Pagination properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
   filteredEvents: Event[] = [];
+  events: Event[] = [];
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -57,6 +57,10 @@ export class EventListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(EventsActions.loadEvents());
+    this.events$.subscribe((events) => {
+      this.events = events;
+      this.filteredEvents = events;
+    });
 
     // Subscribe to events to get the total count and initialize pagination
     this.events$.subscribe((events) => {
@@ -153,5 +157,14 @@ export class EventListComponent implements OnInit {
 
   onAddEvent() {
     this.router.navigate(['/admin/addevent']);
+  }
+  onSearchChanged(searchTerm: string) {
+    const term = searchTerm.toLowerCase();
+    this.filteredEvents = this.events.filter(
+      (event) =>
+        event.title.toLowerCase().includes(term) ||
+        event.category.toLowerCase().includes(term) ||
+        event.location.toLowerCase().includes(term)
+    );
   }
 }

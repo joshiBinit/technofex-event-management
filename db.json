@@ -26,6 +26,27 @@
       "email": "binitjoshi4554@gmail.com",
       "password": "binitjoshi",
       "role": "user"
+    },
+    {
+      "id": "73d1",
+      "username": "Elit ut ea ad quibu",
+      "email": "fehiwibiky@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    },
+    {
+      "id": "11a7",
+      "username": "Sint aut esse aliqua",
+      "email": "hizyj@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
+    },
+    {
+      "id": "ee0a",
+      "username": "Quod eum ut odio vol",
+      "email": "quvimy@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
     }
   ],
   "events": [

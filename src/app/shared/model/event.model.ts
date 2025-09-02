@@ -7,5 +7,6 @@ export interface Event {
   time: string;
   location: string;
   totalTickets: number;
+  availableTickets?: number;
   price: number;
 }

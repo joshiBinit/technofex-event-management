@@ -15,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
@@ -36,6 +37,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatMenuModule,
     MatDatepickerModule,
     MatSidenavModule,
+    MatNativeDateModule,
     MatPaginatorModule,
   ],
 })

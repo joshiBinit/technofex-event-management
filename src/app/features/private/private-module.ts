@@ -4,8 +4,11 @@ import { CommonModule } from '@angular/common';
 import { PrivateRoutingModule } from './private-routing-module';
 import { SharedLayout } from './shared-layout/shared-layout';
 import { SharedModule } from '../../shared/shared-module';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatNativeDateModule } from '@angular/material/core';
+import { StoreModule } from '@ngrx/store';
+import { bookedEventsReducer } from './events/store/booked-events/booked-events.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { BookedEventsEffects } from './events/store/booked-events/booked-events.effect';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   declarations: [SharedLayout],
@@ -13,8 +16,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     CommonModule,
     PrivateRoutingModule,
     SharedModule,
-    MatSidenavModule,
-    MatNativeDateModule,
+    MaterialModule,
+    StoreModule.forFeature('bookedEvents', bookedEventsReducer),
+    EffectsModule.forFeature(BookedEventsEffects),
   ],
 })
 export class PrivateModule {}

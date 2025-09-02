@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { EventsState } from '../../store/events/event.reducer';
 import {
   selectAllEvents,
@@ -8,9 +8,11 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-import { PageEvent } from '@angular/material/paginator';
+
+import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
 import { EventService } from '../../../../../core/services/event/event-service';
 
 @Component({
@@ -23,15 +25,6 @@ export class EventListComponent implements OnInit {
   events$: Observable<Event[]>;
   loading$: Observable<boolean>;
   role$: Observable<string | null>;
-  displayedColumns: string[] = [
-    'title',
-    'category',
-    'date',
-    'location',
-    'tickets',
-    'price',
-    'actions',
-  ];
 
   // Pagination properties
   allEvents: Event[] = [];
@@ -48,7 +41,11 @@ export class EventListComponent implements OnInit {
   filterTimeout: any;
   debounceTime = 300; // ms
 
-  constructor(private store: Store<EventsState>, private router: Router) {
+  constructor(
+    private store: Store<EventsState>,
+    private router: Router,
+    private eventService: EventService
+  ) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
     this.role$ = this.store.select(selectLoginRole);
@@ -56,6 +53,37 @@ export class EventListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
+  }
+
+  getDisplayedColumns(): Observable<string[]> {
+    return this.role$.pipe(
+      map((role) =>
+        role === 'admin'
+          ? [
+              'title',
+              'category',
+              'date',
+              'location',
+              'tickets',
+              'availableTickets',
+              'price',
+              'actions',
+            ]
+          : [
+              'title',
+              'category',
+              'date',
+              'location',
+              'availableTickets',
+              'price',
+              'actions',
+            ]
+      )
+    );
+  }
+  onBookNow(event: Event) {
+    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+    alert(`${event.title} added`);
   }
 
   loadEvents(): void {
@@ -148,10 +176,6 @@ export class EventListComponent implements OnInit {
       );
       this.updateDisplayedEvents();
     }
-  }
-
-  onBookNow() {
-    alert('Event Added');
   }
 
   onAddEvent() {

@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as LoginActions from '../store/login-component.actions';
 import { LoginState } from '../store/login-component.reducer';
+import { FormService } from '../../../../core/services/form/form-service';
 import {
   selectLoginError,
   selectLoginLoading,
@@ -22,17 +23,22 @@ export class LoginComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private store = inject(Store<{ login: LoginState }>);
+  private formService = inject(FormService);
 
   ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    this.loginForm = this.formService.loginForm();
     localStorage.getItem('users')
 
     this.error$ = this.store.select(selectLoginError);
     this.loading$ = this.store.select(selectLoginLoading);
   }
+
+  showPassword = false;
+
+togglePassword(): void {
+  this.showPassword = !this.showPassword;
+}
+
 
   onSubmit(): void {
     if (this.loginForm.valid) {

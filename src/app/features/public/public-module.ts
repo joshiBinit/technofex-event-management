@@ -12,12 +12,14 @@ import { SignupComponent } from './signup/component/signup-component';
 import { LoginComponent } from './login/component/login-component';
 import { LoginEffects } from './login/store/login-component.effects';
 import { loginReducer } from './login/store/login-component.reducer';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   declarations: [SignupComponent, LoginComponent],
   imports: [
     PublicRoutingModule,
     CommonModule,
+    MaterialModule,
     ReactiveFormsModule,
     StoreModule.forFeature('signup', signupReducer),
     StoreModule.forFeature('login', loginReducer),

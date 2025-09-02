@@ -14,9 +14,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../../../shared/material.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { UpdateEventComponent } from './component/update-event-component/update-event-component';
 
 @NgModule({
-  declarations: [AddEventComponent, UserComponent, DashboardComponent],
+  declarations: [AddEventComponent, UserComponent, DashboardComponent, UpdateEventComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

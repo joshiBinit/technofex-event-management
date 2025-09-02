@@ -8,11 +8,10 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-
 import { PageEvent } from '@angular/material/paginator';
-
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
+import { EventService } from '../../../../../core/services/event/event-service';
 
 @Component({
   selector: 'app-event-list-component',
@@ -34,7 +33,6 @@ export class EventListComponent implements OnInit {
     'actions',
   ];
 
-
   // Pagination properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
@@ -44,34 +42,35 @@ export class EventListComponent implements OnInit {
   pageIndex = 0;
   pageSizeOptions: number[] = [5, 10, 25, 50];
   pageEvent: PageEvent = { pageIndex: 0, pageSize: 10, length: 0 };
-  
+
   // Filter
   filterValue = '';
   filterTimeout: any;
   debounceTime = 300; // ms
 
-
-
   constructor(private store: Store<EventsState>, private router: Router) {
-
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
     this.role$ = this.store.select(selectLoginRole);
   }
 
   ngOnInit(): void {
+    this.loadEvents();
+  }
+
+  loadEvents(): void {
     this.store.dispatch(EventsActions.loadEvents());
-    
+
     // Subscribe to events to get the total count and initialize pagination
-    this.events$.subscribe(events => {
+    this.events$.subscribe((events) => {
       if (events && events.length > 0) {
         this.allEvents = events;
         this.filteredEvents = [...events]; // Initialize filtered events with all events
         this.totalItems = events.length;
-        this.pageEvent = { 
-          pageIndex: this.pageIndex, 
-          pageSize: this.pageSize, 
-          length: this.totalItems 
+        this.pageEvent = {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+          length: this.totalItems,
         };
         this.updateDisplayedEvents();
       }
@@ -96,25 +95,32 @@ export class EventListComponent implements OnInit {
     if (this.filterTimeout) {
       clearTimeout(this.filterTimeout);
     }
-    
+
     // Set a new timeout
     this.filterTimeout = setTimeout(() => {
-      const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+      const filterValue = (event.target as HTMLInputElement).value
+        .trim()
+        .toLowerCase();
       this.filterValue = filterValue;
-      
+
       if (filterValue) {
-        this.filteredEvents = this.allEvents.filter(item => 
-          item.title?.toLowerCase().includes(filterValue) ||
-          item.category?.toLowerCase().includes(filterValue) ||
-          item.location?.toLowerCase().includes(filterValue)
+        this.filteredEvents = this.allEvents.filter(
+          (item) =>
+            item.title?.toLowerCase().includes(filterValue) ||
+            item.category?.toLowerCase().includes(filterValue) ||
+            item.location?.toLowerCase().includes(filterValue)
         );
       } else {
         this.filteredEvents = [...this.allEvents];
       }
-      
+
       this.totalItems = this.filteredEvents.length;
       this.pageIndex = 0; // Reset to first page when filtering
-      this.pageEvent = { pageIndex: 0, pageSize: this.pageSize, length: this.totalItems };
+      this.pageEvent = {
+        pageIndex: 0,
+        pageSize: this.pageSize,
+        length: this.totalItems,
+      };
       this.updateDisplayedEvents();
     }, this.debounceTime);
   }
@@ -125,23 +131,53 @@ export class EventListComponent implements OnInit {
   updateDisplayedEvents(): void {
     const startIndex = this.pageIndex * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    
+
     // Slice the filtered data array to get only the items for current page
     this.displayedEvents = this.filteredEvents.slice(startIndex, endIndex);
-    
+
     // Ensure we don't show an empty page if we have data
-    if (this.displayedEvents.length === 0 && this.filteredEvents.length > 0 && this.pageIndex > 0) {
+    if (
+      this.displayedEvents.length === 0 &&
+      this.filteredEvents.length > 0 &&
+      this.pageIndex > 0
+    ) {
       // If current page is empty but we have data, go to the last page with data
-      this.pageIndex = Math.max(0, Math.ceil(this.filteredEvents.length / this.pageSize) - 1);
+      this.pageIndex = Math.max(
+        0,
+        Math.ceil(this.filteredEvents.length / this.pageSize) - 1
+      );
       this.updateDisplayedEvents();
     }
   }
-  
+
   onBookNow() {
     alert('Event Added');
   }
 
   onAddEvent() {
     this.router.navigate(['/admin/addevent']);
+  }
+
+  onUpdateEvent(eventId: number) {
+    this.router.navigate(['/admin/updateevent', eventId]);
+  }
+
+  onDeleteEvent(eventId: number) {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this event?'
+    );
+    if (confirmDelete) {
+      this.eventService.deleteEvent(eventId).subscribe({
+        next: () => {
+          alert('Event deleted successfully!');
+          // Reload events after deletion
+          this.loadEvents();
+        },
+        error: (err) => {
+          console.error('Failed to delete event:', err);
+          alert('Failed to delete event. Please try again.');
+        },
+      });
+    }
   }
 }

@@ -58,17 +58,6 @@
   ],
   "events": [
     {
-      "id": "3",
-      "title": "VueJS Meetup",
-      "category": "Meetup",
-      "description": "Networking event for VueJS enthusiasts and developers.",
-      "date": "2025-09-20",
-      "time": "6:00 PM",
-      "location": "Lalitpur",
-      "totalTickets": 50,
-      "price": 20
-    },
-    {
       "id": "4",
       "title": "Full Stack Development Conference",
       "category": "Conference",
@@ -132,17 +121,6 @@
       "totalTickets": 12,
       "price": 200,
       "date": "2025-10-07T18:15:00.000Z",
-      "time": "12:12"
-    },
-    {
-      "id": "14aa",
-      "title": "Test1",
-      "category": "workshop",
-      "description": "Test1",
-      "location": "Bhaktapur Garden Banquet",
-      "totalTickets": 50,
-      "price": 123,
-      "date": "2025-09-02T18:15:00.000Z",
       "time": "12:12"
     }
   ],

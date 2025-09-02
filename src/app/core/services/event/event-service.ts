@@ -20,4 +20,15 @@ export class EventService {
   loadLocations(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:3000/locations');
   }
+
+  updateEvent(id: number, event: Event) {
+    return this.http.put<Event>(`${this.apiUrl}/${id}`, event);
+  }
+
+  getEventById(id: number): Observable<Event> {
+    return this.http.get<Event>(`${this.apiUrl}/${id}`);
+  }
+  deleteEvent(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

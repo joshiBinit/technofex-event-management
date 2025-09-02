@@ -18,11 +18,11 @@ const routes: Routes = [
           import('./user/user-module').then((m) => m.UserModule),
       },
 
-      {
-        path: 'event',
-        loadChildren: () =>
-          import('./events/event-module').then((m) => m.EventModule),
-      },
+      // {
+      //   path: 'event',
+      //   loadChildren: () =>
+      //     import('./events/event-module').then((m) => m.EventModule),
+      // },
       { path: '', redirectTo: '', pathMatch: 'full' },
     ],
   },

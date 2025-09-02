@@ -20,3 +20,8 @@ export const selectLoginUsername = createSelector(
   selectLoginState,
   (state) => state.username
 );
+
+export const selectLoginEmail = createSelector(
+  selectLoginState,
+  (state) => state.email
+);

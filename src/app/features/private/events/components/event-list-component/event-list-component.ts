@@ -59,6 +59,7 @@ export class EventListComponent {
   }
   onBookNow(event: Event) {
     this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+    alert(`${event.title} added`);
   }
 
   onAddEvent() {

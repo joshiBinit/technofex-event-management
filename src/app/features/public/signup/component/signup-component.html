@@ -6,10 +6,19 @@
       <!-- Username -->
       <div>
         <label class="block text-sm font-medium text-gray-700">Username</label>
-        <input type="text" formControlName="username"
-          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200" placeholder="Enter your username" />
-        <p class="text-red-500 text-xs mt-1"
-          *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+        <input
+          type="text"
+          formControlName="username"
+          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+          placeholder="Enter your username"
+        />
+        <p
+          class="text-red-500 text-xs mt-1"
+          *ngIf="
+            signupForm.get('username')?.invalid &&
+            signupForm.get('username')?.touched
+          "
+        >
           Username is required
         </p>
       </div>
@@ -17,44 +26,101 @@
       <!-- Email -->
       <div>
         <label class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" formControlName="email"
-          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200" placeholder="Enter your email" />
-        <p class="text-red-500 text-xs mt-1"
-          *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+          placeholder="Enter your email"
+        />
+        <p
+          class="text-red-500 text-xs mt-1"
+          *ngIf="
+            signupForm.get('email')?.invalid && signupForm.get('email')?.touched
+          "
+        >
           Valid email is required
         </p>
       </div>
 
       <!-- Password -->
-      <div>
+      <div class="relative">
         <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" formControlName="password"
-          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200" placeholder="Enter your password" />
-        <p class="text-red-500 text-xs mt-1"
-          *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 pr-10"
+          placeholder="Enter your password"
+        />
+
+        <!-- Eye Icon Button -->
+        <button
+          type="button"
+          (click)="showPassword = !showPassword"
+          class="absolute right-3 top-6 text-gray-400 hover:text-gray-500"
+        >
+          <mat-icon>{{
+            showPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+
+        <p
+          class="text-red-500 text-xs mt-1"
+          *ngIf="
+            signupForm.get('password')?.invalid &&
+            signupForm.get('password')?.touched
+          "
+        >
           Password must be at least 6 characters
         </p>
       </div>
 
       <!-- Confirm Password -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
-        <input type="password" formControlName="confirmPassword"
-          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
-          placeholder="Confirm your password" />
-        <p class="text-red-500 text-xs mt-1"
-          *ngIf="signupForm.errors?.['mismatch'] && signupForm.get('confirmPassword')?.touched">
+      <div class="relative mt-4">
+        <label class="block text-sm font-medium text-gray-700"
+          >Confirm Password</label
+        >
+        <input
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 pr-10"
+          placeholder="Confirm your password"
+        />
+
+        <!-- Eye Icon Button -->
+        <button
+          type="button"
+          (click)="showConfirmPassword = !showConfirmPassword"
+          class="absolute right-3 top-6 text-gray-400 hover:text-gray-500"
+        >
+          <mat-icon>{{
+            showConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+
+        <p
+          class="text-red-500 text-xs mt-1"
+          *ngIf="signupForm.errors?.['mismatch'] && signupForm.get('confirmPassword')?.touched"
+        >
           Passwords do not match
         </p>
       </div>
 
       <!-- Error -->
-      <p class="text-red-500 text-sm" *ngIf="error$ | async as error">{{ error }}</p>
+      <p class="text-red-500 text-sm" *ngIf="error$ | async as error">
+        {{ error }}
+      </p>
 
       <!-- Button -->
-      <button type="submit" [disabled]="signupForm.invalid || (loading$ | async)"
-        class="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50">
-        {{ (loading$ | async) ? 'Signing up...' : 'Sign Up' }}
+      <button
+        type="submit"
+        [disabled]="signupForm.invalid || (loading$ | async)"
+        [ngClass]="{
+          'cursor-not-allowed': signupForm.invalid || (loading$ | async),
+          'cursor-pointer': signupForm.valid && !(loading$ | async)
+        }"
+        class="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+      >
+        {{ (loading$ | async) ? "Signing up..." : "Sign Up" }}
       </button>
     </form>
 

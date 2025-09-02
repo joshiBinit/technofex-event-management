@@ -25,4 +25,20 @@ export class FormService {
       price: ['', [Validators.required, Validators.min(0)]],
     });
   }
+  loginForm(): FormGroup {
+     return this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
+
+  signupForm(): FormGroup {
+    return this.fb.group({
+     
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    });
+  }
 }

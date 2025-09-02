@@ -8,6 +8,7 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-event-list-component',
   standalone: false,
@@ -27,14 +28,32 @@ export class EventListComponent {
     'actions',
   ];
 
+  filteredEvents: Event[] = [];
+  events: Event[] = [];
+
   constructor(private store: Store<EventsState>) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
   }
   ngOnInit(): void {
     this.store.dispatch(EventsActions.loadEvents());
+
+    this.events$.subscribe((events) => {
+      this.events = events;
+      this.filteredEvents = events;
+    });
   }
   onBookNow() {
     alert('Event Added');
+  }
+
+  onSearchChanged(searchTerm: string) {
+    const term = searchTerm.toLowerCase();
+    this.filteredEvents = this.events.filter(
+      (event) =>
+        event.title.toLowerCase().includes(term) ||
+        event.category.toLowerCase().includes(term) ||
+        event.location.toLowerCase().includes(term)
+    );
   }
 }

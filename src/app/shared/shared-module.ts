@@ -7,10 +7,17 @@ import { SidebarComponent } from './components/sidebar-component/sidebar-compone
 import { MaterialModule } from './material.module';
 
 import { ProfileComponent } from './components/profile/profile';
+import { FormsModule } from '@angular/forms';
+import { SearchComponent } from './components/search-component/search-component';
 
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, ProfileComponent],
-  imports: [CommonModule, SharedRoutingModule, MaterialModule],
-  exports: [HeaderComponent, SidebarComponent],
+  declarations: [
+    HeaderComponent,
+    SidebarComponent,
+    ProfileComponent,
+    SearchComponent,
+  ],
+  imports: [CommonModule, SharedRoutingModule, MaterialModule, FormsModule],
+  exports: [HeaderComponent, SidebarComponent, SearchComponent],
 })
 export class SharedModule {}

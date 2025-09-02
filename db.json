@@ -26,6 +26,13 @@
       "email": "binitjoshi4554@gmail.com",
       "password": "binitjoshi",
       "role": "user"
+    },
+    {
+      "id": "281d",
+      "username": "srijana",
+      "email": "srijana@gmail.com",
+      "password": "srijana",
+      "role": "user"
     }
   ],
   "events": [

@@ -1,0 +1,9 @@
+<div class="search-container mb-4">
+  <input
+    type="text"
+    placeholder="Search events by title..."
+    [(ngModel)]="searchTerm"
+    (input)="onSearch()"
+    class="border rounded px-2 py-1 w-full max-w-sm"
+  />
+</div>

@@ -19,6 +19,13 @@
       "email": "puja@gmail.com",
       "password": "puja123",
       "role": "user"
+    },
+    {
+      "id": "a06c",
+      "username": "joe",
+      "email": "joe@test.com",
+      "password": "joe123",
+      "role": "user"
     }
   ],
   "events": [
@@ -128,47 +135,91 @@
       "location": "Kathmandu",
       "totalTickets": 150,
       "price": 75
+    },
+    {
+      "id": "4ffa",
+      "title": "Test 1",
+      "category": "Test 1",
+      "description": "Test 1",
+      "date": "2025-08-29T18:15:00.000Z",
+      "time": "00:12",
+      "location": "Test 1",
+      "totalTickets": 200,
+      "price": 3000
+    },
+    {
+      "id": "5dca",
+      "title": "sdfsad",
+      "category": "asdasd",
+      "description": "asdasd",
+      "date": "2025-08-28T18:15:00.000Z",
+      "time": "12:31",
+      "location": "asdasd",
+      "totalTickets": 1123,
+      "price": 123123
+    },
+    {
+      "id": "a7b0",
+      "title": "asdasd",
+      "category": "asdasd",
+      "description": "asdasd",
+      "date": "2025-08-29T18:15:00.000Z",
+      "time": "12:31",
+      "location": "asdasd",
+      "totalTickets": 12,
+      "price": 123123
+    },
+    {
+      "id": "1255",
+      "title": "Test",
+      "category": "conference",
+      "description": "Test",
+      "location": "Test",
+      "totalTickets": 12,
+      "price": 200,
+      "date": "2025-10-07T18:15:00.000Z",
+      "time": "12:12"
     }
   ],
   "locations": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Hotel Yak & Yeti Conference Hall"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Radisson Hotel Event Center"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Bhrikuti Mandap Exhibition Hall"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Gokarna Forest Resort"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Lalitpur Event Plaza"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Bhaktapur Garden Banquet"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "The Moods Event Hall"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Kathmandu Marriott Hotel Ballroom"
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "Patan Industrial Park Hall"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Nagarkot Event Resort"
     }
   ]

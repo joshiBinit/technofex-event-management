@@ -35,6 +35,7 @@ export class LoginEffects {
 
                 console.log('Login successful:', authData);
 
+                
                 // ✅ Navigate based on role
                 if (role === 'admin') {
                   this.router.navigate(['/admin/dashboard']);

@@ -47,6 +47,13 @@
       "email": "quvimy@mailinator.com",
       "password": "Pa$$w0rd!",
       "role": "user"
+    },
+    {
+      "id": "a06c",
+      "username": "joe",
+      "email": "joe@test.com",
+      "password": "joe123",
+      "role": "user"
     }
   ],
   "events": [
@@ -119,43 +126,43 @@
   ],
   "locations": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Hotel Yak & Yeti Conference Hall"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Radisson Hotel Event Center"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Bhrikuti Mandap Exhibition Hall"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Gokarna Forest Resort"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Lalitpur Event Plaza"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Bhaktapur Garden Banquet"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "The Moods Event Hall"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Kathmandu Marriott Hotel Ballroom"
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "Patan Industrial Park Hall"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Nagarkot Event Resort"
     }
   ]

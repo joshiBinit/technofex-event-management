@@ -9,14 +9,12 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class Pagination implements OnInit {
   @Input() length = 0;
-  @Input() pageSize = 5;
+  @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 50];
   @Input() showFirstLastButtons = true;
+  @Input() pageIndex = 0;
   
   @Output() page = new EventEmitter<PageEvent>();
-  
-  // Current page index
-  pageIndex = 0;
   
   ngOnInit(): void {
     // Initialize with default values if none provided

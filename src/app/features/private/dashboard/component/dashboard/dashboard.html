@@ -10,8 +10,8 @@
   <table mat-table [dataSource]="(events$ | async) || []" class="mat-elevation-z8">
 
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let event">{{ event.id }}</td>
+      <th mat-header-cell *matHeaderCellDef>S.N</th>
+      <td mat-cell *matCellDef="let event;let i=index">{{ i+1 }}</td>
     </ng-container>
 
     <ng-container matColumnDef="title">

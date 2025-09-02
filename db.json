@@ -14,12 +14,25 @@
       "role": "user"
     },
     {
-      "id": "281d",
-      "username": "srijana",
-      "email": "srijana@gmail.com",
-      "password": "srijana"
-
-   
+      "id": "bcda",
+      "username": "puja",
+      "email": "puja@gmail.com",
+      "password": "puja123",
+      "role": "user"
+    },
+    {
+      "id": "a06c",
+      "username": "joe",
+      "email": "joe@test.com",
+      "password": "joe123",
+      "role": "user"
+    },
+    {
+      "id": "b8e7",
+      "username": "Veniam porro autem ",
+      "email": "tirytuwi@mailinator.com",
+      "password": "Pa$$w0rd!",
+      "role": "user"
     }
   ],
   "events": [
@@ -98,17 +111,6 @@
   ],
   "bookedEvents": [
     {
-      "id": "3",
-      "title": "VueJS Meetup",
-      "category": "Meetup",
-      "description": "Networking event for VueJS enthusiasts and developers.",
-      "date": "2025-09-20",
-      "time": "6:00 PM",
-      "location": "Lalitpur",
-      "totalTickets": 50,
-      "price": 20
-    },
-    {
       "id": "4",
       "title": "Full Stack Development Conference",
       "category": "Conference",
@@ -117,86 +119,20 @@
       "time": "8:30 AM",
       "location": "Bhaktapur",
       "totalTickets": 200,
+      "availableTickets": 200,
       "price": 100
     },
     {
-      "id": "5",
-      "title": "AI & Machine Learning Seminar",
-      "category": "Seminar",
-      "description": "Deep dive into AI and ML concepts with practical examples.",
-      "date": "2025-09-30",
-      "time": "2:00 PM",
+      "id": "6",
+      "title": "Cybersecurity Workshop",
+      "category": "Workshop",
+      "description": "Hands-on training on cybersecurity tools and techniques.",
+      "date": "2025-10-05",
+      "time": "10:00 AM",
       "location": "Kathmandu",
-      "totalTickets": 150,
-      "price": 75
-    },
-    {
-      "id": "4ffa",
-      "title": "Test 1",
-      "category": "Test 1",
-      "description": "Test 1",
-      "date": "2025-08-29T18:15:00.000Z",
-      "time": "00:12",
-      "location": "Test 1",
-      "totalTickets": 200,
-      "price": 3000
-    },
-    {
-      "id": "5dca",
-      "title": "sdfsad",
-      "category": "asdasd",
-      "description": "asdasd",
-      "date": "2025-08-28T18:15:00.000Z",
-      "time": "12:31",
-      "location": "asdasd",
-      "totalTickets": 1123,
-      "price": 123123
-    },
-    {
-      "id": "a7b0",
-      "title": "asdasd",
-      "category": "asdasd",
-      "description": "asdasd",
-      "date": "2025-08-29T18:15:00.000Z",
-      "time": "12:31",
-      "location": "asdasd",
-      "totalTickets": 12,
-      "price": 123123
-    },
-    {
-      "id": "1255",
-      "title": "Test",
-      "category": "conference",
-      "description": "Test",
-      "location": "Test",
-      "totalTickets": 12,
-      "price": 200,
-      "date": "2025-10-07T18:15:00.000Z",
-      "time": "12:12"
-    },
-    {
-      "id": "7",
-      "title": "Startup Pitch Night",
-      "category": "Networking",
-      "description": "Connect with investors and showcase startup ideas.",
-      "date": "2025-10-12",
-      "time": "7:00 PM",
-      "location": "Bhaktapur",
-      "totalTickets": 80,
-      "availableTickets": 80,
-      "price": 30
-    },
-    {
-      "id": "3",
-      "title": "VueJS Meetup",
-      "category": "Meetup",
-      "description": "Networking event for VueJS enthusiasts and developers.",
-      "date": "2025-09-20",
-      "time": "6:00 PM",
-      "location": "Lalitpur",
-      "totalTickets": 50,
-      "availableTickets": 50,
-      "price": 20
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 50
     }
   ],
   "locations": [

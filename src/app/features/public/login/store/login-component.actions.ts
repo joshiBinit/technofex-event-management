@@ -7,10 +7,14 @@ export const login = createAction(
 
 export const loginSuccess = createAction(
   '[Login] Login Success',
-  props<{ token: string; role: string; username: string }>()
+  props<{ token: string; role: string; username: string; email: string }>()
 );
 
 export const loginFailure = createAction(
   '[Login] Login Failure',
   props<{ error: string }>()
+);
+export const initializeLogin = createAction(
+  '[Login] Initialize From LocalStorage',
+  props<{ token: string; role: string; username: string; email: string }>()
 );

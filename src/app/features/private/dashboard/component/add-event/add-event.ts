@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-event',
@@ -11,14 +12,26 @@ import { EventService } from '../../../../../core/services/event/event-service';
 })
 export class AddEventComponent {
   eventForm!: FormGroup;
+  locations: string[] = [];
 
   constructor(
+    private router: Router,
     private formService: FormService,
     private eventService: EventService
   ) {}
 
   ngOnInit(): void {
     this.eventForm = this.formService.buildNewEventForm();
+    this.loadLocations();
+  }
+
+  loadLocations() {
+    this.eventService.loadLocations().subscribe({
+      next: (data) => {
+        this.locations = data.map((loc) => loc.name);
+      },
+      error: (err) => console.error('Failed to load locations:', err),
+    });
   }
 
   onSubmit() {
@@ -49,6 +62,7 @@ export class AddEventComponent {
           console.log('Event added successfully:', event);
           alert('Event created successfully!');
           this.eventForm.reset();
+          // this.router.navigate(['/admin'])
         },
         error: (err) => {
           console.error('Error adding event:', err);

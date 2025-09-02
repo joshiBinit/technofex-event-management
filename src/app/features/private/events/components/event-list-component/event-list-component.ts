@@ -8,7 +8,12 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
+
 import { PageEvent } from '@angular/material/paginator';
+
+import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-event-list-component',
   standalone: false,
@@ -18,6 +23,7 @@ import { PageEvent } from '@angular/material/paginator';
 export class EventListComponent implements OnInit {
   events$: Observable<Event[]>;
   loading$: Observable<boolean>;
+  role$: Observable<string | null>;
   displayedColumns: string[] = [
     'title',
     'category',
@@ -28,6 +34,7 @@ export class EventListComponent implements OnInit {
     'actions',
   ];
 
+
   // Pagination properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
@@ -36,9 +43,13 @@ export class EventListComponent implements OnInit {
   pageIndex = 0;
   pageSizeOptions: number[] = [5, 10, 25, 50];
 
-  constructor(private store: Store<EventsState>) {
+
+
+  constructor(private store: Store<EventsState>, private router: Router) {
+
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
+    this.role$ = this.store.select(selectLoginRole);
   }
 
   ngOnInit(): void {
@@ -74,5 +85,9 @@ export class EventListComponent implements OnInit {
   
   onBookNow() {
     alert('Event Added');
+  }
+
+  onAddEvent() {
+    this.router.navigate(['/admin/addevent']);
   }
 }

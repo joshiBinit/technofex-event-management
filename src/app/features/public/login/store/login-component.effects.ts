@@ -31,6 +31,7 @@ export class LoginEffects {
                 const token = authData.token;
                 const role = authData.role;
                 const username = authData.username;
+                const email = authData.email;
 
                 console.log('Login successful:', authData);
 
@@ -47,6 +48,7 @@ export class LoginEffects {
                     token,
                     role,
                     username,
+                    email,
                   })
                 );
               } else {

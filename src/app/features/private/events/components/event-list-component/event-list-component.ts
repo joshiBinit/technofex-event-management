@@ -136,17 +136,11 @@ export class EventListComponent implements OnInit {
     this.router.navigate(['/admin/addevent']);
   }
 
-  /**
-   * Navigation to update event page
-   */
-  onUpdateEvent(eventId: number) {
+  onUpdateEvent(eventId: string) {
     this.router.navigate(['/admin/updateevent', eventId]);
   }
 
-  /**
-   * Delete an event and reload list
-   */
-  onDeleteEvent(eventId: number) {
+  onDeleteEvent(eventId: string) {
     const confirmDelete = confirm(
       'Are you sure you want to delete this event?'
     );

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class AddEventComponent {
   eventForm!: FormGroup;
   locations: string[] = [];
+  nextId = 10;
 
   constructor(
     private router: Router,
@@ -47,6 +48,7 @@ export class AddEventComponent {
       } = this.eventForm.value;
 
       const payload = {
+        id: this.nextId.toString(),
         title,
         category,
         description,
@@ -62,7 +64,8 @@ export class AddEventComponent {
           console.log('Event added successfully:', event);
           alert('Event created successfully!');
           this.eventForm.reset();
-          // this.router.navigate(['/admin'])
+          this.router.navigate(['/admin/event/list']);
+          this.nextId++;
         },
         error: (err) => {
           console.error('Error adding event:', err);

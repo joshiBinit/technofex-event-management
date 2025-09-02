@@ -14,7 +14,7 @@ import { Event } from '../../../../../shared/model/event.model';
 export class UpdateEventComponent implements OnInit {
   eventForm!: FormGroup;
   locations: string[] = [];
-  eventId!: number;
+  eventId!: string; // <-- changed to string
 
   constructor(
     private router: Router,
@@ -24,15 +24,13 @@ export class UpdateEventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Initialize form
     this.eventForm = this.formService.buildNewEventForm();
     this.loadLocations();
 
-    // Get event ID from route
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
-        this.eventId = +id;
+        this.eventId = id; // <-- keep as string
         this.loadEvent(this.eventId);
       }
     });
@@ -47,16 +45,21 @@ export class UpdateEventComponent implements OnInit {
     });
   }
 
-  loadEvent(id: number) {
+  loadEvent(id: string) {
+    // <-- parameter is string
     this.eventService.getEventById(id).subscribe({
       next: (event) => {
         if (event) {
+          if (event.location && !this.locations.includes(event.location)) {
+            this.locations.push(event.location);
+          }
+
           this.eventForm.patchValue({
             title: event.title,
             category: event.category,
             description: event.description,
             schedule: {
-              date: event.date ? new Date(event.date) : null, // convert string -> Date
+              date: event.date ? new Date(event.date) : null,
               time: event.time,
             },
             location: event.location,
@@ -74,13 +77,13 @@ export class UpdateEventComponent implements OnInit {
       const formValue = this.eventForm.value;
 
       const payload: Event = {
-        id: this.eventId,
+        id: this.eventId, // <-- string now
         title: formValue.title,
         category: formValue.category,
         description: formValue.description,
         date: formValue.schedule.date
           ? formValue.schedule.date.toISOString().split('T')[0]
-          : '', // convert Date -> 'YYYY-MM-DD' string
+          : '',
         time: formValue.schedule.time,
         location: formValue.location,
         totalTickets: formValue.totalTickets,

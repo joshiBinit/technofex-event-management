@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { EventsEffects } from './store/events/event.effect';
 import { MaterialModule } from '../../../shared/material.module';
 import { eventsReducer } from './store/events/event.reducer';
+import { SharedModule } from '../../../shared/shared-module';
 
 @NgModule({
   declarations: [EventListComponent],
@@ -18,6 +19,7 @@ import { eventsReducer } from './store/events/event.reducer';
     StoreModule.forFeature('events', eventsReducer),
     EffectsModule.forFeature(EventsEffects),
     MaterialModule,
+    SharedModule,
   ],
 })
 export class EventModule {}

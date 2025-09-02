@@ -7,10 +7,10 @@ import { SidebarComponent } from './components/sidebar-component/sidebar-compone
 import { MaterialModule } from './material.module';
 
 import { ProfileComponent } from './components/profile/profile';
-
+import { Pagination } from './components/pagination/pagination';
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, ProfileComponent],
+  declarations: [HeaderComponent, SidebarComponent, ProfileComponent, Pagination],
   imports: [CommonModule, SharedRoutingModule, MaterialModule],
-  exports: [HeaderComponent, SidebarComponent],
+  exports: [HeaderComponent, SidebarComponent, Pagination],
 })
 export class SharedModule {}

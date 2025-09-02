@@ -19,7 +19,7 @@
   <div class="overflow-x-auto" *ngIf="events$ | async as events">
     <table
       mat-table
-      [dataSource]="events || []"
+      [dataSource]="displayedEvents"
       class="mat-elevation-z4 w-full rounded-lg overflow-hidden"
     >
       <!-- Title Column -->

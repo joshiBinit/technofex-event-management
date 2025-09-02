@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { EventsState } from '../../store/events/event.reducer';
 import {
   selectAllEvents,
@@ -9,10 +9,11 @@ import {
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
 
-import { PageEvent } from '@angular/material/paginator';
-
+import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { EventService } from '../../../../../core/services/event/event-service';
 
 @Component({
   selector: 'app-event-list-component',
@@ -49,19 +50,57 @@ export class EventListComponent implements OnInit {
   filterTimeout: any;
   debounceTime = 300; // ms
 
-  constructor(private store: Store<EventsState>, private router: Router) {
+  constructor(
+    private store: Store<EventsState>,
+    private router: Router,
+    private eventService: EventService
+  ) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
     this.role$ = this.store.select(selectLoginRole);
   }
 
   ngOnInit(): void {
-    this.store.dispatch(EventsActions.loadEvents());
+    this.loadEvents();
     this.events$.subscribe((events) => {
       this.events = events;
       this.filteredEvents = events;
     });
+  }
 
+  getDisplayedColumns(): Observable<string[]> {
+    return this.role$.pipe(
+      map((role) =>
+        role === 'admin'
+          ? [
+              'title',
+              'category',
+              'date',
+              'location',
+              'tickets',
+              'availableTickets',
+              'price',
+              'actions',
+            ]
+          : [
+              'title',
+              'category',
+              'date',
+              'location',
+              'availableTickets',
+              'price',
+              'actions',
+            ]
+      )
+    );
+  }
+  onBookNow(event: Event) {
+    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+    alert(`${event.title} added`);
+  }
+
+  loadEvents(): void {
+    this.store.dispatch(EventsActions.loadEvents());
     // Subscribe to events to get the total count and initialize pagination
     this.events$.subscribe((events) => {
       if (events && events.length > 0) {
@@ -151,13 +190,10 @@ export class EventListComponent implements OnInit {
     }
   }
 
-  onBookNow() {
-    alert('Event Added');
-  }
-
   onAddEvent() {
     this.router.navigate(['/admin/addevent']);
   }
+
   onSearchChanged(searchTerm: string) {
     const term = searchTerm.toLowerCase();
     this.filteredEvents = this.events.filter(
@@ -166,5 +202,27 @@ export class EventListComponent implements OnInit {
         event.category.toLowerCase().includes(term) ||
         event.location.toLowerCase().includes(term)
     );
+  }
+  onUpdateEvent(eventId: number) {
+    this.router.navigate(['/admin/updateevent', eventId]);
+  }
+
+  onDeleteEvent(eventId: number) {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this event?'
+    );
+    if (confirmDelete) {
+      this.eventService.deleteEvent(eventId).subscribe({
+        next: () => {
+          alert('Event deleted successfully!');
+          // Reload events after deletion
+          this.loadEvents();
+        },
+        error: (err) => {
+          console.error('Failed to delete event:', err);
+          alert('Failed to delete event. Please try again.');
+        },
+      });
+    }
   }
 }

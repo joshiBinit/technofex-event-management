@@ -13,15 +13,8 @@
     }
   </div>
 
-  <!-- Filter Section -->
-  <div class="mb-4">
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Filter Events</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by title, category, location...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </div>
-
+  <!-- Loading message -->
+  <p class="text-gray-600" *ngIf="loading$ | async">Loading events...</p>
   @if (loading$ | async) {
   <p class="text-gray-600">Loading events...</p>
   }
@@ -29,9 +22,12 @@
   <app-search-component (searchChanged)="onSearchChanged($event)"></app-search-component>
 
   <div class="overflow-x-auto">
+
+  <div class="overflow-x-auto" *ngIf="events$ | async as events">
+
     <table
       mat-table
-      [dataSource]="displayedEvents"
+      [dataSource]="events || []"
       class="mat-elevation-z4 w-full rounded-lg overflow-hidden"
     >
       <!-- Title Column -->
@@ -74,6 +70,16 @@
         </td>
       </ng-container>
 
+      <!-- Available Tickets Column -->
+      <ng-container matColumnDef="availableTickets">
+        <th mat-header-cell *matHeaderCellDef class="px-4 py-2">
+          Available Tickets
+        </th>
+        <td mat-cell *matCellDef="let event" class="px-4 py-2">
+          {{ event.availableTickets }}
+        </td>
+      </ng-container>
+
       <!-- Price Column -->
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Price</th>
@@ -86,22 +92,48 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Actions</th>
         <td mat-cell *matCellDef="let event" class="px-4 py-2">
-          <button
-            mat-raised-button
-            color="primary"
-            class="rounded-lg"
-            (click)="onBookNow()"
-          >
-            Book Now
-          </button>
+          <!-- Admin Buttons -->
+          <ng-container *ngIf="(role$ | async) === 'admin'">
+            <button
+              mat-raised-button
+              color="primary"
+              class="rounded-lg mr-2"
+              (click)="onUpdateEvent(event.id)"
+            >
+              Update
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              class="rounded-lg"
+              (click)="onDeleteEvent(event.id)"
+            >
+              Delete
+            </button>
+          </ng-container>
+
+          <!-- User Button -->
+          <ng-container *ngIf="(role$ | async) === 'user'">
+            <button
+              mat-raised-button
+              color="primary"
+              class="rounded-lg"
+              (click)="onBookNow(event)"
+            >
+              Book Now
+            </button>
+          </ng-container>
         </td>
       </ng-container>
 
       <!-- Header and Row Declarations -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns() | async"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: getDisplayedColumns() | async"
+      ></tr>
     </table>
-    
+
     <!-- Pagination Component -->
     <app-pagination
       [length]="totalItems"
@@ -110,11 +142,15 @@
       [showFirstLastButtons]="true"
       [pageIndex]="pageIndex"
       (page)="onPageChange($event)"
-      class="mt-4">
+      class="mt-4"
+    >
     </app-pagination>
-    
+
     <!-- No Results Message -->
-    <div *ngIf="filteredEvents.length === 0 && !(loading$ | async)" class="p-4 text-center text-gray-500">
+    <div
+      *ngIf="filteredEvents.length === 0 && !(loading$ | async)"
+      class="p-4 text-center text-gray-500"
+    >
       No events found matching your search criteria.
     </div>
   </div>

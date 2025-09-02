@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './component/dashboard/dashboard';
 import { AddEventComponent } from './component/add-event/add-event';
 import { UserComponent } from './component/user-component/user-component';
+import { EventListComponent } from '../events/components/event-list-component/event-list-component';
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'addevent', component: AddEventComponent },
   { path: 'userlist', component: UserComponent },
+  { path: 'event/list', component: EventListComponent },
 ];
 
 @NgModule({

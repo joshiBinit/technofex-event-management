@@ -1,5 +1,26 @@
 <div class="p-4">
-  <h1 class="text-2xl font-bold mb-4">Event List</h1>
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold mb-4">Event List</h1>
+    @if ((role$ | async) === 'admin') {
+    <button
+      mat-raised-button
+      color="accent"
+      class="rounded-lg"
+      (click)="onAddEvent()"
+    >
+      + Add New Event
+    </button>
+    }
+  </div>
+
+  <!-- Filter Section -->
+  <div class="mb-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Filter Events</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search by title, category, location...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
 
   @if (loading$ | async) {
   <p class="text-gray-600">Loading events...</p>
@@ -10,7 +31,7 @@
   <div class="overflow-x-auto">
     <table
       mat-table
-      [dataSource]="filteredEvents || []"
+      [dataSource]="displayedEvents"
       class="mat-elevation-z4 w-full rounded-lg overflow-hidden"
     >
       <!-- Title Column -->
@@ -80,5 +101,21 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    
+    <!-- Pagination Component -->
+    <app-pagination
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      class="mt-4">
+    </app-pagination>
+    
+    <!-- No Results Message -->
+    <div *ngIf="filteredEvents.length === 0 && !(loading$ | async)" class="p-4 text-center text-gray-500">
+      No events found matching your search criteria.
+    </div>
   </div>
 </div>

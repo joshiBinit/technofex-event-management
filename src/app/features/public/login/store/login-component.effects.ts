@@ -31,9 +31,11 @@ export class LoginEffects {
                 const token = authData.token;
                 const role = authData.role;
                 const username = authData.username;
+                const email = authData.email;
 
                 console.log('Login successful:', authData);
 
+                
                 // ✅ Navigate based on role
                 if (role === 'admin') {
                   this.router.navigate(['/admin/dashboard']);
@@ -46,6 +48,7 @@ export class LoginEffects {
                     token,
                     role,
                     username,
+                    email,
                   })
                 );
               } else {

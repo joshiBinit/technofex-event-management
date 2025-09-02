@@ -19,11 +19,15 @@
   <p class="text-gray-600">Loading events...</p>
   }
   
-  <app-search-component (searchChanged)="onSearchChanged($event)"></app-search-component>
+  <app-search-component 
+    [data]="allEvents" 
+    [searchFields]="searchFields"
+    [placeholder]="'Search by title, category, location...'"
+    (searchChanged)="onSearchChanged($event)"
+    (filteredData)="onFilteredDataChanged($event)">
+  </app-search-component>
 
   <div class="overflow-x-auto">
-
-  <div class="overflow-x-auto" *ngIf="events$ | async as events">
 
     <table
       mat-table
@@ -136,19 +140,18 @@
 
     <!-- Pagination Component -->
     <app-pagination
-      [length]="totalItems"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions"
+      #pagination
+      [data]="allEvents"
       [showFirstLastButtons]="true"
-      [pageIndex]="pageIndex"
       (page)="onPageChange($event)"
+      (paginatedData)="onPaginatedDataChanged($event)"
       class="mt-4"
     >
     </app-pagination>
 
     <!-- No Results Message -->
     <div
-      *ngIf="filteredEvents.length === 0 && !(loading$ | async)"
+      *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
       class="p-4 text-center text-gray-500"
     >
       No events found matching your search criteria.

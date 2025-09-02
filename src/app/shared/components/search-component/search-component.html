@@ -1,9 +1,22 @@
 <div class="search-container mb-4">
-  <input
-    type="text"
-    placeholder="Search events by title..."
-    [(ngModel)]="searchTerm"
-    (input)="onSearch()"
-    class="border rounded px-2 py-1 w-full max-w-sm"
-  />
+  <mat-form-field appearance="outline" class="w-full max-w-md">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      type="text"
+      [placeholder]="placeholder"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+    />
+    <button
+      *ngIf="searchTerm"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="clearSearch()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-icon *ngIf="!searchTerm" matSuffix>search</mat-icon>
+  </mat-form-field>
 </div>

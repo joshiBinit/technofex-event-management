@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import { EventsState } from '../../store/events/event.reducer';
@@ -8,12 +8,12 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-
 import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
 import { EventService } from '../../../../../core/services/event/event-service';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-event-list-component',
@@ -22,33 +22,25 @@ import { EventService } from '../../../../../core/services/event/event-service';
   styleUrl: './event-list-component.scss',
 })
 export class EventListComponent implements OnInit {
+  // Observables
   events$: Observable<Event[]>;
   loading$: Observable<boolean>;
   role$: Observable<string | null>;
-  displayedColumns: string[] = [
-    'title',
-    'category',
-    'date',
-    'location',
-    'tickets',
-    'price',
-    'actions',
-  ];
-  // Pagination properties
+
+  // Data properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
-  filteredEvents: Event[] = [];
-  events: Event[] = [];
+  filterEvents: Event[] = [];
+  // Pagination
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
-  pageSizeOptions: number[] = [5, 10, 25, 50];
-  pageEvent: PageEvent = { pageIndex: 0, pageSize: 10, length: 0 };
 
-  // Filter
-  filterValue = '';
-  filterTimeout: any;
-  debounceTime = 300; // ms
+  // Search fields for the search component
+  searchFields: string[] = ['title', 'category', 'location'];
+
+  // Reference to pagination component
+  @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
   constructor(
     private store: Store<EventsState>,
@@ -62,12 +54,30 @@ export class EventListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
+  }
+
+  /**
+   * Load all events and initialize pagination
+   */
+  loadEvents(): void {
+    this.store.dispatch(EventsActions.loadEvents());
+
     this.events$.subscribe((events) => {
-      this.events = events;
-      this.filteredEvents = events;
+      if (events && events.length > 0) {
+        this.allEvents = events;
+        this.totalItems = events.length;
+
+        // Pass all events to pagination to manage slicing
+        if (this.paginationComponent) {
+          this.paginationComponent.setFilteredData(events);
+        }
+      }
     });
   }
 
+  /**
+   * Determine table columns based on user role
+   */
   getDisplayedColumns(): Observable<string[]> {
     return this.role$.pipe(
       map((role) =>
@@ -94,121 +104,48 @@ export class EventListComponent implements OnInit {
       )
     );
   }
+
+  /**
+   * Handle booking an event
+   */
   onBookNow(event: Event) {
     this.store.dispatch(BookedEventsActions.bookEvent({ event }));
     alert(`${event.title} added`);
   }
 
-  loadEvents(): void {
-    this.store.dispatch(EventsActions.loadEvents());
-    // Subscribe to events to get the total count and initialize pagination
-    this.events$.subscribe((events) => {
-      if (events && events.length > 0) {
-        this.allEvents = events;
-        this.filteredEvents = [...events]; // Initialize filtered events with all events
-        this.totalItems = events.length;
-        this.pageEvent = {
-          pageIndex: this.pageIndex,
-          pageSize: this.pageSize,
-          length: this.totalItems,
-        };
-        this.updateDisplayedEvents();
-      }
-    });
+  /**
+   * Handle paginated data emitted by the pagination component
+   */
+  onPaginatedDataChanged(data: Event[]): void {
+    this.displayedEvents = data;
   }
 
   /**
-   * Handle page changes from the paginator
+   * Handle filtered data from the search component
    */
-  onPageChange(event: PageEvent): void {
-    this.pageEvent = event;
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    this.updateDisplayedEvents();
-  }
-
-  /**
-   * Apply filter to events with debouncing
-   */
-  applyFilter(event: KeyboardEvent): void {
-    // Clear any existing timeout to implement debouncing
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout);
-    }
-
-    // Set a new timeout
-    this.filterTimeout = setTimeout(() => {
-      const filterValue = (event.target as HTMLInputElement).value
-        .trim()
-        .toLowerCase();
-      this.filterValue = filterValue;
-
-      if (filterValue) {
-        this.filteredEvents = this.allEvents.filter(
-          (item) =>
-            item.title?.toLowerCase().includes(filterValue) ||
-            item.category?.toLowerCase().includes(filterValue) ||
-            item.location?.toLowerCase().includes(filterValue)
-        );
-      } else {
-        this.filteredEvents = [...this.allEvents];
-      }
-
-      this.totalItems = this.filteredEvents.length;
-      this.pageIndex = 0; // Reset to first page when filtering
-      this.pageEvent = {
-        pageIndex: 0,
-        pageSize: this.pageSize,
-        length: this.totalItems,
-      };
-      this.updateDisplayedEvents();
-    }, this.debounceTime);
-  }
-
-  /**
-   * Update the displayed events based on current page and page size
-   */
-  updateDisplayedEvents(): void {
-    const startIndex = this.pageIndex * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-
-    // Slice the filtered data array to get only the items for current page
-    this.displayedEvents = this.filteredEvents.slice(startIndex, endIndex);
-
-    // Ensure we don't show an empty page if we have data
-    if (
-      this.displayedEvents.length === 0 &&
-      this.filteredEvents.length > 0 &&
-      this.pageIndex > 0
-    ) {
-      // If current page is empty but we have data, go to the last page with data
-      this.pageIndex = Math.max(
-        0,
-        Math.ceil(this.filteredEvents.length / this.pageSize) - 1
-      );
-      this.updateDisplayedEvents();
+  onFilteredDataChanged(data: Event[]): void {
+    if (this.paginationComponent) {
+      this.paginationComponent.setFilteredData(data);
     }
   }
 
+  /**
+   * Navigation to add event page
+   */
   onAddEvent() {
     this.router.navigate(['/admin/addevent']);
   }
 
-  onSearchChanged(searchTerm: string) {
-    const term = searchTerm.toLowerCase();
-    console.log(searchTerm);
-
-    this.filteredEvents = this.events.filter(
-      (event) =>
-        event.title.toLowerCase().includes(term) ||
-        event.category.toLowerCase().includes(term) ||
-        event.location.toLowerCase().includes(term)
-    );
-  }
+  /**
+   * Navigation to update event page
+   */
   onUpdateEvent(eventId: number) {
     this.router.navigate(['/admin/updateevent', eventId]);
   }
 
+  /**
+   * Delete an event and reload list
+   */
   onDeleteEvent(eventId: number) {
     const confirmDelete = confirm(
       'Are you sure you want to delete this event?'
@@ -217,7 +154,6 @@ export class EventListComponent implements OnInit {
       this.eventService.deleteEvent(eventId).subscribe({
         next: () => {
           alert('Event deleted successfully!');
-          // Reload events after deletion
           this.loadEvents();
         },
         error: (err) => {
@@ -226,5 +162,21 @@ export class EventListComponent implements OnInit {
         },
       });
     }
+  }
+
+  /**
+   * Placeholder for search term changes (used by search component)
+   */
+  onSearchChanged(searchTerm: string) {
+    console.log('Search term:', searchTerm);
+    // Filtering logic is handled by the search component, which emits filtered data
+  }
+
+  /**
+   * Optional: handle page change events if needed
+   */
+  onPageChange(event: PageEvent): void {
+    console.log('Page changed:', event);
+    // Currently pagination component handles slicing automatically
   }
 }

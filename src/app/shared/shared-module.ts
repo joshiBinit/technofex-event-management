@@ -7,10 +7,18 @@ import { SidebarComponent } from './components/sidebar-component/sidebar-compone
 import { MaterialModule } from './material.module';
 
 import { ProfileComponent } from './components/profile/profile';
-import { Pagination } from './components/pagination/pagination';
+import { PaginationComponent } from '../shared/components/pagination/pagination';
+import { SearchComponent } from './components/search-component/search-component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, ProfileComponent, Pagination],
-  imports: [CommonModule, SharedRoutingModule, MaterialModule],
-  exports: [HeaderComponent, SidebarComponent, Pagination],
+  declarations: [
+    HeaderComponent,
+    SidebarComponent,
+    ProfileComponent,
+    SearchComponent,
+    PaginationComponent
+  ],
+  imports: [CommonModule, SharedRoutingModule, MaterialModule, FormsModule],
+  exports: [HeaderComponent, SidebarComponent, PaginationComponent, SearchComponent],
 })
 export class SharedModule {}

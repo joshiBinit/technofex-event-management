@@ -33,6 +33,13 @@
       "email": "tirytuwi@mailinator.com",
       "password": "Pa$$w0rd!",
       "role": "user"
+    },
+    {
+      "id": "404d",
+      "username": "srijana",
+      "email": "srijana@gmail.com",
+      "password": "srijana",
+      "role": "user"
     }
   ],
   "events": [
@@ -133,6 +140,18 @@
       "totalTickets": 100,
       "availableTickets": 100,
       "price": 50
+    },
+    {
+      "id": "5",
+      "title": "AI & Machine Learning Seminar",
+      "category": "Seminar",
+      "description": "Deep dive into AI and ML concepts with practical examples.",
+      "date": "2025-09-30",
+      "time": "2:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "availableTickets": 150,
+      "price": 75
     }
   ],
   "locations": [

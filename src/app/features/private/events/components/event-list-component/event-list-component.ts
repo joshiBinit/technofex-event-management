@@ -196,6 +196,8 @@ export class EventListComponent implements OnInit {
 
   onSearchChanged(searchTerm: string) {
     const term = searchTerm.toLowerCase();
+    console.log(searchTerm);
+
     this.filteredEvents = this.events.filter(
       (event) =>
         event.title.toLowerCase().includes(term) ||

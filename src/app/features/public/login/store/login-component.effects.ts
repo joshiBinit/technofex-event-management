@@ -22,15 +22,24 @@ export class LoginEffects {
             username: action.username,
             password: action.password,
             role: action.role,
+            returnUrl: action.returnUrl
           })
           .pipe(
             map((user) => {
               if (user) {
-                // ✅ Navigate based on role
-                if (user.role === 'admin') {
-                  this.router.navigate(['/admin/dashboard']);
+                // ✅ Navigate based on returnUrl or role
+                const returnUrl = action.returnUrl;
+                
+                // Check if returnUrl is provided and not a public route
+                if (returnUrl && returnUrl !== '/' && returnUrl !== '/login' && returnUrl !== '/signup') {
+                  this.router.navigateByUrl(returnUrl);
                 } else {
-                  this.router.navigate(['/user/dashboard']);
+                  // Default navigation based on role
+                  if (user.role === 'admin') {
+                    this.router.navigate(['/admin/dashboard']);
+                  } else {
+                    this.router.navigate(['/user/dashboard']);
+                  }
                 }
 
                 return LoginActions.loginSuccess({

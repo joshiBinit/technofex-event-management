@@ -715,6 +715,17 @@
       "price": 337,
       "date": "2021-09-27T18:15:00.000Z",
       "time": "06:40"
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "price": 20
     }
   ],
   "locations": [

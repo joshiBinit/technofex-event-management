@@ -21,12 +21,12 @@ export class ProfileComponent implements OnInit {
   private store = inject(Store<{ login: LoginState }>);
 
   constructor() {
-    // Default user object if not logged in
     this.user$ = of({
       username: 'Guest',
       email: 'guest@example.com',
       role: 'user',
       password: '',
+      bookings: [], // ✅ add empty bookings
     });
   }
 
@@ -38,9 +38,10 @@ export class ProfileComponent implements OnInit {
     ]).pipe(
       map(([username, email, role]) => ({
         username: username ?? 'Guest',
-        email: email ?? 'guest@example.com', // ✅ only fallback for guest
+        email: email ?? 'guest@example.com',
         role: (role as 'user' | 'admin') ?? 'user',
         password: '*****',
+        bookings: [], // ✅ required for User interface
       }))
     );
   }

@@ -7,7 +7,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { addEvent } from '../../store/dashboard-event/dashboard-event.action';
 import { v4 as uuidv4 } from 'uuid';
-
+import { Observable } from 'rxjs';
+import { selectAllLocations } from '../../../../../shared/store/location/location.selector';
+import { Location } from '../../../../../shared/model/event.model';
+import { loadLocations } from '../../../../../shared/store/location/location.action';
 @Component({
   selector: 'app-add-event',
   standalone: false,
@@ -16,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class AddEventComponent {
   eventForm!: FormGroup;
-  locations: string[] = [];
+  locations$: Observable<Location[]>;
   nextId = 10;
 
   constructor(
@@ -25,7 +28,9 @@ export class AddEventComponent {
     private eventService: EventService,
     private snackbar: MatSnackBar,
     private store: Store
-  ) {}
+  ) {
+    this.locations$ = this.store.select(selectAllLocations);
+  }
 
   ngOnInit(): void {
     this.eventForm = this.formService.buildNewEventForm();
@@ -33,12 +38,7 @@ export class AddEventComponent {
   }
 
   loadLocations() {
-    this.eventService.loadLocations().subscribe({
-      next: (data) => {
-        this.locations = data.map((loc) => loc.name);
-      },
-      error: (err) => console.error('Failed to load locations:', err),
-    });
+    this.store.dispatch(loadLocations());
   }
 
   onSubmit() {

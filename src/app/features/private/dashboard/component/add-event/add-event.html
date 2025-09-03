@@ -73,8 +73,8 @@
     <mat-form-field class="w-full">
       <mat-label>Location</mat-label>
       <mat-select formControlName="location">
-        <mat-option *ngFor="let loc of locations" [value]="loc">
-          {{ loc }}
+        <mat-option *ngFor="let loc of locations$ | async" [value]="loc.name">
+          {{ loc.name }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="eventForm.get('location')?.hasError('required')">

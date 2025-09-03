@@ -105,24 +105,22 @@ export class AuthService {
   }
 
   /** Add a booked event for current user and save to json-server */
-  addBooking(event: Event): Observable<User | null> {
+  addBooking(event: Event): Observable<User | 'duplicate' | null> {
     const currentUser: any = this.getCurrentUser();
     if (!currentUser) return of(null);
 
+    // Prevent duplicate booking
     if (currentUser.bookings?.some((e: Event) => e.id === event.id)) {
-      alert('Event already booked!');
-      return of(currentUser);
+      return of('duplicate'); // <--- special flag
     }
 
     const updatedBookings = currentUser.bookings
       ? [...currentUser.bookings, event]
       : [event];
 
-    // Update localStorage
     const updatedUser = { ...currentUser, bookings: updatedBookings };
     localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
 
-    // Update json-server using runtime id
     return this.http
       .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
         bookings: updatedBookings,

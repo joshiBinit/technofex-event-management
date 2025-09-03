@@ -98,8 +98,10 @@ export class EventListComponent implements OnInit {
 
   /** Book event: updates localStorage, json-server, and NgRx store */
   onBookNow(event: Event) {
-    this.authService.addBooking(event).subscribe((user) => {
-      if (user) {
+    this.authService.addBooking(event).subscribe((result) => {
+      if (result === 'duplicate') {
+        alert(`${event.title} is already booked!`);
+      } else if (result) {
         alert(`${event.title} booked successfully!`);
         this.store.dispatch(BookedEventsActions.bookEvent({ event }));
       } else {

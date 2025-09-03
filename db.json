@@ -36,6 +36,18 @@
           "totalTickets": 300,
           "availableTickets": 300,
           "price": 120
+        },
+        {
+          "id": "3",
+          "title": "VueJS Meetup",
+          "category": "Meetup",
+          "description": "Networking event for VueJS enthusiasts and developers.",
+          "date": "2025-09-20",
+          "time": "6:00 PM",
+          "location": "Lalitpur",
+          "totalTickets": 50,
+          "availableTickets": 50,
+          "price": 20
         }
       ]
     },
@@ -413,6 +425,54 @@
       "totalTickets": 300,
       "availableTickets": 300,
       "price": 120
+    },
+    {
+      "id": "1",
+      "title": "Angular Workshop",
+      "category": "Workshop",
+      "description": "Hands-on workshop covering advanced Angular concepts.",
+      "date": "2025-09-15",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 40
+    },
+    {
+      "id": "1",
+      "title": "Angular Workshop",
+      "category": "Workshop",
+      "description": "Hands-on workshop covering advanced Angular concepts.",
+      "date": "2025-09-15",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 40
+    },
+    {
+      "id": "1",
+      "title": "Angular Workshop",
+      "category": "Workshop",
+      "description": "Hands-on workshop covering advanced Angular concepts.",
+      "date": "2025-09-15",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 40
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "availableTickets": 50,
+      "price": 20
     }
   ],
   "locations": [

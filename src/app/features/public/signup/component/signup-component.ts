@@ -28,11 +28,6 @@ export class SignupComponent implements OnInit {
   loading$!: Observable<boolean>;
   showPassword = false;
   showConfirmPassword = false;
-
-  
-
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
   private formService = inject(FormService);
   private store = inject(Store<{ signup: SignupState }>);
 
@@ -69,7 +64,6 @@ export class SignupComponent implements OnInit {
       // Don't navigate immediately - let the effect handle it
     } else {
       this.signupForm.markAllAsTouched();
-      
     }
   }
 }

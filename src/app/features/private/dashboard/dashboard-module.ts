@@ -15,17 +15,25 @@ import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../../../shared/material.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { UpdateEventComponent } from './component/update-event-component/update-event-component';
+import { dashboardEventReducer } from './store/dashboard-event/dashboard-event.reducer';
+import { DashboardEventEffects } from './store/dashboard-event/dashboard-event.effect';
 
 @NgModule({
-  declarations: [AddEventComponent, UserComponent, DashboardComponent, UpdateEventComponent],
+  declarations: [
+    AddEventComponent,
+    UserComponent,
+    DashboardComponent,
+    UpdateEventComponent,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     DashboardRoutingModule,
     StoreModule.forFeature('events', eventsReducer),
+    StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
     HttpClientModule,
     NgApexchartsModule,
-    EffectsModule.forFeature([EventsEffects]),
+    EffectsModule.forFeature([EventsEffects, DashboardEventEffects]),
     MaterialModule,
   ],
 })

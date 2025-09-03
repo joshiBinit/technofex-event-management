@@ -18,17 +18,17 @@
   @if (loading$ | async) {
   <p class="text-gray-600">Loading events...</p>
   }
-  
-  <app-search-component 
-    [data]="allEvents" 
+
+  <app-search-component
+    [data]="allEvents"
     [searchFields]="searchFields"
     [placeholder]="'Search by title, category, location...'"
     (searchChanged)="onSearchChanged($event)"
-    (filteredData)="onFilteredDataChanged($event)">
+    (filteredData)="onFilteredDataChanged($event)"
+  >
   </app-search-component>
 
   <div class="overflow-x-auto">
-
     <table
       mat-table
       [dataSource]="displayedEvents"

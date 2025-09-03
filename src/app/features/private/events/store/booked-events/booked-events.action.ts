@@ -28,3 +28,7 @@ export const loadBookedEventsFailure = createAction(
   '[BookedEvents] Load BookedEvents Failure',
   props<{ error: any }>()
 );
+export const cancelBooking = createAction(
+  '[Booked Events] Cancel Booking',
+  props<{ eventId: string }>()
+);

@@ -48,6 +48,90 @@
           "totalTickets": 50,
           "availableTickets": 50,
           "price": 20
+        },
+        {
+          "id": "4",
+          "title": "Full Stack Development Conference",
+          "category": "Conference",
+          "description": "Explore full stack development trends, tools, and practices.",
+          "date": "2025-09-25",
+          "time": "8:30 AM",
+          "location": "Bhaktapur",
+          "totalTickets": 200,
+          "availableTickets": 200,
+          "price": 100
+        },
+        {
+          "id": "5",
+          "title": "AI & Machine Learning Seminar",
+          "category": "Seminar",
+          "description": "Deep dive into AI and ML concepts with practical examples.",
+          "date": "2025-09-30",
+          "time": "2:00 PM",
+          "location": "Kathmandu",
+          "totalTickets": 150,
+          "availableTickets": 150,
+          "price": 75
+        },
+        {
+          "id": "6",
+          "title": "Cybersecurity Workshop",
+          "category": "Workshop",
+          "description": "Hands-on training on cybersecurity tools and techniques.",
+          "date": "2025-10-05",
+          "time": "10:00 AM",
+          "location": "Kathmandu",
+          "totalTickets": 100,
+          "availableTickets": 100,
+          "price": 50
+        },
+        {
+          "id": "8",
+          "title": "Photography Exhibition",
+          "category": "Exhibition",
+          "description": "Explore the works of emerging photographers from Nepal.",
+          "date": "2025-10-20",
+          "time": "3:00 PM",
+          "location": "Lalitpur",
+          "totalTickets": 150,
+          "availableTickets": 150,
+          "price": 25
+        },
+        {
+          "id": "9",
+          "title": "Blockchain Hackathon",
+          "category": "Hackathon",
+          "description": "48-hour hackathon focused on blockchain applications.",
+          "date": "2025-10-25",
+          "time": "9:00 AM",
+          "location": "Kathmandu",
+          "totalTickets": 120,
+          "availableTickets": 120,
+          "price": 0
+        },
+        {
+          "id": "7",
+          "title": "Startup Pitch Night",
+          "category": "Networking",
+          "description": "Connect with investors and showcase startup ideas.",
+          "date": "2025-10-12",
+          "time": "7:00 PM",
+          "location": "Bhaktapur",
+          "totalTickets": 80,
+          "availableTickets": 80,
+          "price": 30
+        },
+        {
+          "id": "44e55cbb-0806-40a1-a2c7-31bb8c1cebb9",
+          "title": "testtttt",
+          "category": "conference",
+          "description": "tessttt",
+          "location": "Lalitpur Event Plaza",
+          "totalTickets": 1,
+          "price": 122,
+          "date": "2025-06-09T18:15:00.000Z",
+          "time": "12:12",
+          "availableTickets": 1
         }
       ]
     },
@@ -56,7 +140,21 @@
       "username": "puja",
       "email": "puja@gmail.com",
       "password": "puja123",
-      "role": "user"
+      "role": "user",
+      "bookings": [
+        {
+          "id": "44e55cbb-0806-40a1-a2c7-31bb8c1cebb9",
+          "title": "testtttt",
+          "category": "conference",
+          "description": "tessttt",
+          "location": "Lalitpur Event Plaza",
+          "totalTickets": 1,
+          "price": 122,
+          "date": "2025-06-09T18:15:00.000Z",
+          "time": "12:12",
+          "availableTickets": 1
+        }
+      ]
     },
     {
       "id": "a06c",
@@ -180,7 +278,6 @@
       "time": "9:00 AM",
       "location": "Pokhara",
       "totalTickets": 300,
-      "availableTickets": 300,
       "price": 120
     },
     {
@@ -203,7 +300,7 @@
       "time": "8:30 AM",
       "location": "Bhaktapur",
       "totalTickets": 200,
-      "availableTickets": 200,
+      "availableTickets": 199,
       "price": 100
     },
     {
@@ -215,7 +312,7 @@
       "time": "2:00 PM",
       "location": "Kathmandu",
       "totalTickets": 150,
-      "availableTickets": 150,
+      "availableTickets": 149,
       "price": 75
     },
     {
@@ -227,7 +324,6 @@
       "time": "10:00 AM",
       "location": "Kathmandu",
       "totalTickets": 100,
-      "availableTickets": 100,
       "price": 50
     },
     {
@@ -239,7 +335,7 @@
       "time": "7:00 PM",
       "location": "Bhaktapur",
       "totalTickets": 80,
-      "availableTickets": 80,
+      "availableTickets": 79,
       "price": 30
     },
     {
@@ -251,7 +347,7 @@
       "time": "3:00 PM",
       "location": "Lalitpur",
       "totalTickets": 150,
-      "availableTickets": 150,
+      "availableTickets": 149,
       "price": 25
     },
     {
@@ -263,7 +359,6 @@
       "time": "9:00 AM",
       "location": "Kathmandu",
       "totalTickets": 120,
-      "availableTickets": 120,
       "price": 0
     },
     {
@@ -275,7 +370,6 @@
       "time": "1:00 PM",
       "location": "Kathmandu",
       "totalTickets": 150,
-      "availableTickets": 150,
       "price": 40
     },
     {
@@ -306,11 +400,81 @@
       "title": "Vel in fugit fuga ",
       "category": "workshop",
       "description": "Sint qui pariatur D",
+      "date": "2021-09-27",
+      "time": "06:40",
       "location": "Radisson Hotel Event Center",
       "totalTickets": 90,
-      "price": 337,
-      "date": "2021-09-27T18:15:00.000Z",
-      "time": "06:40"
+      "price": 337
+    },
+    {
+      "id": "10",
+      "title": "Binit Joshi",
+      "category": "workshop",
+      "description": "Binit",
+      "location": "Radisson Hotel Event Center",
+      "totalTickets": 122,
+      "price": 20,
+      "date": "2025-09-02T18:15:00.000Z",
+      "time": "12:12"
+    },
+    {
+      "id": "10",
+      "title": "Binit 1",
+      "category": "conference",
+      "description": "Binit 1",
+      "location": "Bhrikuti Mandap Exhibition Hall",
+      "totalTickets": 112,
+      "price": 100,
+      "date": "2025-10-02T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 112
+    },
+    {
+      "id": "10",
+      "title": "heheheh",
+      "category": "conference",
+      "description": "heheheh",
+      "location": "Bhrikuti Mandap Exhibition Hall",
+      "totalTickets": 1222,
+      "price": 1222,
+      "date": "2025-10-02T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 1222
+    },
+    {
+      "id": "10",
+      "title": "asfasfasf",
+      "category": "workshop",
+      "description": "asfasfasf",
+      "location": "Bhrikuti Mandap Exhibition Hall",
+      "totalTickets": 1212,
+      "price": 1212,
+      "date": "2025-10-14T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 1212
+    },
+    {
+      "id": "a15566be-d8aa-4505-96d5-3ef5a89f7668",
+      "title": "jhkagsuidgvasuoc",
+      "category": "conference",
+      "description": "kjasgduiasgf\n",
+      "date": "2025-09-09",
+      "time": "12:12",
+      "location": "Gokarna Forest Resort",
+      "totalTickets": 12,
+      "price": 1212
+    },
+    {
+      "id": "44e55cbb-0806-40a1-a2c7-31bb8c1cebb9",
+      "title": "testtttt",
+      "category": "conference",
+      "description": "tessttt",
+      "location": "Lalitpur Event Plaza",
+      "totalTickets": 1,
+      "price": 122,
+      "date": "2025-06-09T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 0
     }
   ],
   "bookedEvents": [
@@ -726,6 +890,102 @@
       "location": "Lalitpur",
       "totalTickets": 50,
       "price": 20
+    },
+    {
+      "id": "4",
+      "title": "Full Stack Development Conference",
+      "category": "Conference",
+      "description": "Explore full stack development trends, tools, and practices.",
+      "date": "2025-09-25",
+      "time": "8:30 AM",
+      "location": "Bhaktapur",
+      "totalTickets": 200,
+      "availableTickets": 200,
+      "price": 100
+    },
+    {
+      "id": "5",
+      "title": "AI & Machine Learning Seminar",
+      "category": "Seminar",
+      "description": "Deep dive into AI and ML concepts with practical examples.",
+      "date": "2025-09-30",
+      "time": "2:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "availableTickets": 150,
+      "price": 75
+    },
+    {
+      "id": "6",
+      "title": "Cybersecurity Workshop",
+      "category": "Workshop",
+      "description": "Hands-on training on cybersecurity tools and techniques.",
+      "date": "2025-10-05",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 50
+    },
+    {
+      "id": "8",
+      "title": "Photography Exhibition",
+      "category": "Exhibition",
+      "description": "Explore the works of emerging photographers from Nepal.",
+      "date": "2025-10-20",
+      "time": "3:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 150,
+      "availableTickets": 150,
+      "price": 25
+    },
+    {
+      "id": "9",
+      "title": "Blockchain Hackathon",
+      "category": "Hackathon",
+      "description": "48-hour hackathon focused on blockchain applications.",
+      "date": "2025-10-25",
+      "time": "9:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 120,
+      "availableTickets": 120,
+      "price": 0
+    },
+    {
+      "id": "7",
+      "title": "Startup Pitch Night",
+      "category": "Networking",
+      "description": "Connect with investors and showcase startup ideas.",
+      "date": "2025-10-12",
+      "time": "7:00 PM",
+      "location": "Bhaktapur",
+      "totalTickets": 80,
+      "availableTickets": 80,
+      "price": 30
+    },
+    {
+      "id": "44e55cbb-0806-40a1-a2c7-31bb8c1cebb9",
+      "title": "testtttt",
+      "category": "conference",
+      "description": "tessttt",
+      "location": "Lalitpur Event Plaza",
+      "totalTickets": 1,
+      "price": 122,
+      "date": "2025-06-09T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 1
+    },
+    {
+      "id": "44e55cbb-0806-40a1-a2c7-31bb8c1cebb9",
+      "title": "testtttt",
+      "category": "conference",
+      "description": "tessttt",
+      "location": "Lalitpur Event Plaza",
+      "totalTickets": 1,
+      "price": 122,
+      "date": "2025-06-09T18:15:00.000Z",
+      "time": "12:12",
+      "availableTickets": 1
     }
   ],
   "locations": [

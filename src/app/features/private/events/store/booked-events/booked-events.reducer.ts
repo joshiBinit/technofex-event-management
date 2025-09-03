@@ -15,6 +15,10 @@ export const initialBookedEventsState: BookedEventsState = {
 export const bookedEventsReducer = createReducer(
   initialBookedEventsState,
   //Book new event
+  on(BookedEventsActions.cancelBooking, (state, { eventId }) => ({
+    ...state,
+    bookedEvents: state.bookedEvents.filter((e) => e.id !== eventId),
+  })),
   on(BookedEventsActions.bookEvent, (state) => ({ ...state, loading: true })),
   on(BookedEventsActions.bookEventSuccess, (state, { event }) => ({
     ...state,

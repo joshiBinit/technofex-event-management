@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { EventsState } from '../../store/events/event.reducer';
 import {
   selectAllEvents,
@@ -25,14 +25,13 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './event-list-component.html',
   styleUrls: ['./event-list-component.scss'],
 })
-export class EventListComponent implements OnInit {
-  events$: Observable<Event[]>;
-  loading$: Observable<boolean>;
-  role$: Observable<string | null>;
-
+export class EventListComponent implements OnInit, OnDestroy {
+  private store = inject(Store<EventsState>);
+  events$: Observable<Event[]> = this.store.select(selectAllEvents);
+  loading$: Observable<boolean> = this.store.select(selectEventLoading);
+  role$: Observable<string | null> = this.store.select(selectLoginRole);
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
-  filterEvents: Event[] = [];
 
   totalItems = 0;
   pageSize = 10;
@@ -40,38 +39,37 @@ export class EventListComponent implements OnInit {
 
   searchFields: string[] = ['title', 'category', 'location'];
 
+  private destroy$ = new Subject<void>();
+
   @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
   constructor(
-    private store: Store<EventsState>,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar : MatSnackBar,
+    private snackBar: MatSnackBar,
     private eventService: EventService,
     private authService: AuthService
-  ) {
-    this.events$ = this.store.select(selectAllEvents);
-    this.loading$ = this.store.select(selectEventLoading);
-    this.role$ = this.store.select(selectLoginRole);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadEvents();
+    this.events$.pipe(takeUntil(this.destroy$)).subscribe((events) => {
+      this.allEvents = events;
+      this.totalItems = events?.length ?? 0;
+
+      if (this.paginationComponent) {
+        this.paginationComponent.setFilteredData(events);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadEvents(): void {
     this.store.dispatch(EventsActions.loadEvents());
-
-    this.events$.subscribe((events) => {
-      if (events && events.length > 0) {
-        this.allEvents = events;
-        this.totalItems = events.length;
-
-        if (this.paginationComponent) {
-          this.paginationComponent.setFilteredData(events);
-        }
-      }
-    });
   }
 
   getDisplayedColumns(): Observable<string[]> {
@@ -101,42 +99,25 @@ export class EventListComponent implements OnInit {
     );
   }
 
-  /** Book event: updates localStorage, json-server, and NgRx store */
   onBookNow(event: Event) {
-    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-     
-    this.authService.addBooking(event).subscribe((result) => {
-      if (result === 'duplicate') {
-        this.snackBar.open(`❌ ${event.title} is already booked!`, 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        //
-        // alert(`${event.title} is already booked!`);
-      } else if (result) {
-        this.snackBar.open(`✅ ${event.title} booked successfully`, 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'],
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        //
-        // alert(`${event.title} booked successfully!`);
-        this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-      } else {
-        this.snackBar.open(`❌ Failed to book ${event.title}. Try again!`, 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        //
-        //
-        // alert('Failed to book event. Try again!');
-      }
-    });
+    this.authService
+      .addBooking(event)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        if (result === 'duplicate') {
+          this.showSnackBar(`❌ ${event.title} is already booked!`, 'error');
+        } else if (result === 'soldout') {
+          this.showSnackBar(`❌ ${event.title} is sold out!`, 'error');
+        } else if (result) {
+          this.showSnackBar(`✅ ${event.title} booked successfully`, 'success');
+          this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+        } else {
+          this.showSnackBar(
+            `❌ Failed to book ${event.title}. Try again!`,
+            'error'
+          );
+        }
+      });
   }
 
   onPaginatedDataChanged(data: Event[]): void {
@@ -157,42 +138,36 @@ export class EventListComponent implements OnInit {
     this.router.navigate(['/admin/updateevent', eventId]);
   }
 
- onDeleteEvent(eventId: string) {
-  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-    width: '350px',
-    data: {
-      title: 'Confirm Delete',
-      message: 'Are you sure you want to delete this event?',
-    },
-  });
+  onDeleteEvent(eventId: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Delete',
+        message: 'Are you sure you want to delete this event?',
+      },
+    });
 
-  // Wait for the dialog to close
-  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-    if (confirmed) {
-      this.eventService.deleteEvent(eventId).subscribe({
-        next: () => {
-          this.snackBar.open('✅ Event deleted successfully', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.eventService.deleteEvent(eventId).subscribe({
+            next: () => {
+              this.showSnackBar('✅ Event deleted successfully', 'success');
+              this.loadEvents();
+            },
+            error: (err) => {
+              console.error('Failed to delete event:', err);
+              this.showSnackBar(
+                '❌ Failed to delete event. Please try again.',
+                'error'
+              );
+            },
           });
-          this.loadEvents(); // reload events
-        },
-        error: (err) => {
-          console.error('Failed to delete event:', err);
-          this.snackBar.open('❌ Failed to delete event. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
-        },
+        }
       });
-    }
-  });
-}
-
+  }
 
   onSearchChanged(searchTerm: string) {
     console.log('Search term:', searchTerm);
@@ -200,5 +175,14 @@ export class EventListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     console.log('Page changed:', event);
+  }
+
+  private showSnackBar(message: string, type: 'success' | 'error') {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: [type === 'success' ? 'snackbar-success' : 'snackbar-error'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 }

@@ -7,10 +7,12 @@ export const selectLoginError = createSelector(
   selectLoginState,
   (state) => state.error
 );
+
 export const selectLoginLoading = createSelector(
   selectLoginState,
   (state) => state.loading
 );
+
 export const selectLoginRole = createSelector(
   selectLoginState,
   (state) => state.role
@@ -24,4 +26,9 @@ export const selectLoginUsername = createSelector(
 export const selectLoginEmail = createSelector(
   selectLoginState,
   (state) => state.email
+);
+
+export const selectLoginBookings = createSelector(
+  selectLoginState,
+  (state) => state.bookings
 );

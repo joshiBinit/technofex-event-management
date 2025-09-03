@@ -18,10 +18,11 @@
     <mat-form-field class="w-full">
       <mat-label>Category</mat-label>
       <mat-select formControlName="category">
-        <mat-option value="conference">Conference</mat-option>
-        <mat-option value="workshop">Workshop</mat-option>
-        <mat-option value="concert">Concert</mat-option>
-        <mat-option value="sports">Sports</mat-option>
+        <mat-option value="Conference">Conference</mat-option>
+        <mat-option value="Workshop">Workshop</mat-option>
+        <mat-option value="Concert">Concert</mat-option>
+        <mat-option value="Sports">Sports</mat-option>
+        <mat-option value="Seminar">Seminar</mat-option>
       </mat-select>
       <mat-error *ngIf="eventForm.get('category')?.hasError('required')">
         Category is required

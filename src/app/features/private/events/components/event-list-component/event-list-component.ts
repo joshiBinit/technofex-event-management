@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import { EventsState } from '../../store/events/event.reducer';
@@ -8,43 +8,47 @@ import {
 } from '../../store/events/event.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-
 import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
 import { EventService } from '../../../../../core/services/event/event-service';
+import { AuthService } from '../../../../../core/services/auth-service';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-list-component',
   standalone: false,
   templateUrl: './event-list-component.html',
-  styleUrl: './event-list-component.scss',
+  styleUrls: ['./event-list-component.scss'],
 })
 export class EventListComponent implements OnInit {
   events$: Observable<Event[]>;
   loading$: Observable<boolean>;
   role$: Observable<string | null>;
 
-  // Pagination properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
-  filteredEvents: Event[] = [];
+  filterEvents: Event[] = [];
+
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
-  pageSizeOptions: number[] = [5, 10, 25, 50];
-  pageEvent: PageEvent = { pageIndex: 0, pageSize: 10, length: 0 };
 
-  // Filter
-  filterValue = '';
-  filterTimeout: any;
-  debounceTime = 300; // ms
+  searchFields: string[] = ['title', 'category', 'location'];
+
+  @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
   constructor(
     private store: Store<EventsState>,
     private router: Router,
-    private eventService: EventService
+    private dialog: MatDialog,
+    private snackBar : MatSnackBar,
+    private eventService: EventService,
+    private authService: AuthService
   ) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
@@ -53,6 +57,21 @@ export class EventListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEvents();
+  }
+
+  loadEvents(): void {
+    this.store.dispatch(EventsActions.loadEvents());
+
+    this.events$.subscribe((events) => {
+      if (events && events.length > 0) {
+        this.allEvents = events;
+        this.totalItems = events.length;
+
+        if (this.paginationComponent) {
+          this.paginationComponent.setFilteredData(events);
+        }
+      }
+    });
   }
 
   getDisplayedColumns(): Observable<string[]> {
@@ -81,100 +100,52 @@ export class EventListComponent implements OnInit {
       )
     );
   }
+
+  /** Book event: updates localStorage, json-server, and NgRx store */
   onBookNow(event: Event) {
     this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-    alert(`${event.title} added`);
-  }
-
-  loadEvents(): void {
-    this.store.dispatch(EventsActions.loadEvents());
-
-    // Subscribe to events to get the total count and initialize pagination
-    this.events$.subscribe((events) => {
-      if (events && events.length > 0) {
-        this.allEvents = events;
-        this.filteredEvents = [...events]; // Initialize filtered events with all events
-        this.totalItems = events.length;
-        this.pageEvent = {
-          pageIndex: this.pageIndex,
-          pageSize: this.pageSize,
-          length: this.totalItems,
-        };
-        this.updateDisplayedEvents();
+     
+    this.authService.addBooking(event).subscribe((result) => {
+      if (result === 'duplicate') {
+        this.snackBar.open(`❌ ${event.title} is already booked!`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} is already booked!`);
+      } else if (result) {
+        this.snackBar.open(`✅ ${event.title} booked successfully`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} booked successfully!`);
+        this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+      } else {
+        this.snackBar.open(`❌ Failed to book ${event.title}. Try again!`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        //
+        // alert('Failed to book event. Try again!');
       }
     });
   }
 
-  /**
-   * Handle page changes from the paginator
-   */
-  onPageChange(event: PageEvent): void {
-    this.pageEvent = event;
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    this.updateDisplayedEvents();
+  onPaginatedDataChanged(data: Event[]): void {
+    this.displayedEvents = data;
   }
 
-  /**
-   * Apply filter to events with debouncing
-   */
-  applyFilter(event: KeyboardEvent): void {
-    // Clear any existing timeout to implement debouncing
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout);
-    }
-
-    // Set a new timeout
-    this.filterTimeout = setTimeout(() => {
-      const filterValue = (event.target as HTMLInputElement).value
-        .trim()
-        .toLowerCase();
-      this.filterValue = filterValue;
-
-      if (filterValue) {
-        this.filteredEvents = this.allEvents.filter(
-          (item) =>
-            item.title?.toLowerCase().includes(filterValue) ||
-            item.category?.toLowerCase().includes(filterValue) ||
-            item.location?.toLowerCase().includes(filterValue)
-        );
-      } else {
-        this.filteredEvents = [...this.allEvents];
-      }
-
-      this.totalItems = this.filteredEvents.length;
-      this.pageIndex = 0; // Reset to first page when filtering
-      this.pageEvent = {
-        pageIndex: 0,
-        pageSize: this.pageSize,
-        length: this.totalItems,
-      };
-      this.updateDisplayedEvents();
-    }, this.debounceTime);
-  }
-
-  /**
-   * Update the displayed events based on current page and page size
-   */
-  updateDisplayedEvents(): void {
-    const startIndex = this.pageIndex * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-
-    // Slice the filtered data array to get only the items for current page
-    this.displayedEvents = this.filteredEvents.slice(startIndex, endIndex);
-
-    // Ensure we don't show an empty page if we have data
-    if (
-      this.displayedEvents.length === 0 &&
-      this.filteredEvents.length > 0 &&
-      this.pageIndex > 0
-    ) {
-      // If current page is empty but we have data, go to the last page with data
-      this.pageIndex = Math.max(
-        0,
-        Math.ceil(this.filteredEvents.length / this.pageSize) - 1
-      );
-      this.updateDisplayedEvents();
+  onFilteredDataChanged(data: Event[]): void {
+    if (this.paginationComponent) {
+      this.paginationComponent.setFilteredData(data);
     }
   }
 
@@ -182,26 +153,52 @@ export class EventListComponent implements OnInit {
     this.router.navigate(['/admin/addevent']);
   }
 
-  onUpdateEvent(eventId: number) {
+  onUpdateEvent(eventId: string) {
     this.router.navigate(['/admin/updateevent', eventId]);
   }
 
-  onDeleteEvent(eventId: number) {
-    const confirmDelete = confirm(
-      'Are you sure you want to delete this event?'
-    );
-    if (confirmDelete) {
+ onDeleteEvent(eventId: string) {
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '350px',
+    data: {
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this event?',
+    },
+  });
+
+  // Wait for the dialog to close
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (confirmed) {
       this.eventService.deleteEvent(eventId).subscribe({
         next: () => {
-          alert('Event deleted successfully!');
-          // Reload events after deletion
-          this.loadEvents();
+          this.snackBar.open('✅ Event deleted successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          this.loadEvents(); // reload events
         },
         error: (err) => {
           console.error('Failed to delete event:', err);
-          alert('Failed to delete event. Please try again.');
+          this.snackBar.open('❌ Failed to delete event. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
         },
       });
     }
+  });
+}
+
+
+  onSearchChanged(searchTerm: string) {
+    console.log('Search term:', searchTerm);
+  }
+
+  onPageChange(event: PageEvent): void {
+    console.log('Page changed:', event);
   }
 }

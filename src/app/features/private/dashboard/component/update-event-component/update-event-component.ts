@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-update-event-component',
@@ -14,25 +15,24 @@ import { Event } from '../../../../../shared/model/event.model';
 export class UpdateEventComponent implements OnInit {
   eventForm!: FormGroup;
   locations: string[] = [];
-  eventId!: number;
+  eventId!: string; // <-- changed to string
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private formService: FormService,
-    private eventService: EventService
+    private eventService: EventService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    // Initialize form
     this.eventForm = this.formService.buildNewEventForm();
     this.loadLocations();
 
-    // Get event ID from route
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
-        this.eventId = +id;
+        this.eventId = id; // <-- keep as string
         this.loadEvent(this.eventId);
       }
     });
@@ -47,16 +47,21 @@ export class UpdateEventComponent implements OnInit {
     });
   }
 
-  loadEvent(id: number) {
+  loadEvent(id: string) {
+    // <-- parameter is string
     this.eventService.getEventById(id).subscribe({
       next: (event) => {
         if (event) {
+          if (event.location && !this.locations.includes(event.location)) {
+            this.locations.push(event.location);
+          }
+
           this.eventForm.patchValue({
             title: event.title,
             category: event.category,
             description: event.description,
             schedule: {
-              date: event.date ? new Date(event.date) : null, // convert string -> Date
+              date: event.date ? new Date(event.date) : null,
               time: event.time,
             },
             location: event.location,
@@ -74,13 +79,13 @@ export class UpdateEventComponent implements OnInit {
       const formValue = this.eventForm.value;
 
       const payload: Event = {
-        id: this.eventId,
+        id: this.eventId, // <-- string now
         title: formValue.title,
         category: formValue.category,
         description: formValue.description,
         date: formValue.schedule.date
           ? formValue.schedule.date.toISOString().split('T')[0]
-          : '', // convert Date -> 'YYYY-MM-DD' string
+          : '',
         time: formValue.schedule.time,
         location: formValue.location,
         totalTickets: formValue.totalTickets,
@@ -89,12 +94,28 @@ export class UpdateEventComponent implements OnInit {
 
       this.eventService.updateEvent(this.eventId, payload).subscribe({
         next: () => {
-          alert('Event updated successfully!');
+          this.snackbar.open('✅ Event updated successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          //
+          //
+          // alert('Event updated successfully!');
           this.router.navigate(['/admin/event/list']);
         },
         error: (err) => {
           console.error('Failed to update event:', err);
-          alert('Failed to update event. Please try again.');
+          this.snackbar.open('❌ Failed to update event. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          //
+          //
+          // alert('Failed to update event. Please try again.');
         },
       });
     } else {

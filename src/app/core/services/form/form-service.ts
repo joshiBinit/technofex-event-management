@@ -26,7 +26,7 @@ export class FormService {
     });
   }
   loginForm(): FormGroup {
-     return this.fb.group({
+    return this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
@@ -34,11 +34,10 @@ export class FormService {
 
   signupForm(): FormGroup {
     return this.fb.group({
-     
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
     });
   }
 }

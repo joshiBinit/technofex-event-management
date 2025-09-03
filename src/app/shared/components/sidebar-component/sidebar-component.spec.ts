@@ -9,7 +9,7 @@ import { AuthService } from '../../../core/services/auth-service';
 import { of, take } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('SidebarComponent', () => {
+describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
   let routerSpy: jasmine.SpyObj<Router>;

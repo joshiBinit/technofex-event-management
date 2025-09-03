@@ -58,13 +58,62 @@ export class UserDashboardComponent implements OnInit {
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
-    //
-    // alert(`${event.title} added`);
   }
 
-  /** Cancel a booking */
   onCancelBooking(eventId: string) {
+    // Remove booking from localStorage first
     this.authService.removeBooking(eventId);
     this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
+
+    // Fetch the event from server
+    this.eventService.getEventById(eventId).subscribe({
+      next: (event) => {
+        if (event) {
+          // Increase availableTickets by 1
+          const updatedEvent: Event = {
+            ...event,
+            availableTickets:
+              (event.availableTickets ?? event.totalTickets) + 1,
+          };
+
+          // Update event in JSON server
+          this.eventService.updateEvent(eventId, updatedEvent).subscribe({
+            next: () => {
+              this.snackBar.open(
+                `✅ Booking cancelled and tickets updated for ${event.title}`,
+                'Close',
+                {
+                  duration: 3000,
+                  panelClass: ['snackbar-success'],
+                  horizontalPosition: 'right',
+                  verticalPosition: 'top',
+                }
+              );
+
+              // Dispatch NgRx action to remove booking from store
+              this.store.dispatch(
+                BookedEventsActions.cancelBooking({ eventId })
+              );
+            },
+            error: (err) => {
+              console.error('Failed to update event:', err);
+              this.snackBar.open(
+                `❌ Failed to update tickets for ${event.title}`,
+                'Close',
+                {
+                  duration: 3000,
+                  panelClass: ['snackbar-error'],
+                  horizontalPosition: 'right',
+                  verticalPosition: 'top',
+                }
+              );
+            },
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch event:', err);
+      },
+    });
   }
 }

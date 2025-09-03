@@ -1,9 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { AuthGuard } from './auth-guard-guard';
 import { AuthService } from '../services/auth-service';
 
-fdescribe('AuthGuard', () => {
+describe('AuthGuard', () => {
   let guard: AuthGuard;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
@@ -11,7 +15,10 @@ fdescribe('AuthGuard', () => {
   let mockState: RouterStateSnapshot;
 
   beforeEach(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['isLoggedIn', 'getRole']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', [
+      'isLoggedIn',
+      'getRole',
+    ]);
     routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
 
     TestBed.configureTestingModule({
@@ -69,7 +76,9 @@ fdescribe('AuthGuard', () => {
     routerSpy.createUrlTree.and.returnValue(urlTree);
 
     const result = guard.canActivate(mockRoute, mockState);
-    expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/login'], { queryParams: { returnUrl: '/admin/dashboard' } });
+    expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/login'], {
+      queryParams: { returnUrl: '/admin/dashboard' },
+    });
     expect(result).toBe(urlTree);
   });
 

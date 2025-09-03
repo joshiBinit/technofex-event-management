@@ -2,7 +2,6 @@
   <h2 class="text-2xl font-bold mb-6 text-center">Add New Event</h2>
 
   <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="grid gap-6">
-    <!-- Title -->
     <mat-form-field class="w-full">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" placeholder="Enter event title" />
@@ -14,7 +13,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Category -->
     <mat-form-field class="w-full">
       <mat-label>Category</mat-label>
       <mat-select formControlName="category">
@@ -28,7 +26,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Description -->
     <mat-form-field class="w-full">
       <mat-label>Description</mat-label>
       <textarea
@@ -42,7 +39,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Date & Time (Nested Group) -->
     <div formGroupName="schedule" class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <mat-form-field class="w-full">
         <mat-label>Date</mat-label>
@@ -74,7 +70,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Location -->
     <mat-form-field class="w-full">
       <mat-label>Location</mat-label>
       <mat-select formControlName="location">
@@ -87,7 +82,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Tickets & Price -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <mat-form-field class="w-full">
         <mat-label>Total Tickets</mat-label>
@@ -122,7 +116,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Submit -->
     <div class="flex justify-center">
       <button
         mat-raised-button

@@ -106,36 +106,63 @@ export class AuthService {
   }
 
   /** Add a booked event for current user and save to json-server */
-  addBooking(event: Event): Observable<User | 'duplicate' | null> {
+  addBooking(event: Event): Observable<'soldout' | 'duplicate' | User | null> {
     const currentUser: any = this.getCurrentUser();
     if (!currentUser) return of(null);
 
     // Prevent duplicate booking
     if (currentUser.bookings?.some((e: Event) => e.id === event.id)) {
-      return of('duplicate'); // <--- special flag
+      return of('duplicate' as 'duplicate');
     }
 
-    const updatedBookings = currentUser.bookings
-      ? [...currentUser.bookings, event]
-      : [event];
+    // Fetch latest event from server
+    return this.http.get<Event>(`${this.apiUrl}/events/${event.id}`).pipe(
+      switchMap((serverEvent) => {
+        if (!serverEvent) return of(null);
 
-    const updatedUser = { ...currentUser, bookings: updatedBookings };
-    localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
+        // Check tickets availability
+        if (
+          serverEvent.availableTickets !== undefined &&
+          serverEvent.availableTickets <= 0
+        ) {
+          return of('soldout' as 'soldout');
+        }
 
-    return this.http
-      .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
-        bookings: updatedBookings,
+        // 1️⃣ Update event availableTickets
+        const updatedEvent: Event = {
+          ...serverEvent,
+          availableTickets:
+            (serverEvent.availableTickets ?? serverEvent.totalTickets) - 1,
+        };
+
+        const updateEvent$ = this.http.patch<Event>(
+          `${this.apiUrl}/events/${event.id}`,
+          { availableTickets: updatedEvent.availableTickets }
+        );
+
+        // 2️⃣ Update user bookings
+        const updatedBookings = currentUser.bookings
+          ? [...currentUser.bookings, event]
+          : [event];
+        const updatedUser = { ...currentUser, bookings: updatedBookings };
+        localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
+
+        const updateUser$ = this.http.patch<User>(
+          `${this.apiUrl}/users/${currentUser.id}`,
+          { bookings: updatedBookings }
+        );
+
+        // Combine both requests
+        return updateEvent$.pipe(
+          switchMap(() => updateUser$),
+          map((user) => user),
+          catchError((err) => {
+            console.error('Failed to book event:', err);
+            return of(null);
+          })
+        );
       })
-      .pipe(
-        map((user) => {
-          console.log('Booking saved to server:', user);
-          return user;
-        }),
-        catchError((err) => {
-          console.error('Failed to save booking to server:', err);
-          return of(null);
-        })
-      );
+    );
   }
 
   /** Remove a booked event from current user and update json-server */

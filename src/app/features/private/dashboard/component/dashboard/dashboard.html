@@ -1,17 +1,9 @@
 <div class="dashboard-container">
-  <!-- Stat Cards -->
-  <!-- <div class="cards">
-    <mat-card>Total Events: {{ (events$ | async)?.length || 0 }}</mat-card>
-    <mat-card>Total Bookings: {{ totalBookings$ | async }}</mat-card>
-  </div> -->
-
-  <!-- Events Table -->
   <h2>Events Details</h2>
-  <table mat-table [dataSource]="(events$ | async) || []" class="mat-elevation-z8">
-
+  <table mat-table [dataSource]="eventsWithBookings" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>S.N</th>
-      <td mat-cell *matCellDef="let event;let i=index">{{ i+1 }}</td>
+      <td mat-cell *matCellDef="let event; let i = index">{{ i + 1 }}</td>
     </ng-container>
 
     <ng-container matColumnDef="title">
@@ -24,9 +16,9 @@
       <td mat-cell *matCellDef="let event">{{ event.category }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let event">{{ event.description }}</td>
+    <ng-container matColumnDef="ticketsBooked">
+      <th mat-header-cell *matHeaderCellDef>Tickets Booked</th>
+      <td mat-cell *matCellDef="let event">{{ event.ticketsBooked }}</td>
     </ng-container>
 
     <ng-container matColumnDef="date">
@@ -55,16 +47,6 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-
-  <!-- Chart Section -->
-  <h2>Tickets Overview</h2>
-  <apx-chart 
-    [series]="chartOptions.series || []"
-    [chart]="chartOptions.chart!" 
-    [labels]="chartOptions.labels || []"
-    [plotOptions]="chartOptions.plotOptions!" 
-    [responsive]="chartOptions.responsive || []">
-  </apx-chart>
 </div>

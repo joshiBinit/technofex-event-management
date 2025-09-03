@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ApexOptions } from 'ng-apexcharts';
-
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-
 import { Event } from '../../../../../shared/model/event.model';
+import { User } from '../../../../../shared/model/user.model';
+import { AuthService } from '../../../../../core/services/auth-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { selectAllEvents } from '../../../events/store/events/event.selector';
 import { loadEvents } from '../../../events/store/events/event.action';
+import { computeEventsWithBookings } from '../../utils/event-utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,14 +16,12 @@ import { loadEvents } from '../../../events/store/events/event.action';
   styleUrls: ['./dashboard.scss'],
 })
 export class DashboardComponent implements OnInit {
-  // totalBookings$: Observable<number>;
   events$: Observable<Event[]>;
-
   displayedColumns: string[] = [
     'id',
     'title',
     'category',
-    'description',
+    'ticketsBooked',
     'date',
     'time',
     'location',
@@ -31,35 +29,29 @@ export class DashboardComponent implements OnInit {
     'price',
   ];
 
-  chartOptions: ApexOptions = {
-    series: [],
-    chart: { type: 'pie', width: 380 }, // must always be defined
-    labels: [], // must always be array
-    plotOptions: { pie: { expandOnClick: true } }, // must always be defined
-    responsive: [
-      // must always be array
-      {
-        breakpoint: 480,
-        options: {
-          chart: { width: 200 },
-          legend: { position: 'bottom' },
-        },
-      },
-    ],
-  };
+  eventsWithBookings: (Event & { ticketsBooked: number })[] = [];
+  private destroy$ = new Subject<void>();
 
-  constructor(private store: Store, private eventService:EventService) {
-    // this.totalBookings$ = this.store.select(selectTotalBookings);
+  constructor(
+    private store: Store,
+    private eventService: EventService,
+    private authService: AuthService
+  ) {
     this.events$ = this.store.select(selectAllEvents);
   }
 
   ngOnInit(): void {
-    //dispatch action to loadevents
     this.store.dispatch(loadEvents());
 
-    this.events$.subscribe((events) => {
-      this.chartOptions.series = events?.map((e) => e.totalTickets) || [];
-      this.chartOptions.labels = events?.map((e) => e.title) || [];
-    });
+    combineLatest([this.events$, this.authService.getUsers()])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([events, users]) => {
+        this.eventsWithBookings = computeEventsWithBookings(events, users);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

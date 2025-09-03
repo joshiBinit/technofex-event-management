@@ -4,6 +4,9 @@ import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import { addEvent } from '../../store/dashboard-event/dashboard-event.action';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-add-event',
@@ -20,7 +23,8 @@ export class AddEventComponent {
     private router: Router,
     private formService: FormService,
     private eventService: EventService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +54,7 @@ export class AddEventComponent {
       } = this.eventForm.value;
 
       const payload = {
-        id: this.nextId.toString(),
+        id: uuidv4(),
         title,
         category,
         description,
@@ -60,34 +64,18 @@ export class AddEventComponent {
         date: schedule.date,
         time: schedule.time,
       };
+      this.store.dispatch(addEvent({ event: payload }));
 
-      this.eventService.addEvent(payload).subscribe({
-        next: (event) => {
-          console.log('Event added successfully:', event);
-          this.snackbar.open('✅ Event created successfully', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
-          //
-          //
-          // alert('Event created successfully!');
-          this.eventForm.reset();
-          this.router.navigate(['/admin/event/list']);
-          this.nextId++;
-        },
-        error: (err) => {
-          console.error('Error adding event:', err);
-          this.snackbar.open('❌ Failed to add event. Please try again.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',  
-          });
-          // alert('Failed to add event. Please try again.');
-        },
+      this.snackbar.open('✅ Event creation in progress', 'Close', {
+        duration: 2000,
+        panelClass: ['snackbar-success'],
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
       });
+
+      this.eventForm.reset();
+      this.router.navigate(['/admin/event/list']);
+      this.nextId++;
     } else {
       this.eventForm.markAllAsTouched();
     }

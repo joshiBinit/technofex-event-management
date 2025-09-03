@@ -8,7 +8,7 @@ import { loadBookedEvents } from '../../../events/store/booked-events/booked-eve
 import { Event } from '../../../../../shared/model/event.model';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('BookingDetailComponent', () => {
+describe('BookingDetailComponent', () => {
   let component: BookingDetailComponent;
   let fixture: ComponentFixture<BookingDetailComponent>;
   let store: MockStore<BookedEventsState>;

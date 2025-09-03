@@ -3,6 +3,7 @@ import { BookedEventsState } from './booked-events.reducer';
 
 export const selectBookedEventsState =
   createFeatureSelector<BookedEventsState>('bookedEvents');
+
 export const selectBookedEvents = createSelector(
   selectBookedEventsState,
   (state) => state.bookedEvents

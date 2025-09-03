@@ -95,13 +95,6 @@ describe('DashboardComponent', () => {
 
     const expected = computeEventsWithBookings(mockEvents, mockUsers);
     expect(component.eventsWithBookings).toEqual(expected);
-
-    // Example: tickets booked should be aggregated correctly
-    // const event1 = component.eventsWithBookings.find((e) => e.id === '1');
-    // expect(event1?.ticketsBooked).toBe(5); // 2 + 3
-
-    // const event2 = component.eventsWithBookings.find((e) => e.id === '2');
-    // expect(event2?.ticketsBooked).toBe(1);
   });
 
   it('should complete destroy$ on ngOnDestroy', () => {

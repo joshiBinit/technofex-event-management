@@ -41,7 +41,7 @@ describe('HeaderComponent', () => {
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges(); // triggers initial async pipes etc.
+    fixture.detectChanges();
   });
 
   it('should create component', () => {
@@ -111,7 +111,7 @@ describe('HeaderComponent', () => {
       spyOn(component, 'logout');
       const logoutButton = fixture.debugElement.queryAll(
         By.css('mat-menu-item')
-      )[1].nativeElement; // second button
+      )[1].nativeElement;
       logoutButton.click();
       expect(component.logout).toHaveBeenCalled();
     });

@@ -1,10 +1,6 @@
-// src/app/features/private/dashboard/utils/event-utils.ts
 import { Event } from '../../../../shared/model/event.model';
 import { User } from '../../../../shared/model/user.model';
 
-/**
- * Compute total tickets booked for each event based on all users
- */
 export function computeEventsWithBookings(
   events: Event[],
   users: User[]

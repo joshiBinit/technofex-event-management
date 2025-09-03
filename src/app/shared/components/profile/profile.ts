@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
       email: 'guest@example.com',
       role: 'user',
       password: '',
-      bookings: [], // ✅ add empty bookings
+      bookings: [],
     });
   }
 
@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
         email: email ?? 'guest@example.com',
         role: (role as 'user' | 'admin') ?? 'user',
         password: '*****',
-        bookings: [], // ✅ required for User interface
+        bookings: [],
       }))
     );
   }

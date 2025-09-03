@@ -192,14 +192,6 @@ describe('UpdateEventComponent', () => {
     );
   });
 
-  // it('should mark form as touched if invalid on submit', () => {
-  //   component.eventForm.controls['title'].setValue('');
-  //   component.onSubmit();
-
-  //   expect(component.eventForm.touched).toBeTrue();
-  //   expect(eventServiceMock.updateEvent).not.toHaveBeenCalled();
-  // });
-
   it('should clean up subscriptions on ngOnDestroy', () => {
     const completeSpy = spyOn<any>(
       component['destroy$'],

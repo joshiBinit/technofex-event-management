@@ -103,16 +103,6 @@ xdescribe('EventListComponent', () => {
     ]);
   });
 
-  // it('should show success snackbar on successful booking', () => {
-  //   authServiceSpy.addBooking.and.returnValue(of(null));
-  //   component.onBookNow(mockEvents[0]);
-  //   expect(snackBarSpy.open).toHaveBeenCalledWith(
-  //     '✅ Concert booked successfully',
-  //     'Close',
-  //     jasmine.any(Object)
-  //   );
-  // });
-
   it('should show duplicate booking snackbar', () => {
     authServiceSpy.addBooking.and.returnValue(of('duplicate'));
     component.onBookNow(mockEvents[0]);
@@ -132,15 +122,6 @@ xdescribe('EventListComponent', () => {
       jasmine.any(Object)
     );
   });
-
-  // it('should dispatch bookEvent on successful booking', () => {
-  //   const dispatchSpy = spyOn(store, 'dispatch');
-  //   authServiceSpy.addBooking.and.returnValue(of(null));
-  //   component.onBookNow(mockEvents[0]);
-  //   expect(dispatchSpy).toHaveBeenCalledWith(
-  //     BookedEventsActions.bookEvent({ event: mockEvents[0] })
-  //   );
-  // });
 
   it('should call deleteEvent when confirmed', () => {
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of(true) });

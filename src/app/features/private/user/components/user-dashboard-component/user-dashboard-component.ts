@@ -6,7 +6,7 @@ import * as BookedEventsActions from '../../../events/store/booked-events/booked
 import { Store } from '@ngrx/store';
 import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
 import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.selector';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../../core/services/auth-service';
@@ -20,7 +20,8 @@ import { AuthService } from '../../../../../core/services/auth-service';
 export class UserDashboardComponent implements OnInit {
   events: Event[] = [];
   bookedEvents$: Observable<Event[]>;
-  bookedEvents: Event[] = []; // bookings from localStorage
+  bookedEvents: Event[] = [];
+  private destroy$ = new Subject<void>();
   displayedColumns: string[] = [
     'title',
     'category',
@@ -44,39 +45,58 @@ export class UserDashboardComponent implements OnInit {
       .getRandomEvents(3)
       .subscribe((data) => (this.events = data));
     this.store.dispatch(BookedEventActions.loadBookedEvents());
-    // Load booked events from the current user in localStorage
+
     const currentUser = this.authService.getCurrentUser();
     this.bookedEvents = currentUser?.bookings || [];
   }
   onBookNow(event: Event) {
-    this.authService.addBooking(event); // adds to user bookings in localStorage
-    this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
-    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-    this.snackBar.open(`✅ ${event.title} added successfully`, 'Close', {
+    this.authService
+      .addBooking(event)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        if (result === 'duplicate') {
+          this.showSnackBar(`❌ ${event.title} is already booked!`, 'error');
+        } else if (result === 'soldout') {
+          this.showSnackBar(`❌ ${event.title} is sold out!`, 'error');
+        } else if (result) {
+          this.showSnackBar(`✅ ${event.title} booked successfully`, 'success');
+
+          // Update local store
+          this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+
+          // Update bookedEvents array to reflect changes in UI
+          this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
+        } else {
+          this.showSnackBar(
+            `❌ Failed to book ${event.title}. Try again!`,
+            'error'
+          );
+        }
+      });
+  }
+
+  private showSnackBar(message: string, type: 'success' | 'error') {
+    this.snackBar.open(message, 'Close', {
       duration: 3000,
-      panelClass: ['snackbar-success'],
+      panelClass: [type === 'success' ? 'snackbar-success' : 'snackbar-error'],
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
   }
 
   onCancelBooking(eventId: string) {
-    // Remove booking from localStorage first
     this.authService.removeBooking(eventId);
     this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
 
-    // Fetch the event from server
     this.eventService.getEventById(eventId).subscribe({
       next: (event) => {
         if (event) {
-          // Increase availableTickets by 1
           const updatedEvent: Event = {
             ...event,
             availableTickets:
               (event.availableTickets ?? event.totalTickets) + 1,
           };
 
-          // Update event in JSON server
           this.eventService.updateEvent(eventId, updatedEvent).subscribe({
             next: () => {
               this.snackBar.open(
@@ -90,7 +110,6 @@ export class UserDashboardComponent implements OnInit {
                 }
               );
 
-              // Dispatch NgRx action to remove booking from store
               this.store.dispatch(
                 BookedEventsActions.cancelBooking({ eventId })
               );
@@ -115,5 +134,10 @@ export class UserDashboardComponent implements OnInit {
         console.error('Failed to fetch event:', err);
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

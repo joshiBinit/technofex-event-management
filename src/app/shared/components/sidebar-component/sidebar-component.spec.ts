@@ -28,7 +28,7 @@ describe('SidebarComponent', () => {
         { provide: AuthService, useValue: authServiceSpy },
         provideMockStore(),
       ],
-      schemas: [NO_ERRORS_SCHEMA], // skips all Angular Material components
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     store = TestBed.inject(MockStore);

@@ -28,7 +28,6 @@ export class BookedEventsEffects {
     )
   );
 
-  // Book new event
   bookEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookedEventsActions.bookEvent),

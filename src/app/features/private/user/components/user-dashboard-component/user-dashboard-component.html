@@ -89,7 +89,7 @@
             mat-button
             color="primary"
             [routerLink]="'/user/booking-detail'"
-            [queryParams]="{id:bookedEvent.id}"
+            [queryParams]="{ id: bookedEvent.id }"
           >
             View
           </button>
@@ -108,7 +108,6 @@
     </mat-table>
   </div>
 
-  <!-- Event Recommendations -->
   <div>
     <h2 class="text-lg font-semibold mb-2">Recommended for You</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -34,7 +34,7 @@ describe('SignupComponent', () => {
     component = fixture.componentInstance;
     store = TestBed.inject(MockStore);
     dispatchSpy = spyOn(store, 'dispatch');
-    fixture.detectChanges(); // triggers ngOnInit
+    fixture.detectChanges();
   });
 
   it('should create component', () => {
@@ -82,7 +82,7 @@ describe('SignupComponent', () => {
 
   it('should mark all controls as touched if form is invalid', () => {
     const form = component.signupForm;
-    form.get('email')?.setValue(''); // make invalid
+    form.get('email')?.setValue('');
 
     spyOn(form, 'markAllAsTouched');
     component.onSubmit();

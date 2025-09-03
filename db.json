@@ -692,6 +692,40 @@
       "totalTickets": 150,
       "availableTickets": 150,
       "price": 25
+    },
+    {
+      "id": "6",
+      "title": "Cybersecurity Workshop",
+      "category": "Workshop",
+      "description": "Hands-on training on cybersecurity tools and techniques.",
+      "date": "2025-10-05",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 50
+    },
+    {
+      "id": "10",
+      "title": "Vel in fugit fuga ",
+      "category": "workshop",
+      "description": "Sint qui pariatur D",
+      "location": "Radisson Hotel Event Center",
+      "totalTickets": 90,
+      "price": 337,
+      "date": "2021-09-27T18:15:00.000Z",
+      "time": "06:40"
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 50,
+      "price": 20
     }
   ],
   "locations": [

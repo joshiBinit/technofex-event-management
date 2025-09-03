@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.store';
+import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.selector';
 import { Event } from '../../../../../shared/model/event.model';
 import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
 @Component({

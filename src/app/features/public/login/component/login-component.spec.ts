@@ -7,7 +7,7 @@ import * as LoginActions from '../store/login-component.actions';
 import { FormService } from '../../../../core/services/form/form-service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let store: MockStore<{ login: LoginState }>;

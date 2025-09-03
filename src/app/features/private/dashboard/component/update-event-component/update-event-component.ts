@@ -97,12 +97,12 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
         next: (currentEvent) => {
           if (!currentEvent) return;
 
-          // Adjust availableTickets if totalTickets is reduced below current
-          const adjustedAvailableTickets =
-            formValue.totalTickets <
-            (currentEvent.availableTickets ?? currentEvent.totalTickets)
-              ? formValue.totalTickets
-              : currentEvent.availableTickets ?? formValue.totalTickets;
+          const bookedTickets =
+            currentEvent.totalTickets -
+            (currentEvent.availableTickets ?? currentEvent.totalTickets);
+
+          const updatedAvailableTickets =
+            formValue.totalTickets - bookedTickets;
 
           const payload: Event = {
             id: this.eventId,
@@ -115,7 +115,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
             time: formValue.schedule.time,
             location: formValue.location,
             totalTickets: formValue.totalTickets,
-            availableTickets: adjustedAvailableTickets,
+            availableTickets: updatedAvailableTickets,
             price: formValue.price,
           };
 
@@ -130,7 +130,6 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
                   horizontalPosition: 'right',
                   verticalPosition: 'top',
                 });
-
                 this.router.navigate(['/admin/event/list']);
               },
               error: (err) => {

@@ -1,15 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, of, map, catchError } from 'rxjs';
+import { mergeMap, of, map, catchError, tap } from 'rxjs';
 import * as LoginActions from './login-component.actions';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class LoginEffects {
   private actions$ = inject(Actions);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -50,5 +52,39 @@ export class LoginEffects {
           )
       )
     )
+  );
+
+   // Snackbar for login success
+  loginSuccessSnackbar$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(LoginActions.loginSuccess),
+        tap(() => {
+          this.snackBar.open('✅ Login Successful!', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        })
+      ),
+    { dispatch: false }
+  );
+
+  // Snackbar for login failure
+  loginFailureSnackbar$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(LoginActions.loginFailure),
+        tap((action) => {
+          this.snackBar.open(`❌ Login Failed: ${action.error}`, 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        })
+      ),
+    { dispatch: false }
   );
 }

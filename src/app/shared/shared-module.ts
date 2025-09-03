@@ -10,15 +10,17 @@ import { ProfileComponent } from './components/profile/profile';
 import { PaginationComponent } from '../shared/components/pagination/pagination';
 import { SearchComponent } from './components/search-component/search-component';
 import { FormsModule } from '@angular/forms';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog';
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
     ProfileComponent,
     SearchComponent,
-    PaginationComponent
+    PaginationComponent,
+    ConfirmationDialogComponent
   ],
   imports: [CommonModule, SharedRoutingModule, MaterialModule, FormsModule],
-  exports: [HeaderComponent, SidebarComponent, PaginationComponent, SearchComponent],
+  exports: [HeaderComponent, SidebarComponent, PaginationComponent, SearchComponent, ConfirmationDialogComponent],
 })
 export class SharedModule {}

@@ -6,8 +6,10 @@ import * as EventsActions from './event.action';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+
 @Injectable()
 export class EventsEffects {
+  
   actions$ = inject(Actions);
   eventService = inject(EventService);
   loadEvents$ = createEffect(() =>
@@ -21,4 +23,7 @@ export class EventsEffects {
       )
     )
   );
+
+
+
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-update-event-component',
@@ -20,7 +21,8 @@ export class UpdateEventComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private formService: FormService,
-    private eventService: EventService
+    private eventService: EventService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -92,12 +94,28 @@ export class UpdateEventComponent implements OnInit {
 
       this.eventService.updateEvent(this.eventId, payload).subscribe({
         next: () => {
-          alert('Event updated successfully!');
+          this.snackbar.open('✅ Event updated successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          //
+          //
+          // alert('Event updated successfully!');
           this.router.navigate(['/admin/event/list']);
         },
         error: (err) => {
           console.error('Failed to update event:', err);
-          alert('Failed to update event. Please try again.');
+          this.snackbar.open('❌ Failed to update event. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          //
+          //
+          // alert('Failed to update event. Please try again.');
         },
       });
     } else {

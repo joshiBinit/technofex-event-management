@@ -15,6 +15,9 @@ import { EventService } from '../../../../../core/services/event/event-service';
 import { AuthService } from '../../../../../core/services/auth-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-list-component',
@@ -42,6 +45,8 @@ export class EventListComponent implements OnInit {
   constructor(
     private store: Store<EventsState>,
     private router: Router,
+    private dialog: MatDialog,
+    private snackBar : MatSnackBar,
     private eventService: EventService,
     private authService: AuthService
   ) {
@@ -98,14 +103,38 @@ export class EventListComponent implements OnInit {
 
   /** Book event: updates localStorage, json-server, and NgRx store */
   onBookNow(event: Event) {
+    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+     
     this.authService.addBooking(event).subscribe((result) => {
       if (result === 'duplicate') {
-        alert(`${event.title} is already booked!`);
+        this.snackBar.open(`❌ ${event.title} is already booked!`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} is already booked!`);
       } else if (result) {
-        alert(`${event.title} booked successfully!`);
+        this.snackBar.open(`✅ ${event.title} booked successfully`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} booked successfully!`);
         this.store.dispatch(BookedEventsActions.bookEvent({ event }));
       } else {
-        alert('Failed to book event. Try again!');
+        this.snackBar.open(`❌ Failed to book ${event.title}. Try again!`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        //
+        // alert('Failed to book event. Try again!');
       }
     });
   }
@@ -128,23 +157,42 @@ export class EventListComponent implements OnInit {
     this.router.navigate(['/admin/updateevent', eventId]);
   }
 
-  onDeleteEvent(eventId: string) {
-    const confirmDelete = confirm(
-      'Are you sure you want to delete this event?'
-    );
-    if (confirmDelete) {
+ onDeleteEvent(eventId: string) {
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '350px',
+    data: {
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this event?',
+    },
+  });
+
+  // Wait for the dialog to close
+  dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    if (confirmed) {
       this.eventService.deleteEvent(eventId).subscribe({
         next: () => {
-          alert('Event deleted successfully!');
-          this.loadEvents();
+          this.snackBar.open('✅ Event deleted successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          this.loadEvents(); // reload events
         },
         error: (err) => {
           console.error('Failed to delete event:', err);
-          alert('Failed to delete event. Please try again.');
+          this.snackBar.open('❌ Failed to delete event. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
         },
       });
     }
-  }
+  });
+}
+
 
   onSearchChanged(searchTerm: string) {
     console.log('Search term:', searchTerm);

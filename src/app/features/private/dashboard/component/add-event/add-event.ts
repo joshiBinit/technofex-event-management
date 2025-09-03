@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-event',
@@ -18,7 +19,8 @@ export class AddEventComponent {
   constructor(
     private router: Router,
     private formService: FormService,
-    private eventService: EventService
+    private eventService: EventService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -62,14 +64,28 @@ export class AddEventComponent {
       this.eventService.addEvent(payload).subscribe({
         next: (event) => {
           console.log('Event added successfully:', event);
-          alert('Event created successfully!');
+          this.snackbar.open('✅ Event created successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+          //
+          //
+          // alert('Event created successfully!');
           this.eventForm.reset();
           this.router.navigate(['/admin/event/list']);
           this.nextId++;
         },
         error: (err) => {
           console.error('Error adding event:', err);
-          alert('Failed to add event. Please try again.');
+          this.snackbar.open('❌ Failed to add event. Please try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',  
+          });
+          // alert('Failed to add event. Please try again.');
         },
       });
     } else {

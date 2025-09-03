@@ -33,6 +33,13 @@
       "email": "tirytuwi@mailinator.com",
       "password": "Pa$$w0rd!",
       "role": "user"
+    },
+    {
+      "id": "718f",
+      "username": "srijana",
+      "email": "srijana@gmail.com",
+      "password": "srijana",
+      "role": "user"
     }
   ],
   "events": [

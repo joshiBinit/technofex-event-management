@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
 import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
 import { Observable } from 'rxjs';
-import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.store';
+import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.selector';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../../core/services/auth-service';
 

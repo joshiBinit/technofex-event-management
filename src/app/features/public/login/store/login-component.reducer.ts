@@ -1,11 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
 import * as LoginActions from './login-component.actions';
+import { Event } from '../../../../shared/model/event.model';
 
 export interface LoginState {
   token: string | null;
   role: string | null;
   username: string | null;
   email: string | null;
+  bookings: Event[]; // ✅ store user bookings here
   error: string | null;
   loading: boolean;
 }
@@ -15,6 +17,7 @@ export const initialState: LoginState = {
   role: null,
   username: null,
   email: null,
+  bookings: [],
   error: null,
   loading: false,
 };
@@ -22,15 +25,19 @@ export const initialState: LoginState = {
 export const loginReducer = createReducer(
   initialState,
   on(LoginActions.login, (state) => ({ ...state, loading: true, error: null })),
-  on(LoginActions.loginSuccess, (state, { token, role, username, email }) => ({
-    ...state,
-    token,
-    role,
-    username,
-    email,
-    error: null,
-    loading: false,
-  })),
+  on(
+    LoginActions.loginSuccess,
+    (state, { token, role, username, email, bookings }) => ({
+      ...state,
+      token,
+      role,
+      username,
+      email,
+      bookings,
+      error: null,
+      loading: false,
+    })
+  ),
   on(LoginActions.loginFailure, (state, { error }) => ({
     ...state,
     error,
@@ -38,12 +45,13 @@ export const loginReducer = createReducer(
   })),
   on(
     LoginActions.initializeLogin,
-    (state, { token, role, username, email }) => ({
+    (state, { token, role, username, email, bookings }) => ({
       ...state,
       token,
       role,
       username,
       email,
+      bookings,
       error: null,
       loading: false,
     })

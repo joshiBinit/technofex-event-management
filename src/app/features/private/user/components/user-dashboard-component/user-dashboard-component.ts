@@ -1,38 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
-import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
-import { Store } from '@ngrx/store';
-import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
-import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
-import { Observable } from 'rxjs';
-import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.store';
+import { EventService } from '../../../../../core/services/event/event-service';
+import { AuthService } from '../../../../../core/services/auth-service';
+
 @Component({
   selector: 'app-user-dashboard-component',
   standalone: false,
   templateUrl: './user-dashboard-component.html',
-  styleUrl: './user-dashboard-component.scss',
+  styleUrls: ['./user-dashboard-component.scss'],
 })
 export class UserDashboardComponent implements OnInit {
-  events: Event[] = [];
-
-  constructor(
-    private eventService: EventService,
-    private store: Store<BookedEventsState>
-  ) {
-    this.bookedEvents$ = this.store.select(selectBookedEvents);
-  }
-  ngOnInit() {
-    this.eventService
-      .getRandomEvents(3)
-      .subscribe((data) => (this.events = data));
-    this.store.dispatch(BookedEventActions.loadBookedEvents());
-  }
-  onBookNow(event: Event) {
-    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-    alert(`${event.title} added`);
-  }
-  bookedEvents$: Observable<Event[]>;
+  events: Event[] = []; // recommended events
+  bookedEvents: Event[] = []; // bookings from localStorage
   displayedColumns: string[] = [
     'title',
     'category',
@@ -42,4 +21,32 @@ export class UserDashboardComponent implements OnInit {
     'price',
     'actions',
   ];
+
+  constructor(
+    private eventService: EventService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    // Fetch recommended events
+    this.eventService.getRandomEvents(3).subscribe((data) => {
+      this.events = data;
+    });
+
+    // Load booked events from the current user in localStorage
+    const currentUser = this.authService.getCurrentUser();
+    this.bookedEvents = currentUser?.bookings || [];
+  }
+
+  /** Book event and update localStorage */
+  onBookNow(event: Event) {
+    this.authService.addBooking(event); // adds to user bookings in localStorage
+    this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
+  }
+
+  /** Cancel a booking */
+  onCancelBooking(eventId: string) {
+    this.authService.removeBooking(eventId);
+    this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
+  }
 }

@@ -12,6 +12,7 @@ import * as BookedEventsActions from '../../../events/store/booked-events/booked
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
 import { EventService } from '../../../../../core/services/event/event-service';
+import { AuthService } from '../../../../../core/services/auth-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -19,33 +20,30 @@ import { PageEvent } from '@angular/material/paginator';
   selector: 'app-event-list-component',
   standalone: false,
   templateUrl: './event-list-component.html',
-  styleUrl: './event-list-component.scss',
+  styleUrls: ['./event-list-component.scss'],
 })
 export class EventListComponent implements OnInit {
-  // Observables
   events$: Observable<Event[]>;
   loading$: Observable<boolean>;
   role$: Observable<string | null>;
 
-  // Data properties
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
   filterEvents: Event[] = [];
-  // Pagination
+
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
 
-  // Search fields for the search component
   searchFields: string[] = ['title', 'category', 'location'];
 
-  // Reference to pagination component
   @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
   constructor(
     private store: Store<EventsState>,
     private router: Router,
-    private eventService: EventService
+    private eventService: EventService,
+    private authService: AuthService
   ) {
     this.events$ = this.store.select(selectAllEvents);
     this.loading$ = this.store.select(selectEventLoading);
@@ -56,9 +54,6 @@ export class EventListComponent implements OnInit {
     this.loadEvents();
   }
 
-  /**
-   * Load all events and initialize pagination
-   */
   loadEvents(): void {
     this.store.dispatch(EventsActions.loadEvents());
 
@@ -67,7 +62,6 @@ export class EventListComponent implements OnInit {
         this.allEvents = events;
         this.totalItems = events.length;
 
-        // Pass all events to pagination to manage slicing
         if (this.paginationComponent) {
           this.paginationComponent.setFilteredData(events);
         }
@@ -75,9 +69,6 @@ export class EventListComponent implements OnInit {
     });
   }
 
-  /**
-   * Determine table columns based on user role
-   */
   getDisplayedColumns(): Observable<string[]> {
     return this.role$.pipe(
       map((role) =>
@@ -105,33 +96,28 @@ export class EventListComponent implements OnInit {
     );
   }
 
-  /**
-   * Handle booking an event
-   */
+  /** Book event: updates localStorage, json-server, and NgRx store */
   onBookNow(event: Event) {
-    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-    alert(`${event.title} added`);
+    this.authService.addBooking(event).subscribe((user) => {
+      if (user) {
+        alert(`${event.title} booked successfully!`);
+        this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+      } else {
+        alert('Failed to book event. Try again!');
+      }
+    });
   }
 
-  /**
-   * Handle paginated data emitted by the pagination component
-   */
   onPaginatedDataChanged(data: Event[]): void {
     this.displayedEvents = data;
   }
 
-  /**
-   * Handle filtered data from the search component
-   */
   onFilteredDataChanged(data: Event[]): void {
     if (this.paginationComponent) {
       this.paginationComponent.setFilteredData(data);
     }
   }
 
-  /**
-   * Navigation to add event page
-   */
   onAddEvent() {
     this.router.navigate(['/admin/addevent']);
   }
@@ -158,19 +144,11 @@ export class EventListComponent implements OnInit {
     }
   }
 
-  /**
-   * Placeholder for search term changes (used by search component)
-   */
   onSearchChanged(searchTerm: string) {
     console.log('Search term:', searchTerm);
-    // Filtering logic is handled by the search component, which emits filtered data
   }
 
-  /**
-   * Optional: handle page change events if needed
-   */
   onPageChange(event: PageEvent): void {
     console.log('Page changed:', event);
-    // Currently pagination component handles slicing automatically
   }
 }

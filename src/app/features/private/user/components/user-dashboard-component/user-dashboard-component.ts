@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
 import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
 import { Observable } from 'rxjs';
-import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.store';
+import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.selector';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../../core/services/auth-service';
 
@@ -19,7 +19,7 @@ import { AuthService } from '../../../../../core/services/auth-service';
 })
 export class UserDashboardComponent implements OnInit {
   events: Event[] = [];
-   bookedEvents$: Observable<Event[]>;
+  bookedEvents$: Observable<Event[]>;
   bookedEvents: Event[] = []; // bookings from localStorage
   displayedColumns: string[] = [
     'title',
@@ -30,7 +30,6 @@ export class UserDashboardComponent implements OnInit {
     'price',
     'actions',
   ];
-
 
   constructor(
     private eventService: EventService,
@@ -45,11 +44,9 @@ export class UserDashboardComponent implements OnInit {
       .getRandomEvents(3)
       .subscribe((data) => (this.events = data));
     this.store.dispatch(BookedEventActions.loadBookedEvents());
-      // Load booked events from the current user in localStorage
+    // Load booked events from the current user in localStorage
     const currentUser = this.authService.getCurrentUser();
     this.bookedEvents = currentUser?.bookings || [];
-  
-    
   }
   onBookNow(event: Event) {
     this.authService.addBooking(event); // adds to user bookings in localStorage
@@ -64,8 +61,6 @@ export class UserDashboardComponent implements OnInit {
     //
     // alert(`${event.title} added`);
   }
- 
-  
 
   /** Cancel a booking */
   onCancelBooking(eventId: string) {

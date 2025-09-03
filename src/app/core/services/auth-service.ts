@@ -19,6 +19,7 @@ export class AuthService {
     username: string;
     password: string;
     role: 'user' | 'admin';
+    returnUrl?: string;
   }): Observable<any> {
     return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
       switchMap((users) => {

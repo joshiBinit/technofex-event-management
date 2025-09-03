@@ -3,7 +3,7 @@ import { Event } from '../../../../shared/model/event.model';
 
 export const login = createAction(
   '[Login] Login',
-  props<{ username: string; password: string; role: 'user' | 'admin' }>()
+  props<{ username: string; password: string; role: 'user' | 'admin'; returnUrl?: string }>()
 );
 
 export const loginSuccess = createAction(

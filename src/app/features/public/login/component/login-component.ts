@@ -9,6 +9,7 @@ import {
   selectLoginError,
   selectLoginLoading,
 } from '../store/login-component.selectors';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login-component',
@@ -20,14 +21,20 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   error$!: Observable<string | null>;
   loading$!: Observable<boolean>;
+  returnUrl: string = '/';
 
   private fb = inject(FormBuilder);
   private store = inject(Store<{ login: LoginState }>);
   private formService = inject(FormService);
+  private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.loginForm = this.formService.loginForm();
-    localStorage.getItem('users')
+    
+    // Get return url from route parameters or default to '/'
+    this.route.queryParams.subscribe(params => {
+      this.returnUrl = params['returnUrl'] || '/';
+    });
 
     this.error$ = this.store.select(selectLoginError);
     this.loading$ = this.store.select(selectLoginLoading);
@@ -47,10 +54,15 @@ togglePassword(): void {
       const role = isAdminAttempt ? 'admin' : 'user';
 
       this.store.dispatch(
-        LoginActions.login({ username: email, password, role })
+        LoginActions.login({ 
+          username: email, 
+          password, 
+          role,
+          returnUrl: this.returnUrl 
+        })
       );
 
-      console.log('Login attempt:', { username: email, password, role });
+      console.log('Login attempt:', { username: email, password, role, returnUrl: this.returnUrl });
     } else {
       this.loginForm.markAllAsTouched();
     }

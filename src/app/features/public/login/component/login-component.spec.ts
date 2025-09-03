@@ -37,7 +37,7 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     store = TestBed.inject(MockStore);
     dispatchSpy = spyOn(store, 'dispatch');
-    fixture.detectChanges(); // triggers ngOnInit
+    fixture.detectChanges();
   });
 
   it('should create the component', () => {

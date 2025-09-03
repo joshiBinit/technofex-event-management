@@ -17,7 +17,6 @@ export const initialState: DashboardEventState = {
 export const dashboardEventReducer = createReducer(
   initialState,
 
-  // Add event
   on(DashboardEventActions.addEvent, (state) => ({
     ...state,
     isLoading: true,

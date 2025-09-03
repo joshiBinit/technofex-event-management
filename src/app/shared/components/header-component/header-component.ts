@@ -25,7 +25,6 @@ export class HeaderComponent {
   }
 
   logout() {
-    // Clear session/token here
     localStorage.removeItem('authData');
     this.router.navigate(['/login']);
   }

@@ -32,7 +32,6 @@ export class SignupComponent implements OnInit {
   private store = inject(Store<{ signup: SignupState }>);
 
   ngOnInit(): void {
-    // Add 'username' control
     this.signupForm = this.formService.signupForm();
     this.signupForm.setValidators(this.passwordMatchValidator);
 
@@ -51,17 +50,13 @@ export class SignupComponent implements OnInit {
   onSubmit(): void {
     if (this.signupForm.valid) {
       const { username, email, password } = this.signupForm.value;
-      // Dispatch signup action including username
-      // Role is set to 'user' by default in the effects
       this.store.dispatch(SignupActions.signup({ username, email, password }));
-      // Log signup attempt to console
       console.log('Signup attempt:', {
         username,
         email,
         password,
         role: 'user',
       });
-      // Don't navigate immediately - let the effect handle it
     } else {
       this.signupForm.markAllAsTouched();
     }

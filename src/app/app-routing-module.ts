@@ -19,7 +19,6 @@ const routes: Routes = [
       import('./features/private/private-module').then((m) => m.PrivateModule),
   },
 
-  // fallback route
   { path: '**', redirectTo: '' },
 ];
 

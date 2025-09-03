@@ -7,9 +7,11 @@ This document explains the enhanced pagination and search components that have b
 ## Pagination Component
 
 ### Location
+
 `src/app/shared/components/pagination/pagination.ts`
 
 ### Features
+
 - Handles all pagination logic internally
 - Accepts data arrays and manages slicing for current page
 - Maintains pagination state (page index, page size)
@@ -19,18 +21,11 @@ This document explains the enhanced pagination and search components that have b
 ### Usage
 
 ```html
-<app-pagination
-  #pagination
-  [data]="yourDataArray"
-  [showFirstLastButtons]="true"
-  (page)="onPageChange($event)"
-  (paginatedData)="onPaginatedDataChanged($event)"
-  class="mt-4"
->
-</app-pagination>
+<app-pagination #pagination [data]="yourDataArray" [showFirstLastButtons]="true" (page)="onPageChange($event)" (paginatedData)="onPaginatedDataChanged($event)" class="mt-4"> </app-pagination>
 ```
 
 ### Inputs
+
 - `data`: The array of items to paginate
 - `length`: Total number of items (optional, calculated from data if not provided)
 - `pageSize`: Number of items per page (default: 10)
@@ -39,19 +34,23 @@ This document explains the enhanced pagination and search components that have b
 - `pageIndex`: Current page index (default: 0)
 
 ### Outputs
+
 - `page`: Emits PageEvent when page changes
 - `paginatedData`: Emits the sliced data for the current page
 
 ### Methods
+
 - `setFilteredData(data: any[])`: Updates the data and resets pagination
 - `onPageChange(event: PageEvent)`: Handles page change events
 
 ## Search Component
 
 ### Location
+
 `src/app/shared/components/search-component/search-component.ts`
 
 ### Features
+
 - Handles search logic with debouncing
 - Filters data based on search term
 - Supports searching specific fields or all string properties
@@ -61,26 +60,23 @@ This document explains the enhanced pagination and search components that have b
 ### Usage
 
 ```html
-<app-search-component 
-  [data]="yourDataArray" 
-  [searchFields]="['title', 'description', 'category']"
-  [placeholder]="'Search by title, category...'"
-  (searchChanged)="onSearchChanged($event)"
-  (filteredData)="onFilteredDataChanged($event)">
-</app-search-component>
+<app-search-component [data]="yourDataArray" [searchFields]="['title', 'description', 'category']" [placeholder]="'Search by title, category...'" (searchChanged)="onSearchChanged($event)" (filteredData)="onFilteredDataChanged($event)"> </app-search-component>
 ```
 
 ### Inputs
+
 - `data`: The array of items to search through
 - `searchFields`: Specific fields to search (if empty, searches all string properties)
 - `placeholder`: Placeholder text for the search input
 - `debounceTime`: Debounce time in milliseconds (default: 300)
 
 ### Outputs
+
 - `searchChanged`: Emits the search term when it changes
 - `filteredData`: Emits the filtered data based on the search term
 
 ### Methods
+
 - `onSearch()`: Handles search input with debouncing
 - `clearSearch()`: Clears the search term and resets filtered data
 - `applyFilter()`: Applies the filter to the data
@@ -92,50 +88,46 @@ Here's how to integrate both components in a parent component:
 ### Parent Component TS
 
 ```typescript
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Pagination } from '../../../shared/components/pagination/pagination';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Pagination } from "../../../shared/components/pagination/pagination";
 
 @Component({
-  selector: 'app-parent',
-  templateUrl: './parent.html'
+  selector: "app-parent",
+  templateUrl: "./parent.html",
 })
 export class ParentComponent implements OnInit {
   allData: any[] = [];
   displayedData: any[] = [];
-  searchFields: string[] = ['name', 'description'];
-  
-  @ViewChild('pagination') paginationComponent: Pagination;
-  
+  searchFields: string[] = ["name", "description"];
+
+  @ViewChild("pagination") paginationComponent: Pagination;
+
   ngOnInit(): void {
-    // Load your data
     this.loadData();
   }
-  
+
   loadData(): void {
-    // Get data from service
-    this.dataService.getData().subscribe(data => {
+    this.dataService.getData().subscribe((data) => {
       this.allData = data;
     });
   }
-  
+
   onSearchChanged(searchTerm: string): void {
-    console.log('Search term:', searchTerm);
-    // Additional logic if needed
+    console.log("Search term:", searchTerm);
   }
-  
+
   onFilteredDataChanged(data: any[]): void {
-    // Update pagination with filtered data
     if (this.paginationComponent) {
       this.paginationComponent.setFilteredData(data);
     }
   }
-  
+
   onPaginatedDataChanged(data: any[]): void {
     this.displayedData = data;
   }
-  
+
   onPageChange(event: PageEvent): void {
-    console.log('Page changed:', event);
+    console.log("Page changed:", event);
     // Additional logic if needed
   }
 }
@@ -146,28 +138,13 @@ export class ParentComponent implements OnInit {
 ```html
 <div>
   <h1>Data List</h1>
-  
-  <app-search-component 
-    [data]="allData" 
-    [searchFields]="searchFields"
-    [placeholder]="'Search...'"
-    (searchChanged)="onSearchChanged($event)"
-    (filteredData)="onFilteredDataChanged($event)">
-  </app-search-component>
-  
+
+  <app-search-component [data]="allData" [searchFields]="searchFields" [placeholder]="'Search...'" (searchChanged)="onSearchChanged($event)" (filteredData)="onFilteredDataChanged($event)"> </app-search-component>
+
   <!-- Your data display (table, cards, etc.) -->
-  <div *ngFor="let item of displayedData">
-    {{ item.name }}
-  </div>
-  
-  <app-pagination
-    #pagination
-    [data]="allData"
-    [showFirstLastButtons]="true"
-    (page)="onPageChange($event)"
-    (paginatedData)="onPaginatedDataChanged($event)"
-    class="mt-4">
-  </app-pagination>
+  <div *ngFor="let item of displayedData">{{ item.name }}</div>
+
+  <app-pagination #pagination [data]="allData" [showFirstLastButtons]="true" (page)="onPageChange($event)" (paginatedData)="onPaginatedDataChanged($event)" class="mt-4"> </app-pagination>
 </div>
 ```
 

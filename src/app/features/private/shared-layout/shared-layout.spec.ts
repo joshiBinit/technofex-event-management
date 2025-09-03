@@ -16,7 +16,7 @@ describe('SharedLayout', () => {
       imports: [MatSidenavModule],
       declarations: [SharedLayout],
       providers: [{ provide: Store, useValue: storeSpy }],
-      schemas: [NO_ERRORS_SCHEMA], // skips child components
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedLayout);

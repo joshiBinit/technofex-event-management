@@ -21,7 +21,7 @@ describe('EventBookingService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // ensures no pending requests
+    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -47,7 +47,7 @@ describe('EventBookingService', () => {
 
     const req = httpMock.expectOne('http://localhost:3000/bookedEvents');
     expect(req.request.method).toBe('POST');
-    req.flush(mockEvent); // respond with mockEvent
+    req.flush(mockEvent);
   });
 
   it('should GET booked events', () => {

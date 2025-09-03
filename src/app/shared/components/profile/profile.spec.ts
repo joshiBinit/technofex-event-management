@@ -30,7 +30,6 @@ describe('ProfileComponent', () => {
 
     store = TestBed.inject(MockStore);
 
-    // override selectors with default fallback values
     mockUsernameSelector = store.overrideSelector(selectLoginUsername, null);
     mockEmailSelector = store.overrideSelector(selectLoginEmail, null);
     mockRoleSelector = store.overrideSelector(selectLoginRole, null);

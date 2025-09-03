@@ -26,16 +26,28 @@
           "price": 30
         },
         {
-          "id": "3531c736-70b9-4d67-bcb1-b304f908e2ef",
-          "title": "zfasfsaf",
-          "category": "workshop",
-          "description": "asfasfsa",
-          "date": "2025-10-13",
-          "time": "12:12",
-          "location": "Radisson Hotel Event Center",
-          "totalTickets": 1,
-          "availableTickets": 1,
-          "price": 12
+          "id": "3",
+          "title": "VueJS Meetup",
+          "category": "Meetup",
+          "description": "Networking event for VueJS enthusiasts and developers.",
+          "date": "2025-09-20",
+          "time": "6:00 PM",
+          "location": "Lalitpur",
+          "totalTickets": 60,
+          "availableTickets": 60,
+          "price": 20
+        },
+        {
+          "id": "15",
+          "title": "Tech Career Fair",
+          "category": "Networking",
+          "description": "Meet employers, discover jobs, and grow your tech career.",
+          "date": "2025-11-20",
+          "time": "10:00 AM",
+          "location": "Pokhara",
+          "totalTickets": 500,
+          "availableTickets": 500,
+          "price": 0
         }
       ]
     },
@@ -85,7 +97,7 @@
       "time": "6:00 PM",
       "location": "Lalitpur",
       "totalTickets": 60,
-      "availableTickets": 60,
+      "availableTickets": 59,
       "price": 20
     },
     {
@@ -221,6 +233,174 @@
       "totalTickets": 1,
       "availableTickets": 1,
       "price": 12
+    },
+    {
+      "id": "9",
+      "title": "Blockchain Hackathon",
+      "category": "Hackathon",
+      "description": "48-hour hackathon focused on blockchain applications.",
+      "date": "2025-10-25",
+      "time": "9:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 120,
+      "availableTickets": 120,
+      "price": 0
+    },
+    {
+      "id": "2",
+      "title": "ReactJS Summit 1",
+      "category": "Conference",
+      "description": "A gathering of React developers sharing the latest updates.",
+      "date": "2025-09-18",
+      "time": "12:12",
+      "location": "Pokhara",
+      "totalTickets": 400,
+      "availableTickets": 400,
+      "price": 120
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "6",
+      "title": "Cybersecurity Workshop",
+      "category": "Workshop",
+      "description": "Hands-on training on cybersecurity tools and techniques.",
+      "date": "2025-10-05",
+      "time": "10:00 AM",
+      "location": "Kathmandu",
+      "totalTickets": 100,
+      "availableTickets": 100,
+      "price": 50
+    },
+    {
+      "id": "5",
+      "title": "AI & Machine Learning Seminar",
+      "category": "Seminar",
+      "description": "Deep dive into AI and ML concepts with practical examples.",
+      "date": "2025-09-30",
+      "time": "2:00 PM",
+      "location": "Kathmandu",
+      "totalTickets": 150,
+      "availableTickets": 149,
+      "price": 75
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
+    },
+    {
+      "id": "4",
+      "title": "Full Stack Development Conference",
+      "category": "Conference",
+      "description": "Explore full stack development trends, tools, and practices.",
+      "date": "2025-09-25",
+      "time": "8:30 AM",
+      "location": "Bhaktapur",
+      "totalTickets": 200,
+      "availableTickets": 199,
+      "price": 100
+    },
+    {
+      "id": "3",
+      "title": "VueJS Meetup",
+      "category": "Meetup",
+      "description": "Networking event for VueJS enthusiasts and developers.",
+      "date": "2025-09-20",
+      "time": "6:00 PM",
+      "location": "Lalitpur",
+      "totalTickets": 60,
+      "availableTickets": 60,
+      "price": 20
+    },
+    {
+      "id": "15",
+      "title": "Tech Career Fair",
+      "category": "Networking",
+      "description": "Meet employers, discover jobs, and grow your tech career.",
+      "date": "2025-11-20",
+      "time": "10:00 AM",
+      "location": "Pokhara",
+      "totalTickets": 500,
+      "availableTickets": 500,
+      "price": 0
     }
   ],
   "locations": [

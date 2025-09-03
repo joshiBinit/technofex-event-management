@@ -30,8 +30,8 @@ import { MatListModule } from '@angular/material/list';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    StoreModule.forRoot({}, {}), // <--- root store
-    EffectsModule.forRoot([]), // <--- root effects
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
   ],
   providers: [provideBrowserGlobalErrorListeners(), provideStoreDevtools()],
   bootstrap: [App],

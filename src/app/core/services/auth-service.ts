@@ -10,11 +10,10 @@ import { Event } from '../../shared/model/event.model';
 })
 export class AuthService {
   private localStorageKey = 'authData';
-  private apiUrl = 'http://localhost:3000'; // json-server default URL
+  private apiUrl = 'http://localhost:3000';
 
   constructor(private router: Router, private http: HttpClient) {}
 
-  /** Login user */
   login(user: {
     username: string;
     password: string;
@@ -33,7 +32,7 @@ export class AuthService {
         if (existingUser) {
           const token = this.generateToken();
           const authData: any = {
-            id: (existingUser as any).id, // get runtime id
+            id: (existingUser as any).id,
             token,
             username: existingUser.username,
             role: existingUser.role!,
@@ -56,7 +55,6 @@ export class AuthService {
     );
   }
 
-  /** Signup user */
   signup(user: User): Observable<{ user: User; token: string }> {
     return this.http
       .post<User>(`${this.apiUrl}/users`, {
@@ -68,7 +66,7 @@ export class AuthService {
         map((createdUser) => {
           const token = this.generateToken();
           const authData: any = {
-            id: (createdUser as any).id, // get runtime id
+            id: (createdUser as any).id,
             token,
             username: createdUser.username,
             role: createdUser.role!,
@@ -82,45 +80,37 @@ export class AuthService {
       );
   }
 
-  /** Logout user */
   logout(): void {
     localStorage.removeItem(this.localStorageKey);
     this.router.navigate(['/login']);
   }
 
-  /** Check if user is logged in */
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.localStorageKey);
   }
 
-  /** Get current user data */
   getCurrentUser(): (User & { token?: string; bookings?: Event[] }) | null {
     const authData = localStorage.getItem(this.localStorageKey);
     return authData ? JSON.parse(authData) : null;
   }
 
-  /** Get current user role */
   getRole(): 'user' | 'admin' | null {
     const authData = localStorage.getItem(this.localStorageKey);
     return authData ? JSON.parse(authData).role : null;
   }
 
-  /** Add a booked event for current user and save to json-server */
   addBooking(event: Event): Observable<'soldout' | 'duplicate' | User | null> {
     const currentUser: any = this.getCurrentUser();
     if (!currentUser) return of(null);
 
-    // Prevent duplicate booking
     if (currentUser.bookings?.some((e: Event) => e.id === event.id)) {
       return of('duplicate' as 'duplicate');
     }
 
-    // Fetch latest event from server
     return this.http.get<Event>(`${this.apiUrl}/events/${event.id}`).pipe(
       switchMap((serverEvent) => {
         if (!serverEvent) return of(null);
 
-        // Check tickets availability
         if (
           serverEvent.availableTickets !== undefined &&
           serverEvent.availableTickets <= 0
@@ -128,7 +118,6 @@ export class AuthService {
           return of('soldout' as 'soldout');
         }
 
-        // 1️⃣ Update event availableTickets
         const updatedEvent: Event = {
           ...serverEvent,
           availableTickets:
@@ -152,7 +141,6 @@ export class AuthService {
           { bookings: updatedBookings }
         );
 
-        // Combine both requests
         return updateEvent$.pipe(
           switchMap(() => updateUser$),
           map((user) => user),
@@ -165,7 +153,6 @@ export class AuthService {
     );
   }
 
-  /** Remove a booked event from current user and update json-server */
   removeBooking(eventId: string): Observable<User | null> {
     const currentUser: any = this.getCurrentUser();
     if (!currentUser || !currentUser.bookings) return of(null);
@@ -174,11 +161,9 @@ export class AuthService {
       (e: Event) => e.id !== eventId
     );
 
-    // Update localStorage
     const updatedUser = { ...currentUser, bookings: updatedBookings };
     localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
 
-    // Update json-server
     return this.http
       .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
         bookings: updatedBookings,
@@ -192,12 +177,10 @@ export class AuthService {
       );
   }
 
-  /** Generate simple random token */
   private generateToken(): string {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 
-  /** Fetch all users */
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`);
   }

@@ -1,22 +1,37 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { PaginationComponent } from './pagination';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+// import { Pagination } from './pagination';
 
 describe('PaginationComponent', () => {
   let component: PaginationComponent;
   let fixture: ComponentFixture<PaginationComponent>;
+  // describe('Pagination', () => {
+  //   let component: Pagination;
+  //   let fixture: ComponentFixture<Pagination>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatPaginatorModule],
       declarations: [PaginationComponent],
     }).compileComponents();
+    //   beforeEach(async () => {
+    //     await TestBed.configureTestingModule({
+    //       declarations: [Pagination]
+    //     })
+    //     .compileComponents();
 
     fixture = TestBed.createComponent(PaginationComponent);
     component = fixture.componentInstance;
     component.data = Array.from({ length: 20 }, (_, i) => ({ id: i + 1 }));
     fixture.detectChanges();
   });
+  //     fixture = TestBed.createComponent(Pagination);
+  //     component = fixture.componentInstance;
+  //     fixture.detectChanges();
+  //   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -50,3 +65,7 @@ describe('PaginationComponent', () => {
     expect(component.pageIndex).toBe(0);
   });
 });
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

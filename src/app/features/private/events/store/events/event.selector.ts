@@ -1,4 +1,3 @@
-// src/app/store/events/events.selectors.ts
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { EventsState } from './event.reducer';
 
@@ -19,7 +18,6 @@ export const selectError = createSelector(
   (state) => state.error
 );
 
-// Example: filter by category
 export const selectEventsByCategory = (category: string) =>
   createSelector(selectAllEvents, (events) =>
     events.filter((event) => event.category === category)

@@ -30,9 +30,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formService.loginForm();
-    
-    // Get return url from route parameters or default to '/'
-    this.route.queryParams.subscribe(params => {
+
+    this.route.queryParams.subscribe((params) => {
       this.returnUrl = params['returnUrl'] || '/';
     });
 
@@ -42,10 +41,9 @@ export class LoginComponent implements OnInit {
 
   showPassword = false;
 
-togglePassword(): void {
-  this.showPassword = !this.showPassword;
-}
-
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
@@ -54,15 +52,20 @@ togglePassword(): void {
       const role = isAdminAttempt ? 'admin' : 'user';
 
       this.store.dispatch(
-        LoginActions.login({ 
-          username: email, 
-          password, 
+        LoginActions.login({
+          username: email,
+          password,
           role,
-          returnUrl: this.returnUrl 
+          returnUrl: this.returnUrl,
         })
       );
 
-      console.log('Login attempt:', { username: email, password, role, returnUrl: this.returnUrl });
+      console.log('Login attempt:', {
+        username: email,
+        password,
+        role,
+        returnUrl: this.returnUrl,
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }

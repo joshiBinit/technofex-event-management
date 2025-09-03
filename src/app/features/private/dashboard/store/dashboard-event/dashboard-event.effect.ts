@@ -19,7 +19,6 @@ export class DashboardEventEffects {
     this.actions$.pipe(
       ofType(addEvent),
       mergeMap((action) => {
-        // Ensure availableTickets = totalTickets
         const eventWithAvailable: Event = {
           ...action.event,
           availableTickets: action.event.totalTickets,

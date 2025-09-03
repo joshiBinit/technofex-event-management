@@ -14,7 +14,6 @@ export class FormService {
       category: ['', Validators.required],
       description: ['', Validators.maxLength(500)],
 
-      // Nested group for Date & Time
       schedule: this.fb.group({
         date: ['', Validators.required],
         time: ['', Validators.required],

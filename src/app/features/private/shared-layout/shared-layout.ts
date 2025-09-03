@@ -28,7 +28,7 @@ export class SharedLayout implements OnInit {
           role,
           username,
           email,
-          bookings: bookings ?? [], // ✅ default to empty array if missing
+          bookings: bookings ?? [],
         })
       );
     }

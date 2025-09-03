@@ -17,37 +17,45 @@ export class SignupEffects {
   signup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SignupActions.signup),
-      mergeMap(action => {
+      mergeMap((action) => {
         try {
-          return this.authService.signup({
-            username: action.username,
-            email: action.email,
-            password: action.password,
-            role: 'user'
-          }).pipe(
-            map(response => {
-              // Navigate to login page after successful signup
-              this.router.navigate(['/login']);
-              return SignupActions.signupSuccess({
-                user: response.user,
-                token: response.token,
-                email: action.email,
-                password: action.password
-              });
-            }),
-            catchError(error => {
-              console.error('Signup error:', error);
-              return of(SignupActions.signupFailure({ error: error.message || 'Username already exists' }));
+          return this.authService
+            .signup({
+              username: action.username,
+              email: action.email,
+              password: action.password,
+              role: 'user',
             })
-          );
+            .pipe(
+              map((response) => {
+                this.router.navigate(['/login']);
+                return SignupActions.signupSuccess({
+                  user: response.user,
+                  token: response.token,
+                  email: action.email,
+                  password: action.password,
+                });
+              }),
+              catchError((error) => {
+                console.error('Signup error:', error);
+                return of(
+                  SignupActions.signupFailure({
+                    error: error.message || 'Username already exists',
+                  })
+                );
+              })
+            );
         } catch (error: any) {
           console.error('Signup error:', error);
-          return of(SignupActions.signupFailure({ error: error.message || 'Username already exists' }));
+          return of(
+            SignupActions.signupFailure({
+              error: error.message || 'Username already exists',
+            })
+          );
         }
       })
     )
   );
-   // ✅ Snackbar for signup success
   signupSuccessSnackbar$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -64,12 +72,11 @@ export class SignupEffects {
     { dispatch: false }
   );
 
-  // ✅ Snackbar for signup failure
   signupFailureSnackbar$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(SignupActions.signupFailure),
-        tap(action => {
+        tap((action) => {
           this.snackBar.open(`❌ Signup Failed: ${action.error}`, 'Close', {
             duration: 3000,
             panelClass: ['snackbar-error'],

@@ -7,7 +7,7 @@ export interface LoginState {
   role: string | null;
   username: string | null;
   email: string | null;
-  bookings: Event[]; // ✅ store user bookings here
+  bookings: Event[];
   error: string | null;
   loading: boolean;
 }

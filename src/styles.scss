@@ -37,3 +37,19 @@ html,
 body {
   height: 100%;
 }
+
+
+.snackbar-success {
+  background-color: #4caf50 !important; // Green
+  color: #fff !important;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.snackbar-error {
+  background-color: #f44336 !important; // Red
+  color: #fff !important;
+  font-weight: bold;
+  border-radius: 6px;
+  
+}

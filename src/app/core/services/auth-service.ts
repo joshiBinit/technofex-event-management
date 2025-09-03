@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../shared/model/user.model';
 import { Router } from '@angular/router';
-import { Observable, of, throwError, catchError, map, tap, mergeMap } from 'rxjs';
+import { Observable, of, catchError, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Event } from '../../shared/model/event.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,99 +11,165 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   private localStorageKey = 'authData';
   private apiUrl = 'http://localhost:3000'; // json-server default URL
-  
+
   constructor(private router: Router, private http: HttpClient) {}
 
-  // Admin is already in db.json file
-
-  login(user: any): Observable<boolean> {
+  /** Login user */
+  login(user: {
+    username: string;
+    password: string;
+    role: 'user' | 'admin';
+  }): Observable<any> {
     return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
-      map(users => {
-        // Check if the user is trying to login with email or username
+      switchMap((users) => {
         const existingUser = users.find(
-          (u: any) => (u.username === user.username || u.email === user.username) && u.password === user.password
+          (u: User) =>
+            (u.username === user.username || u.email === user.username) &&
+            u.password === user.password &&
+            u.role === user.role
         );
 
         if (existingUser) {
-          const authData = {
-            token: this.generateToken(),
+          const token = this.generateToken();
+          const authData: any = {
+            id: (existingUser as any).id, // get runtime id
+            token,
             username: existingUser.username,
-            role: existingUser.role,
-            // Store additional user data if needed
-            email: existingUser.email || existingUser.username
+            role: existingUser.role!,
+            email: existingUser.email || existingUser.username,
+            bookings: existingUser.bookings || [],
           };
+
           localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
-          console.log('Login successful with user:', existingUser);
-          return true;
+          console.log('Login successful:', existingUser);
+          return of(authData);
         }
+
         console.log('Login failed, no matching user found');
-        return false;
+        return of(null);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Login error:', error);
-        return of(false);
+        return of(null);
       })
     );
   }
 
+  /** Signup user */
   signup(user: User): Observable<{ user: User; token: string }> {
-    // First check if user already exists
-    return this.http.get<User[]>(`${this.apiUrl}/users?username=${user.username}`).pipe(
-      map(users => {
-        if (users.length > 0) {
-          throw new Error('Username already exists'); // will be caught by effect
-        }
-        
-        // Set default role to 'user' if not provided
-        const newUser = { ...user, role: user.role || 'user' };
-        
-        // Add user to db.json
-        return this.http.post<User>(`${this.apiUrl}/users`, newUser).pipe(
-          map(createdUser => {
-            const token = this.generateToken();
-            const authData = { 
-              username: createdUser.username, 
-              role: createdUser.role, 
-              token,
-              email: createdUser.email || createdUser.username
-            };
-            localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
-            
-            // Log signup data to console
-            console.log('User signed up:', { username: createdUser.username, email: createdUser.email, role: createdUser.role });
-            
-            return { user: createdUser, token };
-          })
-        );
-      }),
-      catchError(error => {
-        console.error('Signup error:', error);
-        return throwError(() => new Error(error.message || 'Username already exists'));
+    return this.http
+      .post<User>(`${this.apiUrl}/users`, {
+        ...user,
+        role: user.role || 'user',
+        bookings: user.bookings || [],
       })
-    ).pipe(
-      // Flatten the nested Observable
-      mergeMap(obs => obs)
-    );
+      .pipe(
+        map((createdUser) => {
+          const token = this.generateToken();
+          const authData: any = {
+            id: (createdUser as any).id, // get runtime id
+            token,
+            username: createdUser.username,
+            role: createdUser.role!,
+            email: createdUser.email || createdUser.username,
+            bookings: createdUser.bookings || [],
+          };
+
+          localStorage.setItem(this.localStorageKey, JSON.stringify(authData));
+          return { user: createdUser, token };
+        })
+      );
   }
 
+  /** Logout user */
   logout(): void {
     localStorage.removeItem(this.localStorageKey);
     this.router.navigate(['/login']);
   }
 
+  /** Check if user is logged in */
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.localStorageKey);
   }
 
+  /** Get current user data */
+  getCurrentUser(): (User & { token?: string; bookings?: Event[] }) | null {
+    const authData = localStorage.getItem(this.localStorageKey);
+    return authData ? JSON.parse(authData) : null;
+  }
+
+  /** Get current user role */
   getRole(): 'user' | 'admin' | null {
     const authData = localStorage.getItem(this.localStorageKey);
     return authData ? JSON.parse(authData).role : null;
   }
 
+  /** Add a booked event for current user and save to json-server */
+  addBooking(event: Event): Observable<User | 'duplicate' | null> {
+    const currentUser: any = this.getCurrentUser();
+    if (!currentUser) return of(null);
+
+    // Prevent duplicate booking
+    if (currentUser.bookings?.some((e: Event) => e.id === event.id)) {
+      return of('duplicate'); // <--- special flag
+    }
+
+    const updatedBookings = currentUser.bookings
+      ? [...currentUser.bookings, event]
+      : [event];
+
+    const updatedUser = { ...currentUser, bookings: updatedBookings };
+    localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
+
+    return this.http
+      .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
+        bookings: updatedBookings,
+      })
+      .pipe(
+        map((user) => {
+          console.log('Booking saved to server:', user);
+          return user;
+        }),
+        catchError((err) => {
+          console.error('Failed to save booking to server:', err);
+          return of(null);
+        })
+      );
+  }
+
+  /** Remove a booked event from current user and update json-server */
+  removeBooking(eventId: string): Observable<User | null> {
+    const currentUser: any = this.getCurrentUser();
+    if (!currentUser || !currentUser.bookings) return of(null);
+
+    const updatedBookings = currentUser.bookings.filter(
+      (e: Event) => e.id !== eventId
+    );
+
+    // Update localStorage
+    const updatedUser = { ...currentUser, bookings: updatedBookings };
+    localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
+
+    // Update json-server
+    return this.http
+      .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
+        bookings: updatedBookings,
+      })
+      .pipe(
+        map((user) => user),
+        catchError((err) => {
+          console.error('Failed to remove booking:', err);
+          return of(null);
+        })
+      );
+  }
+
+  /** Generate simple random token */
   private generateToken(): string {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 
+  /** Fetch all users */
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`);
   }

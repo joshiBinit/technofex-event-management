@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { initializeLogin } from '../../public/login/store/login-component.actions';
+import { Event } from '../../../shared/model/event.model';
 
 @Component({
   selector: 'app-shared-layout',
@@ -19,8 +20,17 @@ export class SharedLayout implements OnInit {
   ngOnInit(): void {
     const authData = localStorage.getItem('authData');
     if (authData) {
-      const { token, role, username, email } = JSON.parse(authData);
-      this.store.dispatch(initializeLogin({ token, role, username, email }));
+      const { token, role, username, email, bookings } = JSON.parse(authData);
+
+      this.store.dispatch(
+        initializeLogin({
+          token,
+          role,
+          username,
+          email,
+          bookings: bookings ?? [], // ✅ default to empty array if missing
+        })
+      );
     }
   }
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Event } from '../../../shared/model/event.model';
-
+import { Location } from '../../../shared/model/event.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,8 +27,8 @@ export class EventService {
     );
   }
 
-  loadLocations(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:3000/locations');
+  loadLocations(): Observable<Location[]> {
+    return this.http.get<Location[]>('http://localhost:3000/locations');
   }
 
   updateEvent(id: string, event: Event): Observable<Event> {

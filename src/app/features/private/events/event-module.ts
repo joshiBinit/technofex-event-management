@@ -10,16 +10,19 @@ import { EventsEffects } from './store/events/event.effect';
 import { MaterialModule } from '../../../shared/material.module';
 import { eventsReducer } from './store/events/event.reducer';
 import { SharedModule } from '../../../shared/shared-module';
+import { bookingReducer } from './store/event-booking/event-booking.reducer';
+import { EventBookingEffects } from './store/event-booking/event-booking.effects';
 
 @NgModule({
   declarations: [EventListComponent],
   imports: [
     CommonModule,
     EventRoutingModule,
-    StoreModule.forFeature('events', eventsReducer),
-    EffectsModule.forFeature(EventsEffects),
     MaterialModule,
     SharedModule,
+    StoreModule.forFeature('events', eventsReducer),
+    StoreModule.forFeature('booking', bookingReducer),
+    EffectsModule.forFeature([EventsEffects, EventBookingEffects]),
   ],
 })
 export class EventModule {}

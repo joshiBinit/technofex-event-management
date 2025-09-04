@@ -129,7 +129,6 @@ export class AuthService {
           { availableTickets: updatedEvent.availableTickets }
         );
 
-        // 2️⃣ Update user bookings
         const updatedBookings = currentUser.bookings
           ? [...currentUser.bookings, event]
           : [event];

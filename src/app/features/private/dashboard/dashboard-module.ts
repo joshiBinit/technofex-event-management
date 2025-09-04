@@ -17,6 +17,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { UpdateEventComponent } from './component/update-event-component/update-event-component';
 import { dashboardEventReducer } from './store/dashboard-event/dashboard-event.reducer';
 import { DashboardEventEffects } from './store/dashboard-event/dashboard-event.effect';
+import { bookingReducer } from '../events/store/event-booking/event-booking.reducer';
 
 @NgModule({
   declarations: [
@@ -31,9 +32,11 @@ import { DashboardEventEffects } from './store/dashboard-event/dashboard-event.e
     DashboardRoutingModule,
     // StoreModule.forFeature('events', eventsReducer),
     StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
+    StoreModule.forFeature('events', eventsReducer),
     HttpClientModule,
     NgApexchartsModule,
-    EffectsModule.forFeature(DashboardEventEffects),
+    EffectsModule.forFeature(DashboardEventEffects, EventsEffects),
+
     MaterialModule,
   ],
 })

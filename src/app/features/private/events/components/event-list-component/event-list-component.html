@@ -148,7 +148,7 @@
 
     <!-- Pagination Component -->
     <app-pagination
-    *ngIf="displayedEvents.length > 0 && !(loading$ | async)"
+    *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
 
       #pagination
       [data]="allEvents"

@@ -155,20 +155,25 @@ export class EventListComponent implements OnInit, OnDestroy {
         if (confirmed) {
           this.eventService.deleteEvent(eventId).subscribe({
             next: () => {
-              this.dialogService.openSuccessDialog(
-                'Event Deleted',
-                'The event has been deleted successfully.',
-                'OK'
-              );
+              this.snackBar.open('Event deleted successfully', 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-success'],
+                horizontalPosition: 'right',
+                verticalPosition: 'top',
+              });
               this.loadEvents(); // reload events
             },
             error: (err) => {
               console.error('Failed to delete event:', err);
-              this.dialogService.openWarningDialog(
-                'Deletion Failed',
-                'Failed to delete the event. Please try again.',
-                'OK',
-                'Cancel'
+              this.snackBar.open(
+                'Failed to delete event. Please try again later.',
+                'Close',
+                {
+                  duration: 3000,
+                  panelClass: ['snackbar  -error'],
+                  horizontalPosition: 'right',
+                  verticalPosition: 'top',
+                }
               );
             },
           });

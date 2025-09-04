@@ -9,7 +9,7 @@ import { Event } from '../../../../../shared/model/event.model';
 import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('UserDashboardComponent', () => {
+describe('UserDashboardComponent', () => {
   let component: UserDashboardComponent;
   let fixture: ComponentFixture<UserDashboardComponent>;
   let eventServiceMock: any;

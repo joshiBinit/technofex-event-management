@@ -47,11 +47,7 @@ export class SidebarComponent implements OnInit {
   }
   eventListRedirect(): void {
     this.role$.pipe(take(1)).subscribe((role) => {
-      if (role === 'admin') {
-        this.router.navigate(['/admin/event/list']);
-      } else {
-        this.router.navigate(['/user/event/list']);
-      }
+      this.router.navigate(['event/list']);
     });
   }
 }

@@ -27,17 +27,24 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class EventListComponent implements OnInit, OnDestroy {
   private store = inject(Store<EventsState>);
+
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
+
   allEvents: Event[] = [];
+  filteredEvents: Event[] = [];
   displayedEvents: Event[] = [];
 
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
+  pageEvent!: PageEvent;
 
   searchFields: string[] = ['title', 'category', 'location'];
+  filterTimeout: any;
+  debounceTime: number = 300;
+  filterValue: string = '';
 
   private destroy$ = new Subject<void>();
 
@@ -55,11 +62,14 @@ export class EventListComponent implements OnInit, OnDestroy {
     this.loadEvents();
     this.events$.pipe(takeUntil(this.destroy$)).subscribe((events) => {
       this.allEvents = events;
+      this.filteredEvents = events;
       this.totalItems = events?.length ?? 0;
 
       if (this.paginationComponent) {
         this.paginationComponent.setFilteredData(events);
       }
+
+      this.updateDisplayedEvents();
     });
   }
 
@@ -120,6 +130,77 @@ export class EventListComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Handle paginator page changes
+   */
+  onPageChange(event: PageEvent): void {
+    console.log('Page changed:', event);
+    this.pageEvent = event;
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.updateDisplayedEvents();
+  }
+
+  /**
+   * Apply filter to events with debounce
+   */
+  applyFilter(event: KeyboardEvent): void {
+    if (this.filterTimeout) {
+      clearTimeout(this.filterTimeout);
+    }
+
+    this.filterTimeout = setTimeout(() => {
+      const filterValue = (event.target as HTMLInputElement).value
+        .trim()
+        .toLowerCase();
+      this.filterValue = filterValue;
+
+      if (filterValue) {
+        this.filteredEvents = this.allEvents.filter(
+          (item) =>
+            item.title?.toLowerCase().includes(filterValue) ||
+            item.category?.toLowerCase().includes(filterValue) ||
+            item.location?.toLowerCase().includes(filterValue)
+        );
+      } else {
+        this.filteredEvents = [...this.allEvents];
+      }
+
+      this.totalItems = this.filteredEvents.length;
+      this.pageIndex = 0;
+
+      this.pageEvent = {
+        pageIndex: 0,
+        pageSize: this.pageSize,
+        length: this.totalItems,
+      };
+
+      this.updateDisplayedEvents();
+    }, this.debounceTime);
+  }
+
+  /**
+   * Update displayed events based on page and size
+   */
+  updateDisplayedEvents(): void {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+
+    this.displayedEvents = this.filteredEvents.slice(startIndex, endIndex);
+
+    if (
+      this.displayedEvents.length === 0 &&
+      this.filteredEvents.length > 0 &&
+      this.pageIndex > 0
+    ) {
+      this.pageIndex = Math.max(
+        0,
+        Math.ceil(this.filteredEvents.length / this.pageSize) - 1
+      );
+      this.updateDisplayedEvents();
+    }
+  }
+
   onPaginatedDataChanged(data: Event[]): void {
     this.displayedEvents = data;
   }
@@ -167,14 +248,6 @@ export class EventListComponent implements OnInit, OnDestroy {
           });
         }
       });
-  }
-
-  onSearchChanged(searchTerm: string) {
-    console.log('Search term:', searchTerm);
-  }
-
-  onPageChange(event: PageEvent): void {
-    console.log('Page changed:', event);
   }
 
   private showSnackBar(message: string, type: 'success' | 'error') {

@@ -112,7 +112,6 @@
     <h2 class="text-lg font-semibold mb-2">Recommended for You</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <mat-card *ngFor="let event of events" class="p-4">
-        <img src="concert.jpg" alt="Concert" class="rounded mb-2" />
         <h3 class="font-semibold">{{ event.title }}</h3>
         <p class="text-sm text-gray-600">
           {{ event.date }} | {{ event.location }}

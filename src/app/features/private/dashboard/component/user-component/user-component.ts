@@ -21,7 +21,7 @@ export class UserComponent implements OnDestroy {
       .getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        this.users = data;
+        this.users = data.filter((user) => user.role === 'user');
       });
   }
 

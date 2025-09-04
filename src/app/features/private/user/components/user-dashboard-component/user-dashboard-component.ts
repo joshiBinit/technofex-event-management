@@ -52,6 +52,8 @@ export class UserDashboardComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
         if (msg) this.showSnackBar(msg, 'success');
+        const currentUser = this.authService.getCurrentUser();
+        this.bookedEvents = currentUser?.bookings || [];
       });
 
     this.store

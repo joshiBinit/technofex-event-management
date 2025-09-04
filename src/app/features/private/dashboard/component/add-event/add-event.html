@@ -34,6 +34,9 @@
         formControlName="description"
         placeholder="Enter event description"
       ></textarea>
+      <mat-error *ngIf="eventForm.get('description')?.hasError('required')">
+        Description is required
+      </mat-error>
       <mat-error *ngIf="eventForm.get('description')?.hasError('maxlength')">
         Maximum 500 characters allowed
       </mat-error>
@@ -121,7 +124,6 @@
         mat-raised-button
         color="primary"
         type="submit"
-        [disabled]="eventForm.invalid"
         class="px-6 py-2 rounded-xl"
       >
         Create Event

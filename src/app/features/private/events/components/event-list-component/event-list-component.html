@@ -28,6 +28,7 @@
   >
   </app-search-component>
 
+
   <div class="overflow-x-auto">
     <table
       mat-table
@@ -137,9 +138,19 @@
         *matRowDef="let row; columns: getDisplayedColumns() | async"
       ></tr>
     </table>
+    
+    <!-- No Results Message -->
+    <div
+      *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
+      class="p-4 text-center text-gray-500"
+    >
+      <p>No events found matching your search criteria.</p>
+    </div>
 
     <!-- Pagination Component -->
     <app-pagination
+    *ngIf="displayedEvents.length > 0 && !(loading$ | async)"
+
       #pagination
       [data]="allEvents"
       [showFirstLastButtons]="true"
@@ -148,13 +159,5 @@
       class="mt-4"
     >
     </app-pagination>
-
-    <!-- No Results Message -->
-    <div
-      *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
-      class="p-4 text-center text-gray-500"
-    >
-      No events found matching your search criteria.
-    </div>
   </div>
 </div>

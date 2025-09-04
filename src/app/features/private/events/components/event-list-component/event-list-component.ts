@@ -18,6 +18,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-event-list-component',
@@ -30,6 +31,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
+
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
 
@@ -45,7 +47,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private dialog: MatDialog,
+    private dialogService: DialogService,
     private snackBar: MatSnackBar,
     private eventService: EventService,
     private authService: AuthService
@@ -100,24 +102,44 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onBookNow(event: Event) {
-    this.authService
-      .addBooking(event)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        if (result === 'duplicate') {
-          this.showSnackBar(`❌ ${event.title} is already booked!`, 'error');
-        } else if (result === 'soldout') {
-          this.showSnackBar(`❌ ${event.title} is sold out!`, 'error');
-        } else if (result) {
-          this.showSnackBar(`✅ ${event.title} booked successfully`, 'success');
-          this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-        } else {
-          this.showSnackBar(
-            `❌ Failed to book ${event.title}. Try again!`,
-            'error'
-          );
-        }
-      });
+    this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+
+    this.authService.addBooking(event).subscribe((result) => {
+      if (result === 'duplicate') {
+        this.snackBar.open(`❌ ${event.title} is already booked!`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} is already booked!`);
+      } else if (result) {
+        this.snackBar.open(`✅ ${event.title} booked successfully`, 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        //
+        // alert(`${event.title} booked successfully!`);
+        this.store.dispatch(BookedEventsActions.bookEvent({ event }));
+      } else {
+        this.snackBar.open(
+          `❌ Failed to book ${event.title}. Try again!`,
+          'Close',
+          {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          }
+        );
+        //
+        //
+        // alert('Failed to book event. Try again!');
+      }
+    });
   }
 
   onPaginatedDataChanged(data: Event[]): void {
@@ -128,6 +150,7 @@ export class EventListComponent implements OnInit, OnDestroy {
     if (this.paginationComponent) {
       this.paginationComponent.setFilteredData(data);
     }
+    this.displayedEvents = data;
   }
 
   onAddEvent() {
@@ -139,29 +162,31 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteEvent(eventId: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
-      data: {
-        title: 'Confirm Delete',
-        message: 'Are you sure you want to delete this event?',
-      },
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((confirmed: boolean) => {
+    this.dialogService
+      .openDeleteDialog(
+        'Delete Event',
+        'Are you sure you want to delete this event?',
+        'Delete',
+        'cancel'
+      )
+      .subscribe((confirmed) => {
         if (confirmed) {
           this.eventService.deleteEvent(eventId).subscribe({
             next: () => {
-              this.showSnackBar('✅ Event deleted successfully', 'success');
-              this.loadEvents();
+              this.dialogService.openSuccessDialog(
+                'Event Deleted',
+                'The event has been deleted successfully.',
+                'OK'
+              );
+              this.loadEvents(); // reload events
             },
             error: (err) => {
               console.error('Failed to delete event:', err);
-              this.showSnackBar(
-                '❌ Failed to delete event. Please try again.',
-                'error'
+              this.dialogService.openWarningDialog(
+                'Deletion Failed',
+                'Failed to delete the event. Please try again.',
+                'OK',
+                'Cancel'
               );
             },
           });

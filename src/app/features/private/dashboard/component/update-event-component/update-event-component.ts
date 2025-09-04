@@ -6,6 +6,7 @@ import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-update-event-component',
@@ -25,6 +26,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private formService: FormService,
     private eventService: EventService,
+    private dialogService: DialogService,
     private snackbar: MatSnackBar
   ) {}
 
@@ -90,6 +92,16 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
 
     const formValue = this.eventForm.value;
 
+    this.dialogService
+      .openDeleteDialog(
+        'Confirm Event Update',
+        'Are you sure you want to update this event?',
+        'Update',
+        'Cancel'  
+      )
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+
     this.eventService
       .getEventById(this.eventId)
       .pipe(takeUntil(this.destroy$))
@@ -147,7 +159,8 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
               },
             });
         },
-        error: (err) => console.error('Failed to fetch current event:', err),
+        error: (err) => console.error('Failed to fetch current event:', err)
+          });
       });
   }
 

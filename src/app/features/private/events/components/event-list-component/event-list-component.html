@@ -27,7 +27,6 @@
   >
   </app-search-component>
 
-
   <div class="overflow-x-auto">
     <table
       mat-table
@@ -54,7 +53,7 @@
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Date</th>
         <td mat-cell *matCellDef="let event" class="px-4 py-2">
-          {{ event.date }} {{ event.time }}
+          {{ event.date }}
         </td>
       </ng-container>
       <!-- time Column -->
@@ -143,7 +142,7 @@
         *matRowDef="let row; columns: getDisplayedColumns() | async"
       ></tr>
     </table>
-    
+
     <!-- No Results Message -->
     <div
       *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
@@ -154,8 +153,7 @@
 
     <!-- Pagination Component -->
     <app-pagination
-    *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
-
+      *ngIf="displayedEvents.length === 0 && !(loading$ | async)"
       #pagination
       [data]="allEvents"
       [showFirstLastButtons]="true"

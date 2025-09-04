@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-
-import { Observable } from 'rxjs';
 import { Event } from '../../../../../shared/model/event.model';
+import { EventService } from '../../../../../core/services/event/event-service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-booking-detail-component',
@@ -12,26 +11,23 @@ import { Event } from '../../../../../shared/model/event.model';
   styleUrls: ['./booking-detail-component.scss'],
 })
 export class BookingDetailComponent implements OnInit {
-  selectedBookedEvents$!: Observable<Event | null>;
-  constructor(private route: ActivatedRoute, private store: Store) {}
+  event!: Event;
+  constructor(
+    private route: ActivatedRoute,
+    private eventService: EventService
+  ) {}
 
   ngOnInit(): void {
-    // this.selectedBookedEvents$ = this.route.queryParamMap.pipe(
-    //   map((params) => params.get('id')),
-    //   switchMap((bookedEventId) =>
-    //     this.store.select(selectBookedEvents).pipe(
-    //       map((events) => {
-    //         const foundEvent =
-    //           events.find((event) => event.id?.toString() === bookedEventId) ??
-    //           null;
-    //         return foundEvent;
-    //       })
-    //     )
-    //   )
-    // );
-    this.route.queryParamMap.subscribe((params) => {
+    this.route.queryParamMap.pipe(take(1)).subscribe((params) => {
       const eventId = params.get('id');
-      console.log('Query param ', eventId);
+      if (eventId) {
+        this.eventService
+          .getEventById(eventId)
+          .pipe(take(1))
+          .subscribe((event) => {
+            this.event = event;
+          });
+      }
     });
   }
 }

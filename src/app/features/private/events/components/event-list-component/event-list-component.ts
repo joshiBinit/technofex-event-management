@@ -6,9 +6,13 @@ import {
   selectAllEvents,
   selectEventLoading,
 } from '../../store/events/event.selector';
+import {
+  selectBookingSuccessMessage,
+  selectBookingError,
+} from '../../store/event-booking/event-booking.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
+import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
 import { EventService } from '../../../../../core/services/event/event-service';
@@ -26,7 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./event-list-component.scss'],
 })
 export class EventListComponent implements OnInit, OnDestroy {
-  private store = inject(Store<EventsState>);
+  private store = inject(Store);
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
@@ -61,6 +65,19 @@ export class EventListComponent implements OnInit, OnDestroy {
         this.paginationComponent.setFilteredData(events);
       }
     });
+    this.store
+      .select(selectBookingSuccessMessage)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((msg) => {
+        if (msg) this.showSnackBar(msg, 'success');
+      });
+
+    this.store
+      .select(selectBookingError)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((err) => {
+        if (err) this.showSnackBar(err, 'error');
+      });
   }
 
   ngOnDestroy(): void {
@@ -100,24 +117,8 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onBookNow(event: Event) {
-    this.authService
-      .addBooking(event)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        if (result === 'duplicate') {
-          this.showSnackBar(`❌ ${event.title} is already booked!`, 'error');
-        } else if (result === 'soldout') {
-          this.showSnackBar(`❌ ${event.title} is sold out!`, 'error');
-        } else if (result) {
-          this.showSnackBar(`✅ ${event.title} booked successfully`, 'success');
-          this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-        } else {
-          this.showSnackBar(
-            `❌ Failed to book ${event.title}. Try again!`,
-            'error'
-          );
-        }
-      });
+    console.log('booked');
+    this.store.dispatch(BookingActions.bookEvent({ event }));
   }
 
   onPaginatedDataChanged(data: Event[]): void {

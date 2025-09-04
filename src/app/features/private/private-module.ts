@@ -1,24 +1,19 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { MaterialModule } from '../../shared/material.module';
+import { SharedModule } from '../../shared/shared-module';
+import { EventBookingEffects } from './events/store/event-booking/event-booking.effects';
+import { bookingReducer } from './events/store/event-booking/event-booking.reducer';
+import { EventsEffects } from './events/store/events/event.effect';
+import { eventsReducer } from './events/store/events/event.reducer';
 import { PrivateRoutingModule } from './private-routing-module';
 import { SharedLayout } from './shared-layout/shared-layout';
-import { SharedModule } from '../../shared/shared-module';
-import { StoreModule } from '@ngrx/store';
-import { bookedEventsReducer } from './events/store/booked-events/booked-events.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { BookedEventsEffects } from './events/store/booked-events/booked-events.effect';
-import { MaterialModule } from '../../shared/material.module';
+import { EventModule } from './events/event-module';
 
 @NgModule({
   declarations: [SharedLayout],
-  imports: [
-    CommonModule,
-    PrivateRoutingModule,
-    SharedModule,
-    MaterialModule,
-    StoreModule.forFeature('bookedEvents', bookedEventsReducer),
-    EffectsModule.forFeature(BookedEventsEffects),
-  ],
+  imports: [CommonModule, PrivateRoutingModule, SharedModule, MaterialModule],
 })
 export class PrivateModule {}

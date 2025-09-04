@@ -29,11 +29,11 @@ import { DashboardEventEffects } from './store/dashboard-event/dashboard-event.e
     CommonModule,
     ReactiveFormsModule,
     DashboardRoutingModule,
-    StoreModule.forFeature('events', eventsReducer),
+    // StoreModule.forFeature('events', eventsReducer),
     StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
     HttpClientModule,
     NgApexchartsModule,
-    EffectsModule.forFeature([EventsEffects, DashboardEventEffects]),
+    EffectsModule.forFeature(DashboardEventEffects),
     MaterialModule,
   ],
 })

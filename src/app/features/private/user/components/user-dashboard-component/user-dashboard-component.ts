@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../../../../shared/model/event.model';
 import { EventService } from '../../../../../core/services/event/event-service';
-
-import * as BookedEventsActions from '../../../events/store/booked-events/booked-events.action';
+import * as BookingActions from '../../../events/store/event-booking/event-booking.action';
 import { Store } from '@ngrx/store';
-import * as BookedEventActions from '../../../events/store/booked-events/booked-events.action';
-import { BookedEventsState } from '../../../events/store/booked-events/booked-events.reducer';
+
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { selectBookedEvents } from '../../../events/store/booked-events/booked-events.selector';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../../core/services/auth-service';
+import {
+  selectBookingError,
+  selectBookingSuccessMessage,
+} from '../../../events/store/event-booking/event-booking.selector';
 
 @Component({
   selector: 'app-user-dashboard-component',
@@ -19,7 +21,7 @@ import { AuthService } from '../../../../../core/services/auth-service';
 })
 export class UserDashboardComponent implements OnInit {
   events: Event[] = [];
-  bookedEvents$: Observable<Event[]>;
+
   bookedEvents: Event[] = [];
   private destroy$ = new Subject<void>();
   displayedColumns: string[] = [
@@ -36,43 +38,32 @@ export class UserDashboardComponent implements OnInit {
     private eventService: EventService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private store: Store<BookedEventsState>
-  ) {
-    this.bookedEvents$ = this.store.select(selectBookedEvents);
-  }
+    private store: Store
+  ) {}
   ngOnInit() {
     this.eventService
       .getRandomEvents(3)
       .subscribe((data) => (this.events = data));
-    this.store.dispatch(BookedEventActions.loadBookedEvents());
 
     const currentUser = this.authService.getCurrentUser();
     this.bookedEvents = currentUser?.bookings || [];
+
+    this.store
+      .select(selectBookingSuccessMessage)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((msg) => {
+        if (msg) this.showSnackBar(msg, 'success');
+      });
+
+    this.store
+      .select(selectBookingError)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((err) => {
+        if (err) this.showSnackBar(err, 'error');
+      });
   }
   onBookNow(event: Event) {
-    this.authService
-      .addBooking(event)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        if (result === 'duplicate') {
-          this.showSnackBar(`❌ ${event.title} is already booked!`, 'error');
-        } else if (result === 'soldout') {
-          this.showSnackBar(`❌ ${event.title} is sold out!`, 'error');
-        } else if (result) {
-          this.showSnackBar(`✅ ${event.title} booked successfully`, 'success');
-
-          // Update local store
-          this.store.dispatch(BookedEventsActions.bookEvent({ event }));
-
-          // Update bookedEvents array to reflect changes in UI
-          this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
-        } else {
-          this.showSnackBar(
-            `❌ Failed to book ${event.title}. Try again!`,
-            'error'
-          );
-        }
-      });
+    this.store.dispatch(BookingActions.bookEvent({ event }));
   }
 
   private showSnackBar(message: string, type: 'success' | 'error') {
@@ -108,10 +99,6 @@ export class UserDashboardComponent implements OnInit {
                   horizontalPosition: 'right',
                   verticalPosition: 'top',
                 }
-              );
-
-              this.store.dispatch(
-                BookedEventsActions.cancelBooking({ eventId })
               );
             },
             error: (err) => {

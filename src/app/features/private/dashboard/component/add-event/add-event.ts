@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { addEvent } from '../../store/dashboard-event/dashboard-event.action';
 import { v4 as uuidv4 } from 'uuid';
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-add-event',
@@ -24,6 +25,7 @@ export class AddEventComponent {
     private formService: FormService,
     private eventService: EventService,
     private snackbar: MatSnackBar,
+    private dialogService: DialogService,
     private store: Store
   ) {}
 
@@ -64,6 +66,7 @@ export class AddEventComponent {
         date: schedule.date,
         time: schedule.time,
       };
+      console.log('Add event');
       this.store.dispatch(addEvent({ event: payload }));
 
       this.snackbar.open('✅ Event creation in progress', 'Close', {
@@ -74,10 +77,65 @@ export class AddEventComponent {
       });
 
       this.eventForm.reset();
-      this.router.navigate(['/admin/event/list']);
+      this.router.navigate(['/event/list']);
       this.nextId++;
     } else {
       this.eventForm.markAllAsTouched();
     }
+
+    if (!this.eventForm.valid) {
+      this.eventForm.markAllAsTouched();
+      return;
+    }
+
+    // Open confirmation dialog
+    this.dialogService
+      .openDeleteDialog(
+        'Confirm Event Creation',
+        'Are you sure you want to create this event?',
+        'Create',
+        'Cancel'
+      )
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          const {
+            title,
+            category,
+            description,
+            location,
+            totalTickets,
+            price,
+            schedule,
+          } = this.eventForm.value;
+
+          const payload = {
+            id: uuidv4(),
+            title,
+            category,
+            description,
+            location,
+            totalTickets,
+            price,
+            date: schedule.date,
+            time: schedule.time,
+          };
+
+          // Dispatch the action to store
+          this.store.dispatch(addEvent({ event: payload }));
+
+          // Show snackbar
+          this.snackbar.open('✅ Event created', 'Close', {
+            duration: 2000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+
+          this.eventForm.reset();
+          this.router.navigate(['/admin/event/list']);
+          this.nextId++;
+        }
+        // If user cancels, do nothing
+      });
   }
 }

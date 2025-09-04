@@ -8,6 +8,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../../../core/services/auth-service';
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import {
   selectBookingError,
   selectBookingSuccessMessage,
@@ -21,9 +22,9 @@ import {
 })
 export class UserDashboardComponent implements OnInit {
   events: Event[] = [];
-
   bookedEvents: Event[] = [];
   private destroy$ = new Subject<void>();
+
   displayedColumns: string[] = [
     'title',
     'category',
@@ -38,21 +39,21 @@ export class UserDashboardComponent implements OnInit {
     private eventService: EventService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private dialogService: DialogService,
     private store: Store
   ) {}
-  ngOnInit() {
-    this.eventService
-      .getRandomEvents(3)
-      .subscribe((data) => (this.events = data));
 
+  ngOnInit() {
+    this.eventService.getRandomEvents(3).subscribe((data) => (this.events = data));
     const currentUser = this.authService.getCurrentUser();
     this.bookedEvents = currentUser?.bookings || [];
-
     this.store
       .select(selectBookingSuccessMessage)
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
         if (msg) this.showSnackBar(msg, 'success');
+        const currentUser = this.authService.getCurrentUser();
+        this.bookedEvents = currentUser?.bookings || [];
       });
 
     this.store
@@ -62,6 +63,7 @@ export class UserDashboardComponent implements OnInit {
         if (err) this.showSnackBar(err, 'error');
       });
   }
+
   onBookNow(event: Event) {
     this.store.dispatch(BookingActions.bookEvent({ event }));
   }
@@ -76,55 +78,60 @@ export class UserDashboardComponent implements OnInit {
   }
 
   onCancelBooking(eventId: string) {
-    this.authService.removeBooking(eventId);
-    this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
+    this.dialogService
+      .openDeleteDialog(
+        'Cancel Booking',
+        'Are you sure you want to cancel this booking?',
+        'Yes, Cancel',
+        'No, Keep'
+      )
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.authService.removeBooking(eventId);
+          this.bookedEvents = this.authService.getCurrentUser()?.bookings || [];
 
-    this.eventService.getEventById(eventId).subscribe({
-      next: (event) => {
-        if (event) {
-          const updatedEvent: Event = {
-            ...event,
-            availableTickets:
-              (event.availableTickets ?? event.totalTickets) + 1,
-          };
+          this.eventService.getEventById(eventId).subscribe({
+            next: (event) => {
+              if (event) {
+                const updatedEvent: Event = {
+                  ...event,
+                  availableTickets: (event.availableTickets ?? event.totalTickets) + 1,
+                };
 
-          this.eventService.updateEvent(eventId, updatedEvent).subscribe({
-            next: () => {
-              this.snackBar.open(
-                `✅ Booking cancelled and tickets updated for ${event.title}`,
-                'Close',
-                {
-                  duration: 3000,
-                  panelClass: ['snackbar-success'],
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
+                this.eventService.updateEvent(eventId, updatedEvent).subscribe({
+                  next: () => {
+                    this.snackBar.open(
+                      `✅ Booking cancelled and tickets updated for ${event.title}`,
+                      'Close',
+                      {
+                        duration: 3000,
+                        panelClass: ['snackbar-success'],
+                        horizontalPosition: 'right',
+                        verticalPosition: 'top',
+                      }
+                    );
+                  },
+                  error: (err) => {
+                    console.error('Failed to update event:', err);
+                    this.snackBar.open(
+                      `❌ Failed to update tickets for ${event.title}`,
+                      'Close',
+                      {
+                        duration: 3000,
+                        panelClass: ['snackbar-error'],
+                        horizontalPosition: 'right',
+                        verticalPosition: 'top',
+                      }
+                    );
+                  },
+                });
+              }
             },
             error: (err) => {
-              console.error('Failed to update event:', err);
-              this.snackBar.open(
-                `❌ Failed to update tickets for ${event.title}`,
-                'Close',
-                {
-                  duration: 3000,
-                  panelClass: ['snackbar-error'],
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
+              console.error('Failed to fetch event:', err);
             },
           });
         }
-      },
-      error: (err) => {
-        console.error('Failed to fetch event:', err);
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+      });
   }
 }

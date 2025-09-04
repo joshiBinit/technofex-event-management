@@ -3,6 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../../../../core/services/auth-service';
 import * as BookingActions from './event-booking.action';
 import { catchError, map, mergeMap, of } from 'rxjs';
+import * as EventsActions from '../../store/events/event.action';
+import { mapBookingResult } from '../util/event-booking-utils';
 
 @Injectable()
 export class EventBookingEffects {
@@ -13,36 +15,24 @@ export class EventBookingEffects {
   bookEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookingActions.bookEvent),
-      mergeMap(({ event }) => {
-        console.log('Effect triggered for booking event:', event);
-        return this.authService.addBooking(event).pipe(
-          map((result) => {
-            console.log('Booking result:', result);
-            if (result === 'duplicate') {
-              return BookingActions.bookEventFailure({
-                error: `${event.title} is already booked ❌`,
-              });
-            } else if (result === 'soldout') {
-              return BookingActions.bookEventFailure({
-                error: `${event.title} is sold out ❌`,
-              });
-            } else if (!result) {
-              return BookingActions.bookEventFailure({
-                error: `Failed to book ${event.title}`,
-              });
-            }
-            return BookingActions.bookEventSuccess({ user: result });
-          }),
-          catchError((err) => {
-            console.error('Booking effect error:', err);
-            return of(
+      mergeMap(({ event }) =>
+        this.authService.addBooking(event).pipe(
+          map((result) => mapBookingResult(result, event)),
+          catchError(() =>
+            of(
               BookingActions.bookEventFailure({
                 error: `Unexpected error while booking ${event.title}`,
               })
-            );
-          })
-        );
-      })
+            )
+          )
+        )
+      )
+    )
+  );
+  loadEventsAfterBooking$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BookingActions.bookEventSuccess),
+      map(() => EventsActions.loadEvents())
     )
   );
 }

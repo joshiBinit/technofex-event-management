@@ -4,6 +4,10 @@ import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 import { Event } from '../../../../../shared/model/event.model';
+import { selectBookingUser } from '../../../events/store/event-booking/event-booking.selector';
+import { map, switchMap } from 'rxjs';
+import { AuthService } from '../../../../../core/services/auth-service';
+import { User } from '../../../../../shared/model/user.model';
 
 @Component({
   selector: 'app-booking-detail-component',
@@ -13,25 +17,32 @@ import { Event } from '../../../../../shared/model/event.model';
 })
 export class BookingDetailComponent implements OnInit {
   selectedBookedEvents$!: Observable<Event | null>;
-  constructor(private route: ActivatedRoute, private store: Store) {}
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // this.selectedBookedEvents$ = this.route.queryParamMap.pipe(
-    //   map((params) => params.get('id')),
-    //   switchMap((bookedEventId) =>
-    //     this.store.select(selectBookedEvents).pipe(
-    //       map((events) => {
-    //         const foundEvent =
-    //           events.find((event) => event.id?.toString() === bookedEventId) ??
-    //           null;
-    //         return foundEvent;
-    //       })
-    //     )
-    //   )
-    // );
-    this.route.queryParamMap.subscribe((params) => {
-      const eventId = params.get('id');
-      console.log('Query param ', eventId);
-    });
+    const currentUser = this.authService.getCurrentUser() as
+      | (User & { id: string; token?: string; bookings?: Event[] })
+      | null;
+
+    if (currentUser) {
+      this.selectedBookedEvents$ = this.route.queryParamMap.pipe(
+        map((params) => params.get('id')),
+        switchMap((bookedEventId) =>
+          this.authService.getUserById(currentUser.id).pipe(
+            map((freshUser) => {
+              return (
+                freshUser.bookings?.find(
+                  (event) => event.id?.toString() === bookedEventId
+                ) ?? null
+              );
+            })
+          )
+        )
+      );
+    }
   }
 }

@@ -12,7 +12,6 @@ import {
 } from '../../store/event-booking/event-booking.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
-import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
 import { EventService } from '../../../../../core/services/event/event-service';
@@ -20,8 +19,9 @@ import { AuthService } from '../../../../../core/services/auth-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationDialogComponent } from '../../../../../shared/components/confirmation-dialog/confirmation-dialog';
-import { MatDialog } from '@angular/material/dialog';
+
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
+import * as BookingActions from '../../store/event-booking/event-booking.action';
 
 @Component({
   selector: 'app-event-list-component',
@@ -50,7 +50,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private dialog: MatDialog,
+    private dialogService: DialogService,
     private snackBar: MatSnackBar,
     private eventService: EventService,
     private authService: AuthService
@@ -98,6 +98,7 @@ export class EventListComponent implements OnInit, OnDestroy {
               'title',
               'category',
               'date',
+              'time',
               'location',
               'tickets',
               'availableTickets',
@@ -108,6 +109,7 @@ export class EventListComponent implements OnInit, OnDestroy {
               'title',
               'category',
               'date',
+              'time',
               'location',
               'availableTickets',
               'price',
@@ -130,6 +132,7 @@ export class EventListComponent implements OnInit, OnDestroy {
     if (this.paginationComponent) {
       this.paginationComponent.setFilteredData(data);
     }
+    this.displayedEvents = data;
   }
 
   onAddEvent() {
@@ -141,29 +144,31 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteEvent(eventId: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
-      data: {
-        title: 'Confirm Delete',
-        message: 'Are you sure you want to delete this event?',
-      },
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((confirmed: boolean) => {
+    this.dialogService
+      .openDeleteDialog(
+        'Delete Event',
+        'Are you sure you want to delete this event?',
+        'Delete',
+        'cancel'
+      )
+      .subscribe((confirmed) => {
         if (confirmed) {
           this.eventService.deleteEvent(eventId).subscribe({
             next: () => {
-              this.showSnackBar('✅ Event deleted successfully', 'success');
-              this.loadEvents();
+              this.dialogService.openSuccessDialog(
+                'Event Deleted',
+                'The event has been deleted successfully.',
+                'OK'
+              );
+              this.loadEvents(); // reload events
             },
             error: (err) => {
               console.error('Failed to delete event:', err);
-              this.showSnackBar(
-                '❌ Failed to delete event. Please try again.',
-                'error'
+              this.dialogService.openWarningDialog(
+                'Deletion Failed',
+                'Failed to delete the event. Please try again.',
+                'OK',
+                'Cancel'
               );
             },
           });

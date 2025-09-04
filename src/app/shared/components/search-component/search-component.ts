@@ -24,7 +24,6 @@ export class SearchComponent {
       this.applyFilter();
     }
   }
-
   get data(): any[] {
     return this._data;
   }

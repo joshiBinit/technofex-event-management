@@ -16,7 +16,9 @@ export class EventService {
   }
 
   getEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(this.apiUrl);
+    return this.http
+      .get<Event[]>(this.apiUrl)
+      .pipe(map((events) => events.reverse()));
   }
 
   getRandomEvents(limit: number = 3): Observable<Event[]> {

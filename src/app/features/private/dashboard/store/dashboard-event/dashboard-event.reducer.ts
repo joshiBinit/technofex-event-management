@@ -24,7 +24,7 @@ export const dashboardEventReducer = createReducer(
   })),
   on(DashboardEventActions.addEventSuccess, (state, { event }) => ({
     ...state,
-    events: [...state.events, event],
+    events: [event, ...state.events],
     isLoading: false,
     error: null,
   })),

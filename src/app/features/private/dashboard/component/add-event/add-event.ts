@@ -64,6 +64,7 @@ export class AddEventComponent {
         date: schedule.date,
         time: schedule.time,
       };
+      console.log('Add event');
       this.store.dispatch(addEvent({ event: payload }));
 
       this.snackbar.open('✅ Event creation in progress', 'Close', {
@@ -74,7 +75,7 @@ export class AddEventComponent {
       });
 
       this.eventForm.reset();
-      this.router.navigate(['/admin/event/list']);
+      this.router.navigate(['/event/list']);
       this.nextId++;
     } else {
       this.eventForm.markAllAsTouched();

@@ -34,6 +34,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
+
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
 

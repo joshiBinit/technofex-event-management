@@ -2,14 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../../../../core/services/auth-service';
 import * as BookingActions from './event-booking.action';
-import { catchError, map, mergeMap, of } from 'rxjs';
 import * as EventsActions from '../../store/events/event.action';
-import { mapBookingResult } from '../util/event-booking-utils';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 
 @Injectable()
 export class EventBookingEffects {
   private actions$ = inject(Actions);
   private authService = inject(AuthService);
+  private snackbarService = inject(SnackbarService);
+
   constructor() {}
 
   bookEvent$ = createEffect(() =>
@@ -47,10 +49,33 @@ export class EventBookingEffects {
       })
     )
   );
+
   loadEventsAfterBooking$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookingActions.bookEventSuccess),
       map(() => EventsActions.loadEvents())
     )
+  );
+
+  showSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BookingActions.bookEventSuccess),
+        tap(() => {
+          this.snackbarService.show('Event booked successfully ✅', 'success');
+        })
+      ),
+    { dispatch: false }
+  );
+
+  showError$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BookingActions.bookEventFailure),
+        tap(({ error }) => {
+          this.snackbarService.show(error, 'error');
+        })
+      ),
+    { dispatch: false }
   );
 }

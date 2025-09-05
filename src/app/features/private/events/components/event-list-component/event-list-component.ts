@@ -59,19 +59,6 @@ export class EventListComponent implements OnInit, OnDestroy {
         this.paginationComponent.setFilteredData(events);
       }
     });
-    this.store
-      .select(selectBookingSuccessMessage)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((msg) => {
-        if (msg) this.snackBarService.show(msg, 'success');
-      });
-
-    this.store
-      .select(selectBookingError)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((err) => {
-        if (err) this.snackBarService.show(err, 'error');
-      });
   }
 
   ngOnDestroy(): void {

@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import { Event } from '../../../../shared/model/event.model';
 import { User } from '../../../../shared/model/user.model';
 import { v4 as uuidv4 } from 'uuid';
@@ -68,4 +69,41 @@ export function buildEventPayload(formValue: EventFormValue) {
     time: formattedTime,
     availableTickets: totalTickets,
   };
+}
+
+export function updateEventPayload(
+  eventId: string,
+  formValue: any,
+  bookedTickets: number = 0
+): Event {
+  const totalTickets = formValue.totalTickets;
+
+  return {
+    id: eventId,
+    title: formValue.title,
+    category: formValue.category,
+    description: formValue.description,
+    date: formValue.schedule.date
+      ? formValue.schedule.date.toISOString().split('T')[0]
+      : '',
+    time: formValue.schedule.time,
+    location: formValue.location,
+    totalTickets,
+    availableTickets: totalTickets - bookedTickets,
+    price: formValue.price,
+  };
+}
+export function patchEventForm(eventForm: FormGroup, event: Event): void {
+  eventForm.patchValue({
+    title: event.title,
+    category: event.category,
+    description: event.description,
+    schedule: {
+      date: event.date ? new Date(event.date) : null,
+      time: event.time,
+    },
+    location: event.location,
+    totalTickets: event.totalTickets,
+    price: event.price,
+  });
 }

@@ -97,69 +97,74 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
         'Confirm Event Update',
         'Are you sure you want to update this event?',
         'Update',
-        'Cancel'  
+        'Cancel'
       )
       .subscribe((confirmed) => {
         if (!confirmed) return;
 
-    this.eventService
-      .getEventById(this.eventId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (currentEvent) => {
-          if (!currentEvent) return;
+        this.eventService
+          .getEventById(this.eventId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (currentEvent) => {
+              if (!currentEvent) return;
 
-          const bookedTickets =
-            currentEvent.totalTickets -
-            (currentEvent.availableTickets ?? currentEvent.totalTickets);
+              const bookedTickets =
+                currentEvent.totalTickets -
+                (currentEvent.availableTickets ?? currentEvent.totalTickets);
 
-          const updatedAvailableTickets =
-            formValue.totalTickets - bookedTickets;
+              const updatedAvailableTickets =
+                formValue.totalTickets - bookedTickets;
 
-          const payload: Event = {
-            id: this.eventId,
-            title: formValue.title,
-            category: formValue.category,
-            description: formValue.description,
-            date: formValue.schedule.date
-              ? formValue.schedule.date.toISOString().split('T')[0]
-              : '',
-            time: formValue.schedule.time,
-            location: formValue.location,
-            totalTickets: formValue.totalTickets,
-            availableTickets: updatedAvailableTickets,
-            price: formValue.price,
-          };
+              const payload: Event = {
+                id: this.eventId,
+                title: formValue.title,
+                category: formValue.category,
+                description: formValue.description,
+                date: formValue.schedule.date
+                  ? formValue.schedule.date.toISOString().split('T')[0]
+                  : '',
+                time: formValue.schedule.time,
+                location: formValue.location,
+                totalTickets: formValue.totalTickets,
+                availableTickets: updatedAvailableTickets,
+                price: formValue.price,
+              };
 
-          this.eventService
-            .updateEvent(this.eventId, payload)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: () => {
-                this.snackbar.open('✅ Event updated successfully', 'Close', {
-                  duration: 3000,
-                  panelClass: ['snackbar-success'],
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
+              this.eventService
+                .updateEvent(this.eventId, payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                  next: () => {
+                    this.snackbar.open(
+                      '✅ Event updated successfully',
+                      'Close',
+                      {
+                        duration: 3000,
+                        panelClass: ['snackbar-success'],
+                        horizontalPosition: 'right',
+                        verticalPosition: 'top',
+                      }
+                    );
+                    this.router.navigate(['/event/list']);
+                  },
+                  error: (err) => {
+                    console.error('Failed to update event:', err);
+                    this.snackbar.open(
+                      '❌ Failed to update event. Please try again.',
+                      'Close',
+                      {
+                        duration: 3000,
+                        panelClass: ['snackbar-error'],
+                        horizontalPosition: 'right',
+                        verticalPosition: 'top',
+                      }
+                    );
+                  },
                 });
-                this.router.navigate(['/admin/event/list']);
-              },
-              error: (err) => {
-                console.error('Failed to update event:', err);
-                this.snackbar.open(
-                  '❌ Failed to update event. Please try again.',
-                  'Close',
-                  {
-                    duration: 3000,
-                    panelClass: ['snackbar-error'],
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top',
-                  }
-                );
-              },
-            });
-        },
-        error: (err) => console.error('Failed to fetch current event:', err)
+            },
+            error: (err) =>
+              console.error('Failed to fetch current event:', err),
           });
       });
   }

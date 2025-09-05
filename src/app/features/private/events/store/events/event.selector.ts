@@ -22,3 +22,6 @@ export const selectEventsByCategory = (category: string) =>
   createSelector(selectAllEvents, (events) =>
     events.filter((event) => event.category === category)
   );
+
+export const selectEventById = (id: string) =>
+  createSelector(selectAllEvents, (events) => events.find((e) => e.id === id));

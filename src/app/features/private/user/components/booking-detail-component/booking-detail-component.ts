@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-
-import { Observable } from 'rxjs';
 import { Event } from '../../../../../shared/model/event.model';
+import { EventService } from '../../../../../core/services/event/event-service';
 
 @Component({
   selector: 'app-booking-detail-component',
@@ -12,26 +10,25 @@ import { Event } from '../../../../../shared/model/event.model';
   styleUrls: ['./booking-detail-component.scss'],
 })
 export class BookingDetailComponent implements OnInit {
-  selectedBookedEvents$!: Observable<Event | null>;
-  constructor(private route: ActivatedRoute, private store: Store) {}
+  event: Event | null = null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private eventService: EventService
+  ) {}
 
   ngOnInit(): void {
-    // this.selectedBookedEvents$ = this.route.queryParamMap.pipe(
-    //   map((params) => params.get('id')),
-    //   switchMap((bookedEventId) =>
-    //     this.store.select(selectBookedEvents).pipe(
-    //       map((events) => {
-    //         const foundEvent =
-    //           events.find((event) => event.id?.toString() === bookedEventId) ??
-    //           null;
-    //         return foundEvent;
-    //       })
-    //     )
-    //   )
-    // );
-    this.route.queryParamMap.subscribe((params) => {
-      const eventId = params.get('id');
-      console.log('Query param ', eventId);
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.eventService.getEventById(id).subscribe({
+          next: (data) => (this.event = data),
+          error: (err) => {
+            console.error('❌ Failed to load event', err);
+            this.event = null;
+          },
+        });
+      }
     });
   }
 }

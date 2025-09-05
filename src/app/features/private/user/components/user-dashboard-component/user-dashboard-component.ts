@@ -21,10 +21,10 @@ import {
   styleUrls: ['./user-dashboard-component.scss'],
 })
 export class UserDashboardComponent implements OnInit {
+  recomendedEvents: Event[] = [];
   events: Event[] = [];
   bookedEvents: Event[] = [];
   private destroy$ = new Subject<void>();
-
   displayedColumns: string[] = [
     'title',
     'category',
@@ -44,14 +44,23 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.eventService.getRandomEvents(3).subscribe((data) => (this.events = data));
-    const currentUser = this.authService.getCurrentUser();
-    this.bookedEvents = currentUser?.bookings || [];
+    this.eventService
+      .getRandomEvents(3)
+      .subscribe((data) => (this.recomendedEvents = data));
+    this.eventService.getEvents().subscribe((allEvents) => {
+      this.events = allEvents;
+
+      const currentUser = this.authService.getCurrentUser();
+      this.bookedEvents = (currentUser?.bookings || []).filter((b) =>
+        this.events.some((e) => e.id === b.id)
+      );
+    });
     this.store
       .select(selectBookingSuccessMessage)
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
         if (msg) this.showSnackBar(msg, 'success');
+        this.store.dispatch(BookingActions.clearBookingMessages());
         const currentUser = this.authService.getCurrentUser();
         this.bookedEvents = currentUser?.bookings || [];
       });
@@ -61,6 +70,7 @@ export class UserDashboardComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((err) => {
         if (err) this.showSnackBar(err, 'error');
+        this.store.dispatch(BookingActions.clearBookingMessages());
       });
   }
 
@@ -95,7 +105,8 @@ export class UserDashboardComponent implements OnInit {
               if (event) {
                 const updatedEvent: Event = {
                   ...event,
-                  availableTickets: (event.availableTickets ?? event.totalTickets) + 1,
+                  availableTickets:
+                    (event.availableTickets ?? event.totalTickets) + 1,
                 };
 
                 this.eventService.updateEvent(eventId, updatedEvent).subscribe({

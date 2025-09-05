@@ -9,6 +9,7 @@ import { addEvent } from '../../store/dashboard-event/dashboard-event.action';
 import { v4 as uuidv4 } from 'uuid';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import { format } from 'date-fns';
+import { buildEventPayload } from '../../utils/event-utils';
 
 @Component({
   selector: 'app-add-event',
@@ -50,7 +51,6 @@ export class AddEventComponent {
       return;
     }
 
-    // Open confirmation dialog
     this.dialogService
       .openDeleteDialog(
         'Confirm Event Creation',
@@ -60,47 +60,9 @@ export class AddEventComponent {
       )
       .subscribe((confirmed) => {
         if (confirmed) {
-          const {
-            title,
-            category,
-            description,
-            location,
-            totalTickets,
-            price,
-            schedule,
-          } = this.eventForm.value;
-
-          // Format the date to yyyy-mm-dd
-          const dateObj = new Date(schedule.date);
-          const formattedDate = dateObj.toISOString().split('T')[0];
-
-          // Format time to hh:mm AM/PM
-          const timeObj = new Date(`1970-01-01T${schedule.time}`);
-          let hours = timeObj.getHours();
-          const minutes = timeObj.getMinutes();
-          const ampm = hours >= 12 ? 'PM' : 'AM';
-          hours = hours % 12 || 12;
-          const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')} ${ampm}`;
-
-          const payload = {
-            id: uuidv4(),
-            title,
-            category,
-            description,
-            location,
-            totalTickets,
-            price,
-            date: formattedDate,
-            time: formattedTime,
-            availableTickets: totalTickets,
-          };
-
-          // Dispatch the event
+          const payload = buildEventPayload(this.eventForm.value);
           this.store.dispatch(addEvent({ event: payload }));
 
-          // Show snackbar
           this.snackbar.open('✅ Event created', 'Close', {
             duration: 2000,
             panelClass: ['snackbar-success'],
@@ -109,7 +71,7 @@ export class AddEventComponent {
           });
 
           this.eventForm.reset();
-          this.router.navigate(['/admin/event/list']);
+          this.router.navigate(['/event/list']);
           this.nextId++;
         }
       });

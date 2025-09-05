@@ -169,7 +169,7 @@ describe('UpdateEventComponent', () => {
       'Close',
       jasmine.objectContaining({ duration: 3000 })
     );
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/admin/event/list']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/event/list']);
   });
 
   it('should show error snackbar when updateEvent fails', () => {

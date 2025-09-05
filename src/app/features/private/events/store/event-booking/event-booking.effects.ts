@@ -15,18 +15,36 @@ export class EventBookingEffects {
   bookEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookingActions.bookEvent),
-      mergeMap(({ event }) =>
-        this.authService.addBooking(event).pipe(
-          map((result) => mapBookingResult(result, event)),
-          catchError(() =>
-            of(
+      mergeMap(({ event }) => {
+        console.log('Effect triggered for booking event:', event);
+        return this.authService.addBooking(event).pipe(
+          map((result) => {
+            console.log('Booking result:', result);
+            if (result === 'duplicate') {
+              return BookingActions.bookEventFailure({
+                error: `${event.title} is already booked ❌`,
+              });
+            } else if (result === 'soldout') {
+              return BookingActions.bookEventFailure({
+                error: `${event.title} is sold out ❌`,
+              });
+            } else if (!result) {
+              return BookingActions.bookEventFailure({
+                error: `Failed to book ${event.title}`,
+              });
+            }
+            return BookingActions.bookEventSuccess({ user: result });
+          }),
+          catchError((err) => {
+            console.error('Booking effect error:', err);
+            return of(
               BookingActions.bookEventFailure({
                 error: `Unexpected error while booking ${event.title}`,
               })
-            )
-          )
-        )
-      )
+            );
+          })
+        );
+      })
     )
   );
   loadEventsAfterBooking$ = createEffect(() =>

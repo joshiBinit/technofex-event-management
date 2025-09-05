@@ -1,27 +1,27 @@
-import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
-import { EventsState } from '../../store/events/event.reducer';
+import { AuthService } from '../../../../../core/services/auth-service';
+import { EventService } from '../../../../../core/services/event/event-service';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
+import { Event } from '../../../../../shared/model/event.model';
+import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
+import {
+  selectBookingError,
+  selectBookingSuccessMessage,
+} from '../../store/event-booking/event-booking.selector';
+import * as EventsActions from '../../store/events/event.action';
 import {
   selectAllEvents,
   selectEventLoading,
 } from '../../store/events/event.selector';
-import {
-  selectBookingSuccessMessage,
-  selectBookingError,
-} from '../../store/event-booking/event-booking.selector';
-import * as EventsActions from '../../store/events/event.action';
-import { Event } from '../../../../../shared/model/event.model';
-import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
-import { Router } from '@angular/router';
-import { EventService } from '../../../../../core/services/event/event-service';
-import { AuthService } from '../../../../../core/services/auth-service';
-import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
+import { admin, ADMIN, NORMAL_USER } from '../../types/user.types';
 
 @Component({
   selector: 'app-event-list-component',
@@ -71,6 +71,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
         if (msg) this.showSnackBar(msg, 'success');
+        this.store.dispatch(BookingActions.clearBookingMessages());
       });
 
     this.store
@@ -78,6 +79,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((err) => {
         if (err) this.showSnackBar(err, 'error');
+        this.store.dispatch(BookingActions.clearBookingMessages());
       });
   }
 
@@ -92,30 +94,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   getDisplayedColumns(): Observable<string[]> {
     return this.role$.pipe(
-      map((role) =>
-        role === 'admin'
-          ? [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'tickets',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-          : [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-      )
+      map((role) => (role === admin ? ADMIN : NORMAL_USER))
     );
   }
 
@@ -160,7 +139,7 @@ export class EventListComponent implements OnInit, OnDestroy {
                 'The event has been deleted successfully.',
                 'OK'
               );
-              this.loadEvents(); // reload events
+              this.loadEvents();
             },
             error: (err) => {
               console.error('Failed to delete event:', err);

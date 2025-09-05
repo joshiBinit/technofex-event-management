@@ -28,7 +28,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private eventService: EventService,
     private dialogService: DialogService,
-    private snackbar: SnackbarService
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -137,17 +137,17 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                   next: () => {
-                    this.snackbar.show(
+                    this.snackbarService.show(
                       '✅ Event updated successfully',
-                      'Close'
+                      'success'
                     );
                     this.router.navigate(['/admin/event/list']);
                   },
                   error: (err) => {
                     console.error('Failed to update event:', err);
-                    this.snackbar.show(
+                    this.snackbarService.show(
                       '❌ Failed to update event. Please try again.',
-                      'Close'
+                      'error'
                     );
                   },
                 });

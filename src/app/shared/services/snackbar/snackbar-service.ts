@@ -9,17 +9,16 @@ export class SnackbarService {
 
   show(
     message: string,
-    action: string = 'Close',
-    type: 'success' | 'error' | 'info' | 'warning' = 'info',
+    type: 'success' | 'error' | 'info' | 'warning',
     duration: number = 3000
   ) {
     const config: MatSnackBarConfig = {
       duration,
       horizontalPosition: 'right',
       verticalPosition: 'top',
-      panelClass: [`snackbar-${type}`], // dynamic class
+      panelClass: [`snackbar-${type}`],
     };
 
-    this.snackbar.open(message, action, config);
+    this.snackbar.open(message, 'Close', config);
   }
 }

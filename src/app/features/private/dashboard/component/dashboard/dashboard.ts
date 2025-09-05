@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Event } from '../../../../../shared/model/event.model';
-import { User } from '../../../../../shared/model/user.model';
 import { AuthService } from '../../../../../core/services/auth-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { selectAllEvents } from '../../../events/store/events/event.selector';
@@ -32,11 +31,7 @@ export class DashboardComponent implements OnInit {
   eventsWithBookings: (Event & { ticketsBooked: number })[] = [];
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private store: Store,
-    private eventService: EventService,
-    private authService: AuthService
-  ) {
+  constructor(private store: Store, private authService: AuthService) {
     this.events$ = this.store.select(selectAllEvents);
   }
 

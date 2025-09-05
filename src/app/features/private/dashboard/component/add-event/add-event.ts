@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormService } from '../../../../../core/services/form/form-service';
-import { EventService } from '../../../../../core/services/event/event-service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { addEvent } from '../../store/dashboard-event/dashboard-event.action';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +10,7 @@ import { selectAllLocations } from '../../../../../shared/store/location/locatio
 import { Location } from '../../../../../shared/model/event.model';
 import { loadLocations } from '../../../../../shared/store/location/location.action';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 @Component({
   selector: 'app-add-event',
   standalone: false,
@@ -26,7 +25,7 @@ export class AddEventComponent {
   constructor(
     private router: Router,
     private formService: FormService,
-    private snackbar: MatSnackBar,
+    private snackbarService: SnackbarService,
     private dialogService: DialogService,
     private store: Store
   ) {
@@ -68,12 +67,7 @@ export class AddEventComponent {
       console.log('Add event');
       this.store.dispatch(addEvent({ event: payload }));
 
-      this.snackbar.open('✅ Event creation in progress', 'Close', {
-        duration: 2000,
-        panelClass: ['snackbar-success'],
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
+      this.snackbarService.show('✅ Event creation in progress', 'info');
 
       this.eventForm.reset();
       this.router.navigate(['/event/list']);

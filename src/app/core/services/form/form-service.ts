@@ -12,7 +12,7 @@ export class FormService {
       id: [0],
       title: ['', [Validators.required, Validators.maxLength(30)]],
       category: ['', Validators.required],
-      description: ['', Validators.maxLength(500)],
+      description: ['', [Validators.required, Validators.maxLength(500)]],
 
       schedule: this.fb.group({
         date: ['', Validators.required],

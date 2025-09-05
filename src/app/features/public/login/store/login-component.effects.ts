@@ -38,7 +38,7 @@ export class LoginEffects {
                   this.router.navigateByUrl(returnUrl);
                 } else {
                   if (user.role === 'admin') {
-                    this.router.navigate(['/admin/dashboard']);
+                    this.router.navigate(['/event/list']);
                   } else {
                     this.router.navigate(['/user/dashboard']);
                   }

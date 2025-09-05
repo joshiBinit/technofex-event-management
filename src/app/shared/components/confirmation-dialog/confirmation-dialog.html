@@ -1,10 +1,26 @@
-<h2 mat-dialog-title>{{ data.title }}</h2>
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="flex items-center gap-3">
+      <h2 mat-dialog-title class="text-xl font-semibold text-gray-800 m-0">{{ data.title }}</h2>
+    </div>
+  </div>
 
-<mat-dialog-content>
-  <p>{{ data.message }}</p>
-</mat-dialog-content>
+  <div mat-dialog-content class="dialog-content">
+    <p class="text-gray-600 leading-relaxed">{{ data.message }}</p>
+  </div>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="warn" (click)="onConfirm()">Delete</button>
-</mat-dialog-actions>
+  <div mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-button 
+      (click)="onCancel()" 
+      class="mr-2">
+      {{ data.cancelText }}
+    </button>
+    <button 
+      mat-raised-button 
+      [color]="getConfirmButtonColor()" 
+      (click)="onConfirm()">
+      {{ data.confirmText }}
+    </button>
+  </div>
+</div>

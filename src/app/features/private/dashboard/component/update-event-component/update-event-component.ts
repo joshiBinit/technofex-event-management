@@ -4,8 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { Subject, takeUntil } from 'rxjs';
+import { DialogService } from '../../../../../core/services/dialog/dialog.service';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-update-event-component',
@@ -25,7 +27,8 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private formService: FormService,
     private eventService: EventService,
-    private snackbar: MatSnackBar
+    private dialogService: DialogService,
+    private snackbar: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -90,64 +93,68 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
 
     const formValue = this.eventForm.value;
 
-    this.eventService
-      .getEventById(this.eventId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (currentEvent) => {
-          if (!currentEvent) return;
+    this.dialogService
+      .openDeleteDialog(
+        'Confirm Event Update',
+        'Are you sure you want to update this event?',
+        'Update',
+        'Cancel'
+      )
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
 
-          const bookedTickets =
-            currentEvent.totalTickets -
-            (currentEvent.availableTickets ?? currentEvent.totalTickets);
+        this.eventService
+          .getEventById(this.eventId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (currentEvent) => {
+              if (!currentEvent) return;
 
-          const updatedAvailableTickets =
-            formValue.totalTickets - bookedTickets;
+              const bookedTickets =
+                currentEvent.totalTickets -
+                (currentEvent.availableTickets ?? currentEvent.totalTickets);
 
-          const payload: Event = {
-            id: this.eventId,
-            title: formValue.title,
-            category: formValue.category,
-            description: formValue.description,
-            date: formValue.schedule.date
-              ? formValue.schedule.date.toISOString().split('T')[0]
-              : '',
-            time: formValue.schedule.time,
-            location: formValue.location,
-            totalTickets: formValue.totalTickets,
-            availableTickets: updatedAvailableTickets,
-            price: formValue.price,
-          };
+              const updatedAvailableTickets =
+                formValue.totalTickets - bookedTickets;
 
-          this.eventService
-            .updateEvent(this.eventId, payload)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: () => {
-                this.snackbar.open('✅ Event updated successfully', 'Close', {
-                  duration: 3000,
-                  panelClass: ['snackbar-success'],
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
+              const payload: Event = {
+                id: this.eventId,
+                title: formValue.title,
+                category: formValue.category,
+                description: formValue.description,
+                date: formValue.schedule.date
+                  ? formValue.schedule.date.toISOString().split('T')[0]
+                  : '',
+                time: formValue.schedule.time,
+                location: formValue.location,
+                totalTickets: formValue.totalTickets,
+                availableTickets: updatedAvailableTickets,
+                price: formValue.price,
+              };
+
+              this.eventService
+                .updateEvent(this.eventId, payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                  next: () => {
+                    this.snackbar.show(
+                      '✅ Event updated successfully',
+                      'Close'
+                    );
+                    this.router.navigate(['/admin/event/list']);
+                  },
+                  error: (err) => {
+                    console.error('Failed to update event:', err);
+                    this.snackbar.show(
+                      '❌ Failed to update event. Please try again.',
+                      'Close'
+                    );
+                  },
                 });
-                this.router.navigate(['/admin/event/list']);
-              },
-              error: (err) => {
-                console.error('Failed to update event:', err);
-                this.snackbar.open(
-                  '❌ Failed to update event. Please try again.',
-                  'Close',
-                  {
-                    duration: 3000,
-                    panelClass: ['snackbar-error'],
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top',
-                  }
-                );
-              },
-            });
-        },
-        error: (err) => console.error('Failed to fetch current event:', err),
+            },
+            error: (err) =>
+              console.error('Failed to fetch current event:', err),
+          });
       });
   }
 

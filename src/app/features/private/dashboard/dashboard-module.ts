@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DashboardComponent } from './component/dashboard/dashboard';
 import { StoreModule } from '@ngrx/store';
-
 import { DashboardRoutingModule } from './dashboard-routing-module';
 import { AddEventComponent } from './component/add-event/add-event';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +29,6 @@ import { locationsEffect } from '../../../shared/store/location/location.effect'
     CommonModule,
     ReactiveFormsModule,
     DashboardRoutingModule,
-    StoreModule.forFeature('events', eventsReducer),
     StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
     StoreModule.forFeature('locations', locationReducer),
     HttpClientModule,

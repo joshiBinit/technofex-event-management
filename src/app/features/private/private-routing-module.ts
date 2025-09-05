@@ -13,14 +13,19 @@ const routes: Routes = [
         loadChildren: () =>
           import('./dashboard/dashboard-module').then((m) => m.DashboardModule),
         canActivate: [AuthGuard],
-        data: { role: ['admin'] }
+        data: { role: ['admin'] },
+      },
+      {
+        path: 'event',
+        loadChildren: () =>
+          import('./events/event-module').then((m) => m.EventModule),
       },
       {
         path: 'user',
         loadChildren: () =>
           import('./user/user-module').then((m) => m.UserModule),
         canActivate: [AuthGuard],
-        data: { role: ['user'] }
+        data: { role: ['user'] },
       },
 
       { path: '', redirectTo: '', pathMatch: 'full' },

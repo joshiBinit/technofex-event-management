@@ -4,7 +4,7 @@
     <h1 class="text-2xl font-bold">Booking Details</h1>
   </div>
 
-  <ng-container *ngIf="selectedBookedEvents$ | async as event; else noBooking">
+  <ng-container *ngIf="eventDetail as event; else noBooking">
     <mat-card class="p-6 bg-white shadow-md max-w-2xl mx-auto">
       <h2 class="text-xl font-semibold">Event Details</h2>
 
@@ -35,7 +35,7 @@
         </div>
         <div>
           <p class="font-medium">Tickets Booked:</p>
-          <p>{{ event?.totalTickets }}</p>
+          <p>1</p>
         </div>
         <div>
           <p class="font-medium">Available Tickets:</p>
@@ -43,7 +43,7 @@
         </div>
         <div>
           <p class="font-medium">Price:</p>
-          <p>{{ event?.price }}</p>
+          <p>{{ event?.price |currency}}</p>
         </div>
       </div>
     </mat-card>

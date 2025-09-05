@@ -88,8 +88,7 @@
           <button
             mat-button
             color="primary"
-            [routerLink]="'/user/booking-detail'"
-            [queryParams]="{ id: bookedEvent.id }"
+            [routerLink]="['/user/booking-detail',bookedEvent.id]"
           >
             View
           </button>

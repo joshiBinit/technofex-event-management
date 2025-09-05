@@ -5,35 +5,34 @@
     >
     <h1 class="text-2xl font-bold">Booking Details</h1>
   </div>
-
-  <ng-container *ngIf="event; else noBooking">
+  <ng-container *ngIf="eventDetail ; else noBooking">
     <mat-card class="p-6 bg-white shadow-md max-w-2xl mx-auto">
       <h2 class="text-xl font-semibold mb-4">Event Details</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <p class="font-medium">Title:</p>
-          <p>{{ event.title }}</p>
+          <p>{{ eventDetail.title }}</p>
         </div>
         <div>
           <p class="font-medium">Category:</p>
-          <p>{{ event.category }}</p>
+          <p>{{ eventDetail.category }}</p>
         </div>
         <div class="md:col-span-2">
           <p class="font-medium">Description:</p>
-          <p>{{ event.description }}</p>
+          <p>{{ eventDetail.description }}</p>
         </div>
         <div>
           <p class="font-medium">Date:</p>
-          <p>{{ event.date }}</p>
+          <p>{{ eventDetail.date }}</p>
         </div>
         <div>
           <p class="font-medium">Time:</p>
-          <p>{{ event.time }}</p>
+          <p>{{ eventDetail.time }}</p>
         </div>
         <div>
           <p class="font-medium">Location:</p>
-          <p>{{ event.location }}</p>
+          <p>{{ eventDetail.location }}</p>
         </div>
         <div>
           <p class="font-medium">Tickets Booked:</p>
@@ -41,11 +40,11 @@
         </div>
         <div>
           <p class="font-medium">Available Tickets:</p>
-          <p>{{ event.availableTickets }}</p>
+          <p>{{ eventDetail.availableTickets }}</p>
         </div>
         <div>
           <p class="font-medium">Price:</p>
-          <p>{{ event.price | currency : "USD" }}</p>
+          <p>{{ eventDetail.price |currency:'USD'}}</p>
         </div>
       </div>
     </mat-card>

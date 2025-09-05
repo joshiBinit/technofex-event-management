@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
-import { EventsState } from '../../store/events/event.reducer';
 import {
   selectAllEvents,
   selectEventLoading,
@@ -15,13 +15,11 @@ import { Event } from '../../../../../shared/model/event.model';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
 import { EventService } from '../../../../../core/services/event/event-service';
-import { AuthService } from '../../../../../core/services/auth-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { admin, ADMIN, NORMAL_USER } from '../../types/user.types';
 
 @Component({
   selector: 'app-event-list-component',
@@ -51,9 +49,8 @@ export class EventListComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private dialogService: DialogService,
-    private snackBar: MatSnackBar,
-    private eventService: EventService,
-    private authService: AuthService
+    private snackBarService: SnackbarService,
+    private eventService: EventService
   ) {}
 
   ngOnInit(): void {
@@ -70,14 +67,14 @@ export class EventListComponent implements OnInit, OnDestroy {
       .select(selectBookingSuccessMessage)
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
-        if (msg) this.showSnackBar(msg, 'success');
+        if (msg) this.snackBarService.show(msg, 'success');
       });
 
     this.store
       .select(selectBookingError)
       .pipe(takeUntil(this.destroy$))
       .subscribe((err) => {
-        if (err) this.showSnackBar(err, 'error');
+        if (err) this.snackBarService.show(err, 'error');
       });
   }
 
@@ -92,35 +89,11 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   getDisplayedColumns(): Observable<string[]> {
     return this.role$.pipe(
-      map((role) =>
-        role === 'admin'
-          ? [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'tickets',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-          : [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-      )
+      map((role) => (role === admin ? ADMIN : NORMAL_USER))
     );
   }
 
   onBookNow(event: Event) {
-    console.log('booked');
     this.store.dispatch(BookingActions.bookEvent({ event }));
   }
 
@@ -155,25 +128,17 @@ export class EventListComponent implements OnInit, OnDestroy {
         if (confirmed) {
           this.eventService.deleteEvent(eventId).subscribe({
             next: () => {
-              this.snackBar.open('Event deleted successfully', 'Close', {
-                duration: 3000,
-                panelClass: ['snackbar-success'],
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-              });
-              this.loadEvents(); // reload events
+              this.snackBarService.show(
+                'Event deleted successfully',
+                'success'
+              );
+              this.loadEvents();
             },
             error: (err) => {
               console.error('Failed to delete event:', err);
-              this.snackBar.open(
+              this.snackBarService.show(
                 'Failed to delete event. Please try again later.',
-                'Close',
-                {
-                  duration: 3000,
-                  panelClass: ['snackbar  -error'],
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
+                'error'
               );
             },
           });
@@ -187,14 +152,5 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageEvent): void {
     console.log('Page changed:', event);
-  }
-
-  private showSnackBar(message: string, type: 'success' | 'error') {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: [type === 'success' ? 'snackbar-success' : 'snackbar-error'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
   }
 }

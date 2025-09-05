@@ -10,3 +10,7 @@ export interface Event {
   availableTickets?: number;
   price: number;
 }
+export interface Location {
+  id?: string;
+  name: string;
+}

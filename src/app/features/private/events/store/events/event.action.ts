@@ -10,3 +10,19 @@ export const loadEventsFailure = createAction(
   '[Events] Load Events Failure',
   props<{ error: string }>()
 );
+
+//Update Event
+export const updateEvent = createAction(
+  '[Events] Update Event',
+  props<{ event: Event }>()
+);
+
+export const updateEventSuccess = createAction(
+  '[Events] Update Event Success',
+  props<{ event: Event }>()
+);
+
+export const updateEventFailure = createAction(
+  '[Events] Update Event Failure',
+  props<{ error: string }>()
+);

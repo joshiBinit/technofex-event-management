@@ -34,6 +34,7 @@
     "@ngrx/store-devtools": "^20.0.1",
     "@tailwindcss/postcss": "^4.1.12",
     "apexcharts": "^5.3.4",
+    "date-fns": "^4.1.0",
     "ng-apexcharts": "^2.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

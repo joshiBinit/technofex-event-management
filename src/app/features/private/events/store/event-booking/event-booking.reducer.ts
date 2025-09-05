@@ -33,5 +33,11 @@ export const bookingReducer = createReducer(
     ...state,
     error,
     successMessage: null,
+  })),
+
+  on(BookingActions.clearBookingMessages, (state) => ({
+    ...state,
+    successMessage: null,
+    error: null,
   }))
 );

@@ -16,3 +16,5 @@ export const bookEventFailure = createAction(
   '[Event Booking] Book Event Failure',
   props<{ error: string }>()
 );
+
+export const clearBookingMessages = createAction('[Booking] Clear Messages');

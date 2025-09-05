@@ -116,7 +116,7 @@ describe('AddEventComponent', () => {
     );
 
     expect(component.eventForm.value.title).toBeNull();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/admin/event/list']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/event/list']);
     expect(component.nextId).toBe(11);
   });
 

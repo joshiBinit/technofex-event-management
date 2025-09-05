@@ -38,18 +38,22 @@ body {
   height: 100%;
 }
 
-
 .snackbar-success {
-  background-color: #4caf50 !important; // Green
+  background-color: #4caf50 !important;
   color: #fff !important;
-  font-weight: bold;
-  border-radius: 6px;
 }
 
 .snackbar-error {
-  background-color: #f44336 !important; // Red
+  background-color: #f44336 !important;
   color: #fff !important;
-  font-weight: bold;
-  border-radius: 6px;
-  
+}
+
+.snackbar-info {
+  background-color: #2196f3 !important;
+  color: #fff !important;
+}
+
+.snackbar-warning {
+  background-color: #ff9800 !important;
+  color: #fff !important;
 }

@@ -4,13 +4,15 @@ import { Router } from '@angular/router';
 import { Observable, of, catchError, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Event } from '../../shared/model/event.model';
+import { environment } from '../../../Environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private localStorageKey = 'authData';
-  private apiUrl = 'http://localhost:3000';
+  private userUrl = ` ${environment.apiUrl}/user`;
+  private bookedEventUrl = `${environment.apiUrl}/events`;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -20,7 +22,7 @@ export class AuthService {
     role: 'user' | 'admin';
     returnUrl?: string;
   }): Observable<any> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+    return this.http.get<User[]>(this.userUrl).pipe(
       switchMap((users) => {
         const existingUser = users.find(
           (u: User) =>
@@ -57,7 +59,7 @@ export class AuthService {
 
   signup(user: User): Observable<{ user: User; token: string }> {
     return this.http
-      .post<User>(`${this.apiUrl}/users`, {
+      .post<User>(this.userUrl, {
         ...user,
         role: user.role || 'user',
         bookings: user.bookings || [],
@@ -107,7 +109,7 @@ export class AuthService {
       return of('duplicate' as 'duplicate');
     }
 
-    return this.http.get<Event>(`${this.apiUrl}/events/${event.id}`).pipe(
+    return this.http.get<Event>(`${this.bookedEventUrl}/${event.id}`).pipe(
       switchMap((serverEvent) => {
         if (!serverEvent) return of(null);
 
@@ -125,7 +127,7 @@ export class AuthService {
         };
 
         const updateEvent$ = this.http.patch<Event>(
-          `${this.apiUrl}/events/${event.id}`,
+          `${this.bookedEventUrl}/${event.id}`,
           { availableTickets: updatedEvent.availableTickets }
         );
 
@@ -136,7 +138,7 @@ export class AuthService {
         localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
 
         const updateUser$ = this.http.patch<User>(
-          `${this.apiUrl}/users/${currentUser.id}`,
+          `${this.userUrl}/${currentUser.id}`,
           { bookings: updatedBookings }
         );
 
@@ -164,7 +166,7 @@ export class AuthService {
     localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
 
     return this.http
-      .patch<User>(`${this.apiUrl}/users/${currentUser.id}`, {
+      .patch<User>(`${this.userUrl}/${currentUser.id}`, {
         bookings: updatedBookings,
       })
       .pipe(
@@ -181,6 +183,6 @@ export class AuthService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
+    return this.http.get<User[]>(this.userUrl);
   }
 }

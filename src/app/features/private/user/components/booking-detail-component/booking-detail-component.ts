@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Event } from '../../../../../shared/model/event.model';
 import { EventService } from '../../../../../core/services/event/event-service';
-
+import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 @Component({
   selector: 'app-booking-detail-component',
   standalone: false,
@@ -10,22 +10,22 @@ import { EventService } from '../../../../../core/services/event/event-service';
   styleUrls: ['./booking-detail-component.scss'],
 })
 export class BookingDetailComponent implements OnInit {
-  event: Event | null = null;
-
+  eventDetail!: Event;
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService
   ) {}
-
+  routePaths = ROUTE_PATHS;
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (id) {
-        this.eventService.getEventById(id).subscribe({
-          next: (data) => (this.event = data),
+      const eventId = params.get('id');
+      if (eventId) {
+        this.eventService.getEventById(eventId).subscribe({
+          next: (event) => {
+            this.eventDetail = event;
+          },
           error: (err) => {
-            console.error('❌ Failed to load event', err);
-            this.event = null;
+            console.error('Failed to fetch event:', err);
           },
         });
       }

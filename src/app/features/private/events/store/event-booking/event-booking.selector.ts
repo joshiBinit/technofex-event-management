@@ -8,10 +8,6 @@ export const selectBookingUser = createSelector(
   selectBookingState,
   (state) => state?.user ?? null
 );
-export const selectBookedEventsByUser = createSelector(
-  selectBookingState,
-  (state) => state.user?.bookings ?? []
-);
 
 export const selectBookingError = createSelector(
   selectBookingState,

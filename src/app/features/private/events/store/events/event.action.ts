@@ -26,3 +26,19 @@ export const updateEventFailure = createAction(
   '[Events] Update Event Failure',
   props<{ error: string }>()
 );
+
+// Delete Event
+export const deleteEvent = createAction(
+  '[Events] Delete Event',
+  props<{ eventId: string }>()
+);
+
+export const deleteEventSuccess = createAction(
+  '[Events] Delete Event Success',
+  props<{ eventId: string }>()
+);
+
+export const deleteEventFailure = createAction(
+  '[Events] Delete Event Failure',
+  props<{ error: string }>()
+);

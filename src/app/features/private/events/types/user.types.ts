@@ -22,6 +22,7 @@ export const NORMAL_USER = [
 ];
 
 export type ROLE = 'admin' | 'user';
+export const searchTerm = ['title', 'category', 'location'];
 
 export const admin: ROLE = 'admin';
 export const user: ROLE = 'user';

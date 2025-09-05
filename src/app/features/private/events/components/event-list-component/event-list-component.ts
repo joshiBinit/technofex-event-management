@@ -19,7 +19,7 @@ import { PaginationComponent } from '../../../../../shared/components/pagination
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
-import { admin, ADMIN, NORMAL_USER } from '../../types/user.types';
+import { admin, ADMIN, NORMAL_USER, searchTerm } from '../../types/user.types';
 
 @Component({
   selector: 'app-event-list-component',
@@ -37,17 +37,13 @@ export class EventListComponent implements OnInit, OnDestroy {
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
-  searchFields: string[] = ['title', 'category', 'location'];
+  searchFields: string[] = searchTerm;
   private destroy$ = new Subject<void>();
+  totalItems$ = this.events$.pipe(map((events) => events?.length ?? 0));
 
   @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
-  constructor(
-    private router: Router,
-    private dialogService: DialogService,
-    private snackBarService: SnackbarService,
-    private eventService: EventService
-  ) {}
+  constructor(private router: Router, private dialogService: DialogService) {}
 
   ngOnInit(): void {
     this.store.dispatch(EventsActions.loadEvents());
@@ -92,7 +88,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onUpdateEvent(eventId: string) {
-    this.router.navigate(['/admin/updateevent', eventId]);
+    this.router.navigate(['/admin/update-event', eventId]);
   }
 
   onDeleteEvent(eventId: string) {
@@ -105,22 +101,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       )
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.eventService.deleteEvent(eventId).subscribe({
-            next: () => {
-              this.snackBarService.show(
-                'Event deleted successfully',
-                'success'
-              );
-              this.store.dispatch(EventsActions.loadEvents());
-            },
-            error: (err) => {
-              console.error('Failed to delete event:', err);
-              this.snackBarService.show(
-                'Failed to delete event. Please try again later.',
-                'error'
-              );
-            },
-          });
+          this.store.dispatch(EventsActions.deleteEvent({ eventId }));
         }
       });
   }

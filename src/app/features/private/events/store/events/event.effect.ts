@@ -6,15 +6,16 @@ import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class EventsEffects {
+  private store = inject(Store);
   actions$ = inject(Actions);
   eventService = inject(EventService);
   snackbarService = inject(SnackbarService);
   router = inject(Router);
 
-  // Load events
   loadEvents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventsActions.loadEvents),
@@ -27,7 +28,6 @@ export class EventsEffects {
     )
   );
 
-  // Update event with snackbar notifications
   updateEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventsActions.updateEvent),
@@ -46,7 +46,6 @@ export class EventsEffects {
     )
   );
 
-  // Show snackbar on success
   updateEventSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -56,10 +55,9 @@ export class EventsEffects {
           this.router.navigate(['/event/list']);
         })
       ),
-    { dispatch: false } // No further action dispatched
+    { dispatch: false }
   );
 
-  // Show snackbar on failure
   updateEventFailure$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -67,6 +65,52 @@ export class EventsEffects {
         tap(({ error }) => {
           this.snackbarService.show(
             `❌ Failed to update event: ${error}`,
+            'error'
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
+  deleteEvent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventsActions.deleteEvent),
+      mergeMap(({ eventId }) =>
+        this.eventService.deleteEvent(eventId).pipe(
+          map(() => EventsActions.deleteEventSuccess({ eventId })),
+          catchError((error) =>
+            of(
+              EventsActions.deleteEventFailure({
+                error: error.message || 'Failed to delete event',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
+
+  deleteEventSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(EventsActions.deleteEventSuccess),
+        tap(() => {
+          this.snackbarService.show('✅ Event deleted successfully', 'success');
+        }),
+        tap(() => {
+          this.store.dispatch(EventsActions.loadEvents());
+        })
+      ),
+    { dispatch: false }
+  );
+
+  deleteEventFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(EventsActions.deleteEventFailure),
+        tap(({ error }) => {
+          this.snackbarService.show(
+            `❌ Failed to delete event: ${error}`,
             'error'
           );
         })

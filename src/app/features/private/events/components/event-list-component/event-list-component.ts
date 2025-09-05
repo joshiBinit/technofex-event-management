@@ -32,16 +32,12 @@ export class EventListComponent implements OnInit, OnDestroy {
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
-
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
-
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
-
   searchFields: string[] = ['title', 'category', 'location'];
-
   private destroy$ = new Subject<void>();
 
   @ViewChild('pagination') paginationComponent!: PaginationComponent;
@@ -54,7 +50,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadEvents();
+    this.store.dispatch(EventsActions.loadEvents());
     this.events$.pipe(takeUntil(this.destroy$)).subscribe((events) => {
       this.allEvents = events;
       this.totalItems = events?.length ?? 0;
@@ -81,10 +77,6 @@ export class EventListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  loadEvents(): void {
-    this.store.dispatch(EventsActions.loadEvents());
   }
 
   getDisplayedColumns(): Observable<string[]> {
@@ -132,7 +124,7 @@ export class EventListComponent implements OnInit, OnDestroy {
                 'Event deleted successfully',
                 'success'
               );
-              this.loadEvents();
+              this.store.dispatch(EventsActions.loadEvents());
             },
             error: (err) => {
               console.error('Failed to delete event:', err);

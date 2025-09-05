@@ -5,6 +5,8 @@ import { Observable, take } from 'rxjs';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
 import { selectLoginRole } from '../../../features/public/login/store/login-component.selectors';
 import { AuthService } from '../../../core/services/auth-service';
+import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
+import { admin } from '../../../features/private/events/types/user.types';
 
 @Component({
   selector: 'app-sidebar-component',
@@ -14,40 +16,27 @@ import { AuthService } from '../../../core/services/auth-service';
 })
 export class SidebarComponent implements OnInit {
   role$: Observable<string | null>;
-
   private store = inject(Store<{ login: LoginState }>);
   constructor(private router: Router, private authService: AuthService) {
     this.role$ = this.store.select(selectLoginRole);
   }
-
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate([ROUTE_PATHS.LOGIN]);
   }
 
-  ngOnInit(): void {
-    this.role$.subscribe((role) => {
-      console.log('Current role:', role);
-      if (role === 'admin') {
-        console.log('User is admin');
-      } else {
-        console.log('User is not admin');
-      }
-    });
-  }
+  ngOnInit(): void {}
 
   dashboardRedirect(): void {
     this.role$.subscribe((role) => {
-      if (role === 'admin') {
-        this.router.navigate(['/admin/dashboard']);
+      if (role === admin) {
+        this.router.navigate([ROUTE_PATHS.ADMIN_DASHBOARD]);
       } else {
-        this.router.navigate(['/user/dashboard']);
+        this.router.navigate([ROUTE_PATHS.USER_DASHBOARD]);
       }
     });
   }
   eventListRedirect(): void {
-    this.role$.pipe(take(1)).subscribe((role) => {
-      this.router.navigate(['event/list']);
-    });
+    this.router.navigate([ROUTE_PATHS.EVENT_LIST]);
   }
 }

@@ -9,3 +9,5 @@ export const table = [
   'totalTickets',
   'price',
 ];
+
+export const userListColumn = ['username', 'email', 'role'];

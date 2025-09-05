@@ -4,6 +4,7 @@ import { selectLoginUsername } from '../../../features/public/login/store/login-
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
+import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
 
 @Component({
   selector: 'app-header-component',
@@ -19,16 +20,14 @@ export class HeaderComponent {
   constructor(private router: Router) {
     this.username$ = this.store.select(selectLoginUsername);
   }
-
   toggleMobileMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
-
   logout() {
     localStorage.removeItem('authData');
-    this.router.navigate(['/login']);
+    this.router.navigate([ROUTE_PATHS.LOGIN]);
   }
   goToProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate([ROUTE_PATHS.PROFILE]);
   }
 }

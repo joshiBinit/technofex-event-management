@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedLayout } from './features/private/shared-layout/shared-layout';
 
 const routes: Routes = [
   {
@@ -18,8 +17,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/private/private-module').then((m) => m.PrivateModule),
   },
-
-  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

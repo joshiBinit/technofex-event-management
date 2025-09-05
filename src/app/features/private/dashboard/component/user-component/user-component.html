@@ -3,7 +3,7 @@
 
   <table
     mat-table
-    [dataSource]="users"
+    [dataSource]="(users$ | async) || []"
     class="min-w-full divide-y divide-gray-200"
   >
     <ng-container matColumnDef="username">

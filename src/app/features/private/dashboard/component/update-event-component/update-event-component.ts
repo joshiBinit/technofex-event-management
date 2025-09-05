@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-update-event-component',
@@ -27,7 +27,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private eventService: EventService,
     private dialogService: DialogService,
-    private snackbar: MatSnackBar
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -136,29 +136,17 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                   next: () => {
-                    this.snackbar.open(
+                    this.snackbarService.show(
                       '✅ Event updated successfully',
-                      'Close',
-                      {
-                        duration: 3000,
-                        panelClass: ['snackbar-success'],
-                        horizontalPosition: 'right',
-                        verticalPosition: 'top',
-                      }
+                      'success'
                     );
                     this.router.navigate(['/event/list']);
                   },
                   error: (err) => {
                     console.error('Failed to update event:', err);
-                    this.snackbar.open(
+                    this.snackbarService.show(
                       '❌ Failed to update event. Please try again.',
-                      'Close',
-                      {
-                        duration: 3000,
-                        panelClass: ['snackbar-error'],
-                        horizontalPosition: 'right',
-                        verticalPosition: 'top',
-                      }
+                      'error'
                     );
                   },
                 });

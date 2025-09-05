@@ -3,16 +3,15 @@ import { Event } from '../../../../../shared/model/event.model';
 import { EventService } from '../../../../../core/services/event/event-service';
 import * as BookingActions from '../../../events/store/event-booking/event-booking.action';
 import { Store } from '@ngrx/store';
-
-import { Observable, Subject, takeUntil } from 'rxjs';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../../../../core/services/auth-service';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import {
   selectBookingError,
   selectBookingSuccessMessage,
 } from '../../../events/store/event-booking/event-booking.selector';
+import { userDashboardTable } from '../../user-table.type';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 
 @Component({
   selector: 'app-user-dashboard-component',
@@ -25,22 +24,13 @@ export class UserDashboardComponent implements OnInit {
   events: Event[] = [];
   bookedEvents: Event[] = [];
   private destroy$ = new Subject<void>();
-  displayedColumns: string[] = [
-    'title',
-    'category',
-    'date',
-    'time',
-    'tickets',
-    'price',
-    'actions',
-  ];
-
+  displayedColumns = userDashboardTable;
   constructor(
     private eventService: EventService,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
     private dialogService: DialogService,
-    private store: Store
+    private store: Store,
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit() {
@@ -59,8 +49,7 @@ export class UserDashboardComponent implements OnInit {
       .select(selectBookingSuccessMessage)
       .pipe(takeUntil(this.destroy$))
       .subscribe((msg) => {
-        if (msg) this.showSnackBar(msg, 'success');
-        this.store.dispatch(BookingActions.clearBookingMessages());
+        if (msg) this.snackbarService.show(msg, 'success');
         const currentUser = this.authService.getCurrentUser();
         this.bookedEvents = currentUser?.bookings || [];
       });
@@ -69,22 +58,12 @@ export class UserDashboardComponent implements OnInit {
       .select(selectBookingError)
       .pipe(takeUntil(this.destroy$))
       .subscribe((err) => {
-        if (err) this.showSnackBar(err, 'error');
-        this.store.dispatch(BookingActions.clearBookingMessages());
+        if (err) this.snackbarService.show(err, 'error');
       });
   }
 
   onBookNow(event: Event) {
     this.store.dispatch(BookingActions.bookEvent({ event }));
-  }
-
-  private showSnackBar(message: string, type: 'success' | 'error') {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: [type === 'success' ? 'snackbar-success' : 'snackbar-error'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
   }
 
   onCancelBooking(eventId: string) {
@@ -111,28 +90,15 @@ export class UserDashboardComponent implements OnInit {
 
                 this.eventService.updateEvent(eventId, updatedEvent).subscribe({
                   next: () => {
-                    this.snackBar.open(
-                      `✅ Booking cancelled and tickets updated for ${event.title}`,
-                      'Close',
-                      {
-                        duration: 3000,
-                        panelClass: ['snackbar-success'],
-                        horizontalPosition: 'right',
-                        verticalPosition: 'top',
-                      }
+                    this.snackbarService.show(
+                      `✅ Booking cancelled for ${event.title}`,
+                      'info'
                     );
                   },
-                  error: (err) => {
-                    console.error('Failed to update event:', err);
-                    this.snackBar.open(
+                  error: () => {
+                    this.snackbarService.show(
                       `❌ Failed to update tickets for ${event.title}`,
-                      'Close',
-                      {
-                        duration: 3000,
-                        panelClass: ['snackbar-error'],
-                        horizontalPosition: 'right',
-                        verticalPosition: 'top',
-                      }
+                      'error'
                     );
                   },
                 });

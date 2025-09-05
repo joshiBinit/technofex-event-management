@@ -1,19 +1,20 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmationType } from '../../type/confirmation.type';
 
 export interface ConfirmationDialogData {
   title: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
-  type?: 'success' | 'warning' | 'delete' | 'info' | 'custom';
+  type?: ConfirmationType;
 }
 
 @Component({
   selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.html',
   styleUrls: ['./confirmation-dialog.scss'],
-  standalone: false
+  standalone: false,
 })
 export class ConfirmationDialogComponent {
   constructor(
@@ -21,9 +22,9 @@ export class ConfirmationDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogData
   ) {
     // Set default values
-    this.data.confirmText = this.data.confirmText || 'Confirm';
-    this.data.cancelText = this.data.cancelText || 'Cancel';
-    this.data.type = this.data.type || 'info';
+    this.data.confirmText = this.data.confirmText || ConfirmationType.Confirm;
+    this.data.cancelText = this.data.cancelText || ConfirmationType.Cancel;
+    this.data.type = this.data.type || ConfirmationType.Info;
   }
 
   onConfirm(): void {
@@ -36,24 +37,24 @@ export class ConfirmationDialogComponent {
 
   getIconName(): string {
     switch (this.data.type) {
-      case 'success':
+      case ConfirmationType.Success:
         return 'check_circle';
-      case 'warning':
+      case ConfirmationType.Warning:
         return 'warning';
-      case 'delete':
+      case ConfirmationType.Delete:
         return 'delete_forever';
       default:
-        return 'info';
+        return ConfirmationType.Info;
     }
   }
 
   getIconColor(): string {
     switch (this.data.type) {
-      case 'success':
+      case ConfirmationType.Success:
         return 'text-green-600';
-      case 'warning':
+      case ConfirmationType.Warning:
         return 'text-yellow-600';
-      case 'delete':
+      case ConfirmationType.Delete:
         return 'text-red-600';
       default:
         return 'text-blue-600';
@@ -62,11 +63,11 @@ export class ConfirmationDialogComponent {
 
   getConfirmButtonColor(): string {
     switch (this.data.type) {
-      case 'success':
+      case ConfirmationType.Success:
         return 'primary';
-      case 'warning':
+      case ConfirmationType.Warning:
         return 'accent';
-      case 'delete':
+      case ConfirmationType.Delete:
         return 'warn';
       default:
         return 'primary';

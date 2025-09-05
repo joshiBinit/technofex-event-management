@@ -5,7 +5,24 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   providedIn: 'root',
 })
 export class FormService {
+  #form?: FormGroup;
+
   constructor(private fb: FormBuilder) {}
+
+  get form(): FormGroup | undefined {
+    return this.#form;
+  }
+
+  set form(value: FormGroup | undefined) {
+    this.#form = value;
+  }
+
+  // setForm(value: FormGroup | undefined): void {
+  //   this.#form = value;
+  // }
+
+  //this.formService.setForm(new FormGroup({}));
+  //this.formService.form = new FormGroup({});
 
   buildNewEventForm(): FormGroup {
     return this.fb.group({
@@ -24,6 +41,7 @@ export class FormService {
       price: ['', [Validators.required, Validators.min(0)]],
     });
   }
+
   loginForm(): FormGroup {
     return this.fb.group({
       email: ['', [Validators.required, Validators.email]],

@@ -8,6 +8,7 @@
       [(ngModel)]="searchTerm"
       (input)="onSearch()"
     />
+    <!-- TODO: use @if -->
     <button
       *ngIf="searchTerm"
       matSuffix

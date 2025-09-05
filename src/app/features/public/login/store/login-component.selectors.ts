@@ -1,4 +1,4 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { LoginState } from './login-component.reducer';
 
 export const selectLoginState = createFeatureSelector<LoginState>('login');
@@ -31,4 +31,15 @@ export const selectLoginEmail = createSelector(
 export const selectLoginBookings = createSelector(
   selectLoginState,
   (state) => state.bookings
+);
+
+export const selectUser = createSelector(
+  selectLoginUsername,
+  selectLoginEmail,
+  selectLoginRole,
+  (username, email, role) => ({
+    username,
+    email,
+    role,
+  })
 );

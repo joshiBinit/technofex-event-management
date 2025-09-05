@@ -8,20 +8,17 @@ import {
 export interface LocationState {
   locations: Location[];
   loading: boolean;
-  error: any;
 }
 
 export const initialLocationState: LocationState = {
   locations: [],
   loading: false,
-  error: null,
 };
 export const locationReducer = createReducer(
   initialLocationState,
   on(loadLocations, (state) => ({
     ...state,
     loading: true,
-    error: null,
   })),
   on(loadLocationsSuccess, (state, { locations }) => ({
     ...state,
@@ -31,6 +28,5 @@ export const locationReducer = createReducer(
   on(loadLocationsFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    error,
   }))
 );

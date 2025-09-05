@@ -11,6 +11,7 @@ import {
 })
 export class DialogService {
   constructor(private dialog: MatDialog) {}
+
   openSuccessDialog(
     title: string,
     message: string,
@@ -32,6 +33,7 @@ export class DialogService {
 
     return dialogRef.afterClosed();
   }
+
   openWarningDialog(
     title: string,
     message: string,
@@ -54,6 +56,7 @@ export class DialogService {
 
     return dialogRef.afterClosed();
   }
+
   openDeleteDialog(
     title: string,
     message: string,
@@ -76,6 +79,7 @@ export class DialogService {
 
     return dialogRef.afterClosed();
   }
+
   openInfoDialog(
     title: string,
     message: string,
@@ -98,6 +102,7 @@ export class DialogService {
 
     return dialogRef.afterClosed();
   }
+
   openCustomDialog(
     data: ConfirmationDialogData,
     width: string = '400px'

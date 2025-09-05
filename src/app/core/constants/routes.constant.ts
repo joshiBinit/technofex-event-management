@@ -12,6 +12,6 @@ export const ROUTE_PATHS = {
   EVENT: 'event',
   DASHBOARD: 'dashboard',
   BOOKING_Detail: 'booking-detail',
-  ADD_EVENT: 'addevent',
-  UPDATE_EVENT: 'updateevent',
+  ADD_EVENT: 'add-event',
+  UPDATE_EVENT: 'update-event',
 };

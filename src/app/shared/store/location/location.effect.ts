@@ -14,6 +14,7 @@ export class locationsEffect {
   actions$ = inject(Actions);
   eventService = inject(EventService);
   http = inject(HttpClient);
+
   loadLocations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadLocations),

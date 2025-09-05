@@ -22,6 +22,7 @@ export class AuthService {
   }): Observable<any> {
     return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
       switchMap((users) => {
+        // TODO: make util to transform data
         const existingUser = users.find(
           (u: User) =>
             (u.username === user.username || u.email === user.username) &&
@@ -45,8 +46,8 @@ export class AuthService {
           return of(authData);
         }
 
-        console.log('Login failed, no matching user found');
-        return of(null);
+        // console.log('');
+        throw new Error('Login failed, no matching user found');
       }),
       catchError((error) => {
         console.error('Login error:', error);
@@ -64,12 +65,13 @@ export class AuthService {
       })
       .pipe(
         map((createdUser) => {
+          // TODO: make util to transform data
           const token = this.generateToken();
           const authData: any = {
             id: (createdUser as any).id,
             token,
             username: createdUser.username,
-            role: createdUser.role!,
+            role: createdUser.role,
             email: createdUser.email || createdUser.username,
             bookings: createdUser.bookings || [],
           };
@@ -100,6 +102,7 @@ export class AuthService {
   }
 
   addBooking(event: Event): Observable<'soldout' | 'duplicate' | User | null> {
+    // TODO: Shift logic
     const currentUser: any = this.getCurrentUser();
     if (!currentUser) return of(null);
 
@@ -152,7 +155,9 @@ export class AuthService {
     );
   }
 
+  // removeBooking(user: User): Observable<User | null> {
   removeBooking(eventId: string): Observable<User | null> {
+    // TODO: Priority 1
     const currentUser: any = this.getCurrentUser();
     if (!currentUser || !currentUser.bookings) return of(null);
 
@@ -177,6 +182,7 @@ export class AuthService {
   }
 
   private generateToken(): string {
+    // TODO: Make a variable to store 36
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 

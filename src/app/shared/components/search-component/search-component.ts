@@ -7,14 +7,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './search-component.scss',
 })
 export class SearchComponent {
-  searchTerm: string = '';
-  private searchTimeout: any;
   @Input() debounceTime = 300;
   @Input() placeholder = 'Search...';
   @Input() searchFields: string[] = [];
 
   @Output() searchChanged = new EventEmitter<string>();
   @Output() filteredData = new EventEmitter<any[]>();
+
+  searchTerm: string = '';
+  //TODO: check
+  private searchTimeout: number = 0;
 
   private _data: any[] = [];
 
@@ -62,6 +64,7 @@ export class SearchComponent {
       });
       this.filteredData.emit(filtered);
     } else {
+      // TODO: Check this scenario
       const filtered = this._data.filter((item) => {
         return Object.keys(item).some((key) => {
           const value = item[key];

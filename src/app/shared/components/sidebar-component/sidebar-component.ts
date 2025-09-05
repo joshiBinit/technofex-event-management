@@ -18,14 +18,16 @@ export class SidebarComponent implements OnInit {
   role$: Observable<string | null>;
   private store = inject(Store<{ login: LoginState }>);
   constructor(private router: Router, private authService: AuthService) {
+    // TODO
     this.role$ = this.store.select(selectLoginRole);
   }
+
+  ngOnInit(): void {}
+
   logout() {
     this.authService.logout();
     this.router.navigate([ROUTE_PATHS.LOGIN]);
   }
-
-  ngOnInit(): void {}
 
   dashboardRedirect(): void {
     this.role$.subscribe((role) => {
@@ -36,6 +38,7 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
+
   eventListRedirect(): void {
     this.router.navigate([ROUTE_PATHS.EVENT_LIST]);
   }

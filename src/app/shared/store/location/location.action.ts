@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Location } from '../../model/event.model';
+
 export const loadLocations = createAction('[Location] Load Location');
 export const loadLocationsSuccess = createAction(
   '[Location] Load Location Success',

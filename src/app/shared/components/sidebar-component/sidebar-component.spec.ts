@@ -92,7 +92,7 @@ describe('SidebarComponent', () => {
       store.refreshState();
 
       component.eventListRedirect();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/admin/event/list']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/event/list']);
     });
 
     it('should navigate to user event list for non-admin', () => {
@@ -100,7 +100,7 @@ describe('SidebarComponent', () => {
       store.refreshState();
 
       component.eventListRedirect();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/user/event/list']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/event/list']);
     });
   });
 });

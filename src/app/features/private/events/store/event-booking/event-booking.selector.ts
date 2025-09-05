@@ -9,6 +9,11 @@ export const selectBookingUser = createSelector(
   (state) => state?.user ?? null
 );
 
+export const selectBookedUser = createSelector(
+  selectBookingState,
+  (state) => state?.user?.bookings ?? null
+);
+
 export const selectBookingError = createSelector(
   selectBookingState,
   (state) => state?.error ?? null

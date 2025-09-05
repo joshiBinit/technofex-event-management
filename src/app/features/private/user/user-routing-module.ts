@@ -11,7 +11,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'booking-detail',
+    path: 'booking-detail/:id',
     component: BookingDetailComponent,
   },
 ];

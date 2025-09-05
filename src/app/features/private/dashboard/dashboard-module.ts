@@ -5,7 +5,6 @@ import { StoreModule } from '@ngrx/store';
 import { DashboardRoutingModule } from './dashboard-routing-module';
 import { AddEventComponent } from './component/add-event/add-event';
 import { ReactiveFormsModule } from '@angular/forms';
-import { eventsReducer } from '../events/store/events/event.reducer';
 import { EventsEffects } from '../events/store/events/event.effect';
 import { UserComponent } from './component/user-component/user-component';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,6 +29,7 @@ import { locationsEffect } from '../../../shared/store/location/location.effect'
     ReactiveFormsModule,
     DashboardRoutingModule,
     StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
+
     StoreModule.forFeature('locations', locationReducer),
     HttpClientModule,
     NgApexchartsModule,
@@ -38,6 +38,7 @@ import { locationsEffect } from '../../../shared/store/location/location.effect'
       DashboardEventEffects,
       locationsEffect,
     ]),
+
     MaterialModule,
   ],
 })

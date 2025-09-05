@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { Event } from '../../../../../shared/model/event.model';
-
 import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
@@ -141,7 +140,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
                       '✅ Event updated successfully',
                       'success'
                     );
-                    this.router.navigate(['/admin/event/list']);
+                    this.router.navigate(['/event/list']);
                   },
                   error: (err) => {
                     console.error('Failed to update event:', err);

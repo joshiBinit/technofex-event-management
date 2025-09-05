@@ -20,6 +20,7 @@ import { SnackbarService } from '../../../../../shared/services/snackbar/snackba
   styleUrls: ['./user-dashboard-component.scss'],
 })
 export class UserDashboardComponent implements OnInit {
+  recomendedEvents: Event[] = [];
   events: Event[] = [];
   bookedEvents: Event[] = [];
   private destroy$ = new Subject<void>();
@@ -35,9 +36,15 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit() {
     this.eventService
       .getRandomEvents(3)
-      .subscribe((data) => (this.events = data));
-    const currentUser = this.authService.getCurrentUser();
-    this.bookedEvents = currentUser?.bookings || [];
+      .subscribe((data) => (this.recomendedEvents = data));
+    this.eventService.getEvents().subscribe((allEvents) => {
+      this.events = allEvents;
+
+      const currentUser = this.authService.getCurrentUser();
+      this.bookedEvents = (currentUser?.bookings || []).filter((b) =>
+        this.events.some((e) => e.id === b.id)
+      );
+    });
     this.store
       .select(selectBookingSuccessMessage)
       .pipe(takeUntil(this.destroy$))

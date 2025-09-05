@@ -27,5 +27,19 @@ export const eventsReducer = createReducer(
     ...state,
     error,
     isLoading: false,
+  })),
+  on(EventsActions.updateEvent, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(EventsActions.updateEventSuccess, (state, { event }) => ({
+    ...state,
+    isLoading: false,
+    events: state.events.map((e) => (e.id === event.id ? event : e)),
+  })),
+  on(EventsActions.updateEventFailure, (state, { error }) => ({
+    ...state,
+    isLoading: false,
+    error,
   }))
 );

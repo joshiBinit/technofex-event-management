@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
 import {
@@ -15,10 +16,10 @@ import { selectLoginRole } from '../../../../public/login/store/login-component.
 import { Router } from '@angular/router';
 import { EventService } from '../../../../../core/services/event/event-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
-import { PageEvent } from '@angular/material/paginator';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { admin, ADMIN, NORMAL_USER } from '../../types/user.types';
 
 @Component({
   selector: 'app-event-list-component',
@@ -88,30 +89,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   getDisplayedColumns(): Observable<string[]> {
     return this.role$.pipe(
-      map((role) =>
-        role === 'admin'
-          ? [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'tickets',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-          : [
-              'title',
-              'category',
-              'date',
-              'time',
-              'location',
-              'availableTickets',
-              'price',
-              'actions',
-            ]
-      )
+      map((role) => (role === admin ? ADMIN : NORMAL_USER))
     );
   }
 
@@ -154,7 +132,7 @@ export class EventListComponent implements OnInit, OnDestroy {
                 'Event deleted successfully',
                 'success'
               );
-              this.loadEvents(); // reload events
+              this.loadEvents();
             },
             error: (err) => {
               console.error('Failed to delete event:', err);

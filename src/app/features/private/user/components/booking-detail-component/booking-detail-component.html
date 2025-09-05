@@ -1,11 +1,11 @@
 <div class="p-6 bg-gray-100 min-h-screen">
   <div class="flex items-center mb-4 cursor-pointer">
-    <mat-icon class="mr-2" [routerLink]="'/user/dashboard'"
+    <mat-icon class="mr-2" [routerLink]="routePaths.USER_DASHBOARD"
       >arrow_back</mat-icon
     >
     <h1 class="text-2xl font-bold">Booking Details</h1>
   </div>
-  <ng-container *ngIf="eventDetail ; else noBooking">
+  <ng-container *ngIf="eventDetail; else noBooking">
     <mat-card class="p-6 bg-white shadow-md max-w-2xl mx-auto">
       <h2 class="text-xl font-semibold mb-4">Event Details</h2>
 
@@ -44,7 +44,7 @@
         </div>
         <div>
           <p class="font-medium">Price:</p>
-          <p>{{ eventDetail.price |currency:'USD'}}</p>
+          <p>{{ eventDetail.price | currency : "USD" }}</p>
         </div>
       </div>
     </mat-card>

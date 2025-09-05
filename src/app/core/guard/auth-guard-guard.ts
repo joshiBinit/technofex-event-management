@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { AuthService } from '../services/auth-service';
 import { Observable } from 'rxjs';
+import { ROUTE_PATHS } from '../constants/routes.constant';
+import { admin, user } from '../../features/private/events/types/user.types';
 
 @Injectable({
   providedIn: 'root',
@@ -10,43 +18,42 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot, 
+    route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    
+  ):
+    | boolean
+    | UrlTree
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree> {
     const isLoggedIn = this.authService.isLoggedIn();
-    const role = this.authService.getRole() || ''; // "admin" | "user" | ""
+    const role = this.authService.getRole() || '';
 
-    //Prevent logged-in users from visiting login/register
-    if (state.url === '/login' || state.url === '/signup') {
+    if (state.url === ROUTE_PATHS.LOGIN || state.url === ROUTE_PATHS.SIGNUP) {
       if (isLoggedIn) {
-        if (role === 'admin') {
-          return this.router.createUrlTree(['/admin/dashboard']);
+        if (role === admin) {
+          return this.router.createUrlTree([ROUTE_PATHS.ADMIN_DASHBOARD]);
         } else {
-          return this.router.createUrlTree(['/user/dashboard']);
+          return this.router.createUrlTree([ROUTE_PATHS.USER_DASHBOARD]);
         }
       }
-      return true; // allow access to login/register if NOT logged in
+      return true;
     }
-
-    //Block access to protected routes if not logged in
     if (!isLoggedIn) {
-      return this.router.createUrlTree(['/login']);
+      return this.router.createUrlTree([ROUTE_PATHS.LOGIN]);
     }
 
     // Role-based access
-    if (state.url.startsWith('/admin')) {
-      if (role !== 'admin') {
-        return this.router.createUrlTree(['/user/dashboard']);
+    if (state.url.startsWith(admin)) {
+      if (role !== admin) {
+        return this.router.createUrlTree([ROUTE_PATHS.USER_DASHBOARD]);
       }
     }
 
-    if (state.url.startsWith('/user')) {
-      if (role !== 'user') {
-        return this.router.createUrlTree(['/admin/dashboard']);
+    if (state.url.startsWith(user)) {
+      if (role !== user) {
+        return this.router.createUrlTree([ROUTE_PATHS.ADMIN_DASHBOARD]);
       }
     }
-
     return true;
   }
 }

@@ -1,0 +1,17 @@
+export const ROUTE_PATHS = {
+  ADMIN: 'admin',
+  USER: 'user',
+  LOGIN: 'login',
+  SIGNUP: 'signup',
+  PROFILE: 'profile',
+  ADMIN_DASHBOARD: 'admin/dashboard',
+  USER_DASHBOARD: 'user/dashboard',
+  EVENT_LIST: 'event/list',
+  USER_LIST: 'user_list',
+  LIST: 'list',
+  EVENT: 'event',
+  DASHBOARD: 'dashboard',
+  BOOKING_Detail: 'booking-detail',
+  ADD_EVENT: 'addevent',
+  UPDATE_EVENT: 'updateevent',
+};

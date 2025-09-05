@@ -84,7 +84,7 @@ export class UserDashboardComponent implements OnInit {
                 this.eventService.updateEvent(eventId, updatedEvent).subscribe({
                   next: () => {
                     this.snackbarService.show(
-                      `✅ Booking cancelled and tickets updated for ${event.title}`,
+                      `✅ Booking cancelled for ${event.title}`,
                       'info'
                     );
                   },

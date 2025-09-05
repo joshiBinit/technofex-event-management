@@ -116,7 +116,6 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onBookNow(event: Event) {
-    console.log('booked');
     this.store.dispatch(BookingActions.bookEvent({ event }));
   }
 

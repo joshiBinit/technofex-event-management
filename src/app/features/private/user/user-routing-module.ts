@@ -5,13 +5,14 @@ import { UserDashboardComponent } from './components/user-dashboard-component/us
 import { BookingDetailComponent } from './components/booking-detail-component/booking-detail-component';
 import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
 
+const { DASHBOARD, BOOKING_Detail } = ROUTE_PATHS;
 const routes: Routes = [
   {
-    path: ROUTE_PATHS.DASHBOARD,
+    path: DASHBOARD,
     component: UserDashboardComponent,
   },
   {
-    path: `${ROUTE_PATHS.BOOKING_Detail}/:id`,
+    path: `${BOOKING_Detail}/:id`,
     component: BookingDetailComponent,
   },
 ];

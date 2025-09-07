@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
+    _: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ):
     | boolean
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     const isLoggedIn = this.authService.isLoggedIn();
     const role = this.authService.getRole() || '';
 
-    if (state.url === LOGIN || state.url === SIGNUP) {
+    if (state.url === `/${LOGIN}` || state.url === `/${SIGNUP}`) {
       if (isLoggedIn) {
         if (role === admin) {
           return this.router.createUrlTree([ADMIN, DASHBOARD]);
@@ -43,13 +43,13 @@ export class AuthGuard implements CanActivate {
     }
 
     // Role-based access
-    if (state.url.startsWith(admin)) {
+    if (state.url.startsWith(`/${ADMIN}`)) {
       if (role !== admin) {
         return this.router.createUrlTree([USER, DASHBOARD]);
       }
     }
 
-    if (state.url.startsWith(user)) {
+    if (state.url.startsWith(`/${USER}`)) {
       if (role !== user) {
         return this.router.createUrlTree([ADMIN, DASHBOARD]);
       }

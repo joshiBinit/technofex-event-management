@@ -76,7 +76,11 @@
 
     <p class="mt-4 text-sm text-center text-gray-600">
       Don't have an account?
-      <a routerLink="/signup" class="text-blue-600 hover:underline">Sign up</a>
+      <a
+        [routerLink]="['/', route_path.SIGNUP]"
+        class="text-blue-600 hover:underline"
+        >Sign up</a
+      >
     </p>
   </div>
 </div>

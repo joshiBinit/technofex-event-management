@@ -78,7 +78,12 @@
           <button
             mat-button
             color="primary"
-            [routerLink]="['/user/booking-detail',bookedEvent.id]"
+            [routerLink]="[
+              '/',
+              route_path.USER,
+              route_path.BOOKING_Detail,
+              bookedEvent.id
+            ]"
           >
             View
           </button>

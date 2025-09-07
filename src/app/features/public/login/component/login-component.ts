@@ -1,15 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
+import { FormService } from '../../../../core/services/form/form-service';
 import * as LoginActions from '../store/login-component.actions';
 import { LoginState } from '../store/login-component.reducer';
-import { FormService } from '../../../../core/services/form/form-service';
 import {
   selectLoginError,
   selectLoginLoading,
 } from '../store/login-component.selectors';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login-component',
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
   error$!: Observable<string | null>;
   loading$!: Observable<boolean>;
   returnUrl: string = '/';
-
+  route_path = ROUTE_PATHS;
   private fb = inject(FormBuilder);
   private store = inject(Store<{ login: LoginState }>);
   private formService = inject(FormService);
@@ -30,11 +31,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formService.loginForm();
-
     this.route.queryParams.subscribe((params) => {
       this.returnUrl = params['returnUrl'] || '/';
     });
-
     this.error$ = this.store.select(selectLoginError);
     this.loading$ = this.store.select(selectLoginLoading);
   }

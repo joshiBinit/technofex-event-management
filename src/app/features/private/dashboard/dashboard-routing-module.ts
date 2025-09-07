@@ -6,11 +6,15 @@ import { UpdateEventComponent } from './component/update-event-component/update-
 import { UserComponent } from './component/user-component/user-component';
 import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
 
+const { DASHBOARD, ADD_EVENT, UPDATE_EVENT, USER, LIST } = ROUTE_PATHS;
 const routes: Routes = [
-  { path: ROUTE_PATHS.DASHBOARD, component: DashboardComponent },
-  { path: ROUTE_PATHS.ADD_EVENT, component: AddEventComponent },
-  { path: `${ROUTE_PATHS.UPDATE_EVENT}/:id`, component: UpdateEventComponent },
-  { path: ROUTE_PATHS.USER_LIST, component: UserComponent },
+  { path: DASHBOARD, component: DashboardComponent },
+  { path: ADD_EVENT, component: AddEventComponent },
+  { path: `${UPDATE_EVENT}/:id`, component: UpdateEventComponent },
+  {
+    path: USER,
+    children: [{ path: LIST, component: UserComponent }],
+  },
 ];
 
 @NgModule({

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of, catchError, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Event } from '../../shared/model/event.model';
-import { environment } from '../../../Environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

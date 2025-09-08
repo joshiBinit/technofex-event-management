@@ -17,10 +17,7 @@ import {
 })
 export class ProfileComponent implements OnInit {
   user$: Observable<User>;
-
-  private store = inject(Store<{ login: LoginState }>);
-
-  constructor() {
+  constructor(private store: Store<{ login: LoginState }>) {
     this.user$ = of({
       username: 'Guest',
       email: 'guest@example.com',

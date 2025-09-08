@@ -16,9 +16,10 @@ const { LOGIN, PROFILE } = ROUTE_PATHS;
 export class HeaderComponent {
   username$: Observable<string | null>;
   mobileMenuOpen = false;
-  private store = inject(Store<{ login: LoginState }>);
-
-  constructor(private router: Router) {
+  constructor(
+    private store: Store<{ login: LoginState }>,
+    private router: Router
+  ) {
     this.username$ = this.store.select(selectLoginUsername);
   }
   toggleMobileMenu() {

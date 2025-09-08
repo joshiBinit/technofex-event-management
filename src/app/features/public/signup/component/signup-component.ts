@@ -30,9 +30,10 @@ export class SignupComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
   route_path = ROUTE_PATHS;
-  private formService = inject(FormService);
-  private store = inject(Store<{ signup: SignupState }>);
-
+  constructor(
+    private formService: FormService,
+    private store: Store<{ signup: SignupState }>
+  ) {}
   ngOnInit(): void {
     this.signupForm = this.formService.signupForm();
     this.signupForm.setValidators(this.passwordMatchValidator);

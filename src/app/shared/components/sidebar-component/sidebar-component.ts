@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ROUTES } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, take } from 'rxjs';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth-service';
 import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
 import { admin } from '../../../features/private/events/types/user.types';
 
+const { ADMIN, USER, LOGIN, DASHBOARD, EVENT, LIST } = ROUTE_PATHS;
 @Component({
   selector: 'app-sidebar-component',
   standalone: false,
@@ -17,12 +18,14 @@ import { admin } from '../../../features/private/events/types/user.types';
 export class SidebarComponent implements OnInit {
   role$: Observable<string | null>;
   private store = inject(Store<{ login: LoginState }>);
+  route_paths = ROUTE_PATHS;
+  admin = admin;
   constructor(private router: Router, private authService: AuthService) {
     this.role$ = this.store.select(selectLoginRole);
   }
   logout() {
     this.authService.logout();
-    this.router.navigate([ROUTE_PATHS.LOGIN]);
+    this.router.navigate([LOGIN]);
   }
 
   ngOnInit(): void {}
@@ -30,13 +33,13 @@ export class SidebarComponent implements OnInit {
   dashboardRedirect(): void {
     this.role$.subscribe((role) => {
       if (role === admin) {
-        this.router.navigate([ROUTE_PATHS.ADMIN_DASHBOARD]);
+        this.router.navigate([ADMIN, DASHBOARD]);
       } else {
-        this.router.navigate([ROUTE_PATHS.USER_DASHBOARD]);
+        this.router.navigate([USER, DASHBOARD]);
       }
     });
   }
   eventListRedirect(): void {
-    this.router.navigate([ROUTE_PATHS.EVENT_LIST]);
+    this.router.navigate([EVENT, LIST]);
   }
 }

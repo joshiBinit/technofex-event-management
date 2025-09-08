@@ -19,8 +19,10 @@ import { PaginationComponent } from '../../../../../shared/components/pagination
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
-import { admin, ADMIN, NORMAL_USER } from '../../types/user.types';
+import { admin, NORMAL_USER, ADMIN } from '../../types/user.types';
+import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
+const { ADMIN: Admin, ADD_EVENT, UPDATE_EVENT } = ROUTE_PATHS;
 @Component({
   selector: 'app-event-list-component',
   standalone: false,
@@ -109,11 +111,11 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   onAddEvent() {
-    this.router.navigate(['/admin/addevent']);
+    this.router.navigate([Admin, ADD_EVENT]);
   }
 
   onUpdateEvent(eventId: string) {
-    this.router.navigate(['/admin/updateevent', eventId]);
+    this.router.navigate([Admin, UPDATE_EVENT, eventId]);
   }
 
   onDeleteEvent(eventId: string) {

@@ -15,6 +15,7 @@ import {
 } from '../store/signup-component.selectors';
 import { Router } from '@angular/router';
 import { FormService } from '../../../../core/services/form/form-service';
+import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
 
 @Component({
   selector: 'app-signup-component',
@@ -28,6 +29,7 @@ export class SignupComponent implements OnInit {
   loading$!: Observable<boolean>;
   showPassword = false;
   showConfirmPassword = false;
+  route_path = ROUTE_PATHS;
   private formService = inject(FormService);
   private store = inject(Store<{ signup: SignupState }>);
 

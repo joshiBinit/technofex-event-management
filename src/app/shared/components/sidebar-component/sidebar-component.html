@@ -22,13 +22,12 @@
   <a
     *ngIf="role$ | async as role"
     mat-list-item
-    routerLink="/admin/userlist"
+    [routerLink]="[route_paths.USER, route_paths.LIST]"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
     class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition"
-    [hidden]="role !== 'admin'"
+    [hidden]="role !== admin"
   >
     <mat-icon>people</mat-icon>
     <span>Users</span>
   </a>
-  <ng-template #hideUser></ng-template>
 </mat-nav-list>

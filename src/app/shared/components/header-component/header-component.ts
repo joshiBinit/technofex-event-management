@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { LoginState } from '../../../features/public/login/store/login-component.reducer';
 import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
 
+const { LOGIN, PROFILE } = ROUTE_PATHS;
 @Component({
   selector: 'app-header-component',
   standalone: false,
@@ -25,9 +26,9 @@ export class HeaderComponent {
   }
   logout() {
     localStorage.removeItem('authData');
-    this.router.navigate([ROUTE_PATHS.LOGIN]);
+    this.router.navigate([LOGIN]);
   }
   goToProfile() {
-    this.router.navigate([ROUTE_PATHS.PROFILE]);
+    this.router.navigate([PROFILE]);
   }
 }

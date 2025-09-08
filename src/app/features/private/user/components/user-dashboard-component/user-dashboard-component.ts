@@ -12,6 +12,7 @@ import {
 } from '../../../events/store/event-booking/event-booking.selector';
 import { userDashboardTable } from '../../user-table.type';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
 @Component({
   selector: 'app-user-dashboard-component',
@@ -23,6 +24,7 @@ export class UserDashboardComponent implements OnInit {
   recomendedEvents: Event[] = [];
   events: Event[] = [];
   bookedEvents: Event[] = [];
+  route_path = ROUTE_PATHS;
   private destroy$ = new Subject<void>();
   displayedColumns = userDashboardTable;
   constructor(

@@ -28,6 +28,7 @@ export class SignupEffects {
             })
             .pipe(
               map((response) => {
+                this.authService.logout();
                 this.router.navigate(['/login']);
                 return SignupActions.signupSuccess({
                   user: response.user,

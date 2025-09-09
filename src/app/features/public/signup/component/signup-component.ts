@@ -36,19 +36,12 @@ export class SignupComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.signupForm = this.formService.signupForm();
-    this.signupForm.setValidators(this.passwordMatchValidator);
 
     this.error$ = this.store.select(selectSignupError);
     this.loading$ = this.store.select(selectSignupLoading);
   }
 
-  passwordMatchValidator(
-    group: AbstractControl
-  ): { [key: string]: boolean } | null {
-    const password = group.get('password')?.value;
-    const confirm = group.get('confirmPassword')?.value;
-    return password === confirm ? null : { mismatch: true };
-  }
+  // Password matching is now handled by CustomValidators.passwordsMatch()
 
   onSubmit(): void {
     if (this.signupForm.valid) {

@@ -43,6 +43,11 @@ export class AddEventComponent {
     this.store.dispatch(loadLocations());
   }
 
+  hasError(controlName: string, errorCode: string): boolean {
+    const control = this.eventForm.get(controlName);
+    return !!(control && control.touched && control.hasError(errorCode));
+  }
+
   onSubmit() {
     if (!this.eventForm.valid) {
       this.eventForm.markAllAsTouched();

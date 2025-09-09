@@ -5,10 +5,10 @@
     <mat-form-field class="w-full">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" placeholder="Enter event title" />
-      <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+      <mat-error *ngIf="hasError('title','required')">
         Title is required
       </mat-error>
-      <mat-error *ngIf="eventForm.get('title')?.hasError('maxlength')">
+      <mat-error *ngIf="hasError('title','maxlength')">
         Maximum 30 characters allowed
       </mat-error>
     </mat-form-field>
@@ -21,7 +21,7 @@
         <mat-option value="concert">Concert</mat-option>
         <mat-option value="sports">Sports</mat-option>
       </mat-select>
-      <mat-error *ngIf="eventForm.get('category')?.hasError('required')">
+      <mat-error *ngIf="hasError('category','required')">
         Category is required
       </mat-error>
     </mat-form-field>
@@ -34,10 +34,10 @@
         formControlName="description"
         placeholder="Enter event description"
       ></textarea>
-      <mat-error *ngIf="eventForm.get('description')?.hasError('required')">
+      <mat-error *ngIf="hasError('description','required')">
         Description is required
       </mat-error>
-      <mat-error *ngIf="eventForm.get('description')?.hasError('maxlength')">
+      <mat-error *ngIf="hasError('description','maxlength')">
         Maximum 500 characters allowed
       </mat-error>
     </mat-form-field>
@@ -54,7 +54,7 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker startView="multi-year"></mat-datepicker>
 
-        <mat-error *ngIf="eventForm.get('schedule.date')?.hasError('required')">
+        <mat-error *ngIf="hasError('schedule.date','required')">
           Date is required
         </mat-error>
       </mat-form-field>
@@ -67,7 +67,7 @@
           formControlName="time"
           placeholder="Select time"
         />
-        <mat-error *ngIf="eventForm.get('schedule.time')?.hasError('required')">
+        <mat-error *ngIf="hasError('schedule.time','required')">
           Time is required
         </mat-error>
       </mat-form-field>
@@ -80,7 +80,7 @@
           {{ loc.name }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="eventForm.get('location')?.hasError('required')">
+      <mat-error *ngIf="hasError('location','required')">
         Location is required
       </mat-error>
     </mat-form-field>
@@ -94,10 +94,10 @@
           formControlName="totalTickets"
           placeholder="Enter total tickets"
         />
-        <mat-error *ngIf="eventForm.get('totalTickets')?.hasError('required')">
+        <mat-error *ngIf="hasError('totalTickets','required')">
           Total tickets is required
         </mat-error>
-        <mat-error *ngIf="eventForm.get('totalTickets')?.hasError('min')">
+        <mat-error *ngIf="hasError('totalTickets','min')">
           Must be at least 1
         </mat-error>
       </mat-form-field>
@@ -110,10 +110,10 @@
           formControlName="price"
           placeholder="Enter ticket price"
         />
-        <mat-error *ngIf="eventForm.get('price')?.hasError('required')">
+        <mat-error *ngIf="hasError('price','required')">
           Price is required
         </mat-error>
-        <mat-error *ngIf="eventForm.get('price')?.hasError('min')">
+        <mat-error *ngIf="hasError('price','min')">
           Must be 0 or greater
         </mat-error>
       </mat-form-field>

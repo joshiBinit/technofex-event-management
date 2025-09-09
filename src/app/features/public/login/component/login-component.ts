@@ -24,10 +24,12 @@ export class LoginComponent implements OnInit {
   loading$!: Observable<boolean>;
   returnUrl: string = '/';
   route_path = ROUTE_PATHS;
-  private fb = inject(FormBuilder);
-  private store = inject(Store<{ login: LoginState }>);
-  private formService = inject(FormService);
-  private route = inject(ActivatedRoute);
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<{ login: LoginState }>,
+    private formService: FormService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formService.loginForm();

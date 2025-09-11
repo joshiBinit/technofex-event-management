@@ -8,6 +8,5 @@ export const EVENT_FORM_KEYS = {
   },
   LOCATION: 'location',
   TOTAL_TICKETS: 'totalTickets',
-  AVAILABLE_TICKETS: 'availableTickets',
   PRICE: 'price',
 } as const;

@@ -4,6 +4,7 @@ import { UserDashboardComponent } from './components/user-dashboard-component/us
 
 import { BookingDetailComponent } from './components/booking-detail-component/booking-detail-component';
 import { ROUTE_PATHS } from '../../../core/constants/routes.constant';
+import { EventDetailResolver } from './components/booking-detail-component/booking-detail.resolver';
 
 const { DASHBOARD, BOOKING_Detail } = ROUTE_PATHS;
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   {
     path: `${BOOKING_Detail}/:id`,
     component: BookingDetailComponent,
+    resolve: { eventDetail: EventDetailResolver },
   },
 ];
 

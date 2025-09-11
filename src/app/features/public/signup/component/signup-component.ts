@@ -1,10 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { SignupState } from '../store/signup-component.reducer';
@@ -13,9 +8,9 @@ import {
   selectSignupError,
   selectSignupLoading,
 } from '../store/signup-component.selectors';
-import { Router } from '@angular/router';
 import { FormService } from '../../../../core/services/form/form-service';
 import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
+import { AUTH_FORM_KEYS } from '../../constant/auth-form-keys.constant';
 
 @Component({
   selector: 'app-signup-component',
@@ -30,24 +25,19 @@ export class SignupComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
   route_path = ROUTE_PATHS;
-  private formService = inject(FormService);
-  private store = inject(Store<{ signup: SignupState }>);
-
+  authFormKey = AUTH_FORM_KEYS;
+  constructor(
+    private formService: FormService,
+    private store: Store<{ signup: SignupState }>
+  ) {}
   ngOnInit(): void {
     this.signupForm = this.formService.signupForm();
-    this.signupForm.setValidators(this.passwordMatchValidator);
 
     this.error$ = this.store.select(selectSignupError);
     this.loading$ = this.store.select(selectSignupLoading);
   }
 
-  passwordMatchValidator(
-    group: AbstractControl
-  ): { [key: string]: boolean } | null {
-    const password = group.get('password')?.value;
-    const confirm = group.get('confirmPassword')?.value;
-    return password === confirm ? null : { mismatch: true };
-  }
+  // Password matching is now handled by CustomValidators.passwordsMatch()
 
   onSubmit(): void {
     if (this.signupForm.valid) {

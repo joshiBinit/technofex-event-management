@@ -5,11 +5,15 @@ import { FormService } from '../../../../../core/services/form/form-service';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
+
 import * as EventsActions from '../../../events/store/events/event.action';
 import * as EventsSelectors from '../../../events/store/events/event.selector';
 import * as LocationsActions from '../../../../../shared/store/location/location.action';
 import * as LocationsSelectors from '../../../../../shared/store/location/location.selector';
 import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
+
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 
 @Component({
   selector: 'app-update-event-component',
@@ -18,10 +22,10 @@ import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
   styleUrls: ['./update-event-component.scss'],
 })
 export class UpdateEventComponent implements OnInit, OnDestroy {
-  locations$: Observable<any>;
-  eventForm: FormGroup;
-  eventId: string = '';
-
+  eventForm!: FormGroup;
+  locations: string[] = [];
+  eventId!: string;
+  eventFormKeys = EVENT_FORM_KEYS;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -30,7 +34,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private dialogService: DialogService
   ) {
-    this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    // this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
     this.eventForm = this.formService.buildNewEventForm();
   }
 

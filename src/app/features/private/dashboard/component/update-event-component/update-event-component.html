@@ -4,7 +4,11 @@
   <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="grid gap-6">
     <mat-form-field class="w-full">
       <mat-label>Title</mat-label>
-      <input matInput formControlName="title" placeholder="Enter event title" />
+      <input
+        matInput
+        [formControlName]="eventFormKeys.TITLE"
+        placeholder="Enter event title"
+      />
       <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
         Title is required
       </mat-error>
@@ -15,7 +19,7 @@
 
     <mat-form-field class="w-full">
       <mat-label>Category</mat-label>
-      <mat-select formControlName="category">
+      <mat-select [formControlName]="eventFormKeys.CATEGORY">
         <mat-option value="Conference">Conference</mat-option>
         <mat-option value="Workshop">Workshop</mat-option>
         <mat-option value="Concert">Concert</mat-option>
@@ -32,7 +36,7 @@
       <textarea
         matInput
         rows="3"
-        formControlName="description"
+        [formControlName]="eventFormKeys.DESCRIPTION"
         placeholder="Enter event description"
       ></textarea>
       <mat-error *ngIf="eventForm.get('description')?.hasError('maxlength')">
@@ -46,7 +50,7 @@
         <input
           matInput
           [matDatepicker]="picker"
-          formControlName="date"
+          [formControlName]="eventFormKeys.SCHEDULE.DATE"
           placeholder="Choose a date"
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -62,7 +66,7 @@
         <input
           matInput
           type="time"
-          formControlName="time"
+          [formControlName]="eventFormKeys.SCHEDULE.TIME"
           placeholder="Select time"
         />
         <mat-error *ngIf="eventForm.get('schedule.time')?.hasError('required')">
@@ -73,9 +77,9 @@
 
     <mat-form-field class="w-full">
       <mat-label>Location</mat-label>
-      <mat-select formControlName="location">
-        <mat-option *ngFor="let loc of locations$ | async" [value]="loc.name">
-          {{ loc.name }}
+      <mat-select [formControlName]="eventFormKeys.LOCATION">
+        <mat-option *ngFor="let loc of locations" [value]="loc">
+          {{ loc }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="eventForm.get('location')?.hasError('required')">
@@ -89,7 +93,7 @@
         <input
           matInput
           type="number"
-          formControlName="totalTickets"
+          [formControlName]="eventFormKeys.TOTAL_TICKETS"
           placeholder="Enter total tickets"
         />
         <mat-error *ngIf="eventForm.get('totalTickets')?.hasError('required')">
@@ -105,7 +109,7 @@
         <input
           matInput
           type="number"
-          formControlName="price"
+          [formControlName]="eventFormKeys.PRICE"
           placeholder="Enter ticket price"
         />
         <mat-error *ngIf="eventForm.get('price')?.hasError('required')">

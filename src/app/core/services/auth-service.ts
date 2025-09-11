@@ -13,13 +13,15 @@ import {
   decrementEventTickets,
   removeEventFromUser,
 } from '../utils/booking-utiils';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private localStorageKey = 'authData';
-  private apiUrl = 'http://localhost:3000';
+  private userUrl = ` ${environment.apiUrl}/user`;
+  private bookedEventUrl = `${environment.apiUrl}/events`;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -111,6 +113,6 @@ export class AuthService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
+    return this.http.get<User[]>(this.userUrl);
   }
 }

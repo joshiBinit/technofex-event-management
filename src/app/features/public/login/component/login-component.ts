@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -11,6 +11,7 @@ import {
   selectLoginError,
   selectLoginLoading,
 } from '../store/login-component.selectors';
+import { AUTH_FORM_KEYS } from '../../constant/auth-form-keys.constant';
 
 @Component({
   selector: 'app-login-component',
@@ -24,10 +25,12 @@ export class LoginComponent implements OnInit {
   loading$!: Observable<boolean>;
   returnUrl: string = '/';
   route_path = ROUTE_PATHS;
-  private fb = inject(FormBuilder);
-  private store = inject(Store<{ login: LoginState }>);
-  private formService = inject(FormService);
-  private route = inject(ActivatedRoute);
+  authFormKey = AUTH_FORM_KEYS;
+  constructor(
+    private store: Store<{ login: LoginState }>,
+    private formService: FormService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formService.loginForm();

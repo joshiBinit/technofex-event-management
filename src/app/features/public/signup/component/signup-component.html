@@ -12,15 +12,12 @@
           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
           placeholder="Enter your username"
         />
-        <p
-          class="text-red-500 text-xs mt-1"
-          *ngIf="
-            signupForm.get('username')?.invalid &&
-            signupForm.get('username')?.touched
-          "
-        >
+        @if(hasError(signupForm,authFormKey.USERNAME,'required')){
+
+        <mat-error class="text-red-500 text-xs mt-1">
           Username is required
-        </p>
+        </mat-error>
+        }
       </div>
 
       <!-- Email -->
@@ -32,14 +29,15 @@
           class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
           placeholder="Enter your email"
         />
-        <p
-          class="text-red-500 text-xs mt-1"
-          *ngIf="
-            signupForm.get('email')?.invalid && signupForm.get('email')?.touched
-          "
-        >
-          Valid email is required
-        </p>
+        @if(hasError(signupForm,authFormKey.EMAIL,'required')){
+        <mat-error class="text-red-500 text-xs mt-1">
+          Email is required.
+        </mat-error>
+        } @if(hasError(signupForm,authFormKey.EMAIL,'email')){
+        <mat-error class="text-red-500 text-xs mt-1">
+          Email is invalid.
+        </mat-error>
+        }
       </div>
 
       <!-- Password -->
@@ -62,16 +60,12 @@
             showPassword ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
+        @if(hasError(signupForm,authFormKey.PASSWORD,'required')){
 
-        <p
-          class="text-red-500 text-xs mt-1"
-          *ngIf="
-            signupForm.get('password')?.invalid &&
-            signupForm.get('password')?.touched
-          "
-        >
+        <mat-error class="text-red-500 text-xs mt-1">
           Password must be at least 6 characters
-        </p>
+        </mat-error>
+        }
       </div>
 
       <!-- Confirm Password -->
@@ -96,13 +90,11 @@
             showConfirmPassword ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
-
-        <p
-          class="text-red-500 text-xs mt-1"
-          *ngIf="signupForm.errors?.['mismatch'] && signupForm.get('confirmPassword')?.touched"
-        >
+        @if(hasError(signupForm,authFormKey.CONFIRM_PASSWORD,'mismatch')){
+        <mat-error class="text-red-500 text-xs mt-1">
           Passwords do not match
-        </p>
+        </mat-error>
+        }
       </div>
 
       <!-- Error -->

@@ -9,9 +9,10 @@
         [formControlName]="eventFormKeys.TITLE"
         placeholder="Enter event title"
       />
-      @if (eventForm.get('title')?.hasError('required')) {
+
+      @if (hasError(eventForm, eventFormKeys.TITLE, 'required')) {
       <mat-error>Title is required</mat-error>
-      } @if (eventForm.get('title')?.hasError('maxlength')) {
+      } @if (hasError(eventForm, eventFormKeys.TITLE, 'maxlength')) {
       <mat-error>Maximum 30 characters allowed</mat-error>
       }
     </mat-form-field>
@@ -25,7 +26,7 @@
         <mat-option value="Sports">Sports</mat-option>
         <mat-option value="Seminar">Seminar</mat-option>
       </mat-select>
-      @if (eventForm.get('category')?.hasError('required')) {
+      @if(hasError(eventForm,eventFormKeys.CATEGORY,'required')){
       <mat-error>Category is required</mat-error>
       }
     </mat-form-field>
@@ -38,7 +39,7 @@
         [formControlName]="eventFormKeys.DESCRIPTION"
         placeholder="Enter event description"
       ></textarea>
-      @if (eventForm.get('description')?.hasError('maxlength')) {
+      @if (hasError(eventForm,eventFormKeys.DESCRIPTION,'maxlength')) {
       <mat-error>Maximum 500 characters allowed</mat-error>
       }
     </mat-form-field>
@@ -55,7 +56,7 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker startView="multi-year"></mat-datepicker>
 
-        @if (eventForm.get('schedule.date')?.hasError('required')) {
+        @if (hasError(eventForm,eventFormKeys.SCHEDULE.DATE,'required')) {
         <mat-error>Date is required</mat-error>
         }
       </mat-form-field>
@@ -68,7 +69,7 @@
           [formControlName]="eventFormKeys.SCHEDULE.TIME"
           placeholder="Select time"
         />
-        @if (eventForm.get('schedule.time')?.hasError('required')) {
+        @if (hasError(eventForm,eventFormKeys.SCHEDULE.TIME,'required')) {
         <mat-error>Time is required</mat-error>
         }
       </mat-form-field>
@@ -81,7 +82,7 @@
         <mat-option [value]="loc">{{ loc }}</mat-option>
         }
       </mat-select>
-      @if (eventForm.get('location')?.hasError('required')) {
+      @if (hasError(eventForm,eventFormKeys.LOCATION,'required')) {
       <mat-error>Location is required</mat-error>
       }
     </mat-form-field>
@@ -110,9 +111,9 @@
           [formControlName]="eventFormKeys.PRICE"
           placeholder="Enter ticket price"
         />
-        @if (eventForm.get('price')?.hasError('required')) {
+        @if (hasError(eventForm,eventFormKeys.PRICE,'required')) {
         <mat-error>Price is required</mat-error>
-        } @if (eventForm.get('price')?.hasError('min')) {
+        } @if (hasError(eventForm,eventFormKeys.PRICE,'min')) {
         <mat-error>Must be 0 or greater</mat-error>
         }
       </mat-form-field>

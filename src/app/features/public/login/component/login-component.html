@@ -13,8 +13,7 @@
           placeholder="Enter your email"
         />
 
-        @if (loginForm.get(authFormKey.EMAIL)?.invalid &&
-        loginForm.get(authFormKey.EMAIL)?.touched) {
+        @if (hasError(loginForm,authFormKey.EMAIL,'required')) {
         <p class="text-red-500 text-xs mt-1">Valid email is required</p>
         }
       </div>
@@ -40,8 +39,7 @@
           </mat-icon>
         </button>
 
-        @if (loginForm.get(authFormKey.PASSWORD)?.invalid &&
-        loginForm.get(authFormKey.PASSWORD)?.touched) {
+        @if (hasError(loginForm,authFormKey.PASSWORD,'required')) {
         <p class="text-red-500 text-xs mt-1">
           Password must be at least 6 characters
         </p>

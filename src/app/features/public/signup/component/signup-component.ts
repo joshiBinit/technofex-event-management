@@ -11,6 +11,7 @@ import {
 import { FormService } from '../../../../core/services/form/form-service';
 import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
 import { AUTH_FORM_KEYS } from '../../constant/auth-form-keys.constant';
+import { hasError } from '../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-signup-component',
@@ -26,6 +27,7 @@ export class SignupComponent implements OnInit {
   showConfirmPassword = false;
   route_path = ROUTE_PATHS;
   authFormKey = AUTH_FORM_KEYS;
+  hasError = hasError;
   constructor(
     private formService: FormService,
     private store: Store<{ signup: SignupState }>

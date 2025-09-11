@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as EventsActions from '../../../events/store/events/event.action';
 import * as EventsSelectors from '../../../events/store/events/event.selector';
@@ -18,20 +18,25 @@ import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
   styleUrls: ['./update-event-component.scss'],
 })
 export class UpdateEventComponent implements OnInit, OnDestroy {
-  private store = inject(Store);
-  eventForm!: FormGroup;
-  locations$ = this.store.select(LocationsSelectors.selectAllLocations);
-  eventId!: string;
+  locations$: Observable<any>;
+  eventForm: FormGroup;
+  eventId: string = '';
+
   private destroy$ = new Subject<void>();
+
   constructor(
+    private store: Store,
     private route: ActivatedRoute,
     private formService: FormService,
     private dialogService: DialogService
-  ) {}
+  ) {
+    this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    this.eventForm = this.formService.buildNewEventForm();
+  }
 
   ngOnInit(): void {
-    this.eventForm = this.formService.buildNewEventForm();
     this.store.dispatch(LocationsActions.loadLocations());
+
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -48,10 +53,10 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     this.store
       .select(EventsSelectors.selectEventLoading)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((loading) => {});
+      .subscribe();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (!this.eventForm.valid) {
       this.eventForm.markAllAsTouched();
       return;
@@ -72,6 +77,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
         this.store.dispatch(EventsActions.updateEvent({ event: payload }));
       });
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

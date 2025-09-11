@@ -6,7 +6,18 @@ import {
 } from '../../constants/validation.constant';
 import { CustomValidators } from '../../validators/custom-validators';
 import { EVENT_FORM_KEYS } from '../../../features/private/dashboard/constants/event-form-keys.constant';
+import { AUTH_FORM_KEYS } from '../../../features/public/constant/auth-form-keys.constant';
 
+const { EMAIL, PASSWORD, USERNAME, CONFIRM_PASSWORD } = AUTH_FORM_KEYS;
+const {
+  TITLE,
+  CATEGORY,
+  DESCRIPTION,
+  SCHEDULE,
+  LOCATION,
+  TOTAL_TICKETS,
+  PRICE,
+} = EVENT_FORM_KEYS;
 @Injectable({
   providedIn: 'root',
 })
@@ -16,15 +27,15 @@ export class FormService {
   buildNewEventForm(): FormGroup {
     return this.fb.group({
       id: [0],
-      [EVENT_FORM_KEYS.TITLE]: [
+      [TITLE]: [
         '',
         [
           Validators.required,
           Validators.maxLength(VALIDATION_CONSTANTS.MAX_TITLE_LENGTH),
         ],
       ],
-      [EVENT_FORM_KEYS.CATEGORY]: ['', Validators.required],
-      description: [
+      [CATEGORY]: ['', Validators.required],
+      [DESCRIPTION]: [
         '',
         [
           Validators.required,
@@ -33,37 +44,38 @@ export class FormService {
       ],
 
       schedule: this.fb.group({
-        [EVENT_FORM_KEYS.SCHEDULE.DATE]: ['', Validators.required],
-        [EVENT_FORM_KEYS.SCHEDULE.TIME]: ['', Validators.required],
+        [SCHEDULE.DATE]: ['', Validators.required],
+        [SCHEDULE.TIME]: ['', Validators.required],
       }),
 
-      [EVENT_FORM_KEYS.LOCATION]: [
+      [LOCATION]: [
         '',
         [
           Validators.required,
           Validators.maxLength(VALIDATION_CONSTANTS.MAX_LOCATION_LENGTH),
         ],
       ],
-      [EVENT_FORM_KEYS.TOTAL_TICKETS]: [
+      [TOTAL_TICKETS]: [
         '',
         [Validators.required, Validators.min(VALIDATION_CONSTANTS.MIN_TICKETS)],
       ],
-      [EVENT_FORM_KEYS.PRICE]: [
+      [PRICE]: [
         '',
         [Validators.required, Validators.min(VALIDATION_CONSTANTS.MIN_PRICE)],
       ],
     });
   }
+
   loginForm(): FormGroup {
     return this.fb.group({
-      email: [
+      [EMAIL]: [
         '',
         [
           Validators.required,
           Validators.pattern(VALIDATION_PATTERNS.EMAIL_REGEX),
         ],
       ],
-      password: [
+      [PASSWORD]: [
         '',
         [
           Validators.required,
@@ -77,7 +89,7 @@ export class FormService {
   signupForm(): FormGroup {
     return this.fb.group(
       {
-        username: [
+        [USERNAME]: [
           '',
           [
             Validators.required,
@@ -85,14 +97,14 @@ export class FormService {
             Validators.maxLength(VALIDATION_CONSTANTS.MAX_USERNAME_LENGTH),
           ],
         ],
-        email: [
+        [EMAIL]: [
           '',
           [
             Validators.required,
             Validators.pattern(VALIDATION_PATTERNS.EMAIL_REGEX),
           ],
         ],
-        password: [
+        [PASSWORD]: [
           '',
           [
             Validators.required,
@@ -100,7 +112,7 @@ export class FormService {
             Validators.maxLength(VALIDATION_CONSTANTS.MAX_PASSWORD_LENGTH),
           ],
         ],
-        confirmPassword: ['', Validators.required],
+        [CONFIRM_PASSWORD]: ['', Validators.required],
       },
       {
         validators: CustomValidators.passwordsMatch(),

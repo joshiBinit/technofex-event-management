@@ -18,7 +18,6 @@ export class EventBookingEffects {
     this.actions$.pipe(
       ofType(BookingActions.bookEvent),
       mergeMap(({ event }) => {
-        console.log('Effect triggered for booking event:', event);
         return this.authService.addBooking(event).pipe(
           map((result) => {
             console.log('Booking result:', result);

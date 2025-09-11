@@ -5,13 +5,15 @@ import { Observable, of, catchError, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Event } from '../../shared/model/event.model';
 import { environment } from '../../../environments/environment';
+import { ROLE } from '../../features/private/events/types/user.types';
+import { ROUTE_PATHS } from '../constants/routes.constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private localStorageKey = 'authData';
-  private userUrl = ` ${environment.apiUrl}/user`;
+  private userUrl = ` ${environment.apiUrl}/users`;
   private bookedEventUrl = `${environment.apiUrl}/events`;
 
   constructor(private router: Router, private http: HttpClient) {}
@@ -19,7 +21,7 @@ export class AuthService {
   login(user: {
     username: string;
     password: string;
-    role: 'user' | 'admin';
+    role: ROLE;
     returnUrl?: string;
   }): Observable<any> {
     return this.http.get<User[]>(this.userUrl).pipe(
@@ -61,7 +63,7 @@ export class AuthService {
     return this.http
       .post<User>(this.userUrl, {
         ...user,
-        role: user.role || 'user',
+        role: user.role || user,
         bookings: user.bookings || [],
       })
       .pipe(
@@ -84,7 +86,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.localStorageKey);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/', ROUTE_PATHS.LOGIN]);
   }
 
   isLoggedIn(): boolean {

@@ -1,4 +1,5 @@
 export const EVENT_FORM_KEYS = {
+  ID: 'id',
   TITLE: 'title',
   CATEGORY: 'category',
   DESCRIPTION: 'description',

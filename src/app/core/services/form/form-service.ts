@@ -10,6 +10,7 @@ import { AUTH_FORM_KEYS } from '../../../features/public/constant/auth-form-keys
 
 const { EMAIL, PASSWORD, USERNAME, CONFIRM_PASSWORD } = AUTH_FORM_KEYS;
 const {
+  ID,
   TITLE,
   CATEGORY,
   DESCRIPTION,
@@ -26,7 +27,7 @@ export class FormService {
 
   buildNewEventForm(): FormGroup {
     return this.fb.group({
-      id: [0],
+      [ID]: [0],
       [TITLE]: [
         '',
         [

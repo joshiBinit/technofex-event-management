@@ -7,6 +7,7 @@ import { Event } from '../../../../../shared/model/event.model';
 import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 
 @Component({
   selector: 'app-update-event-component',
@@ -18,7 +19,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
   eventForm!: FormGroup;
   locations: string[] = [];
   eventId!: string;
-
+  eventFormKeys = EVENT_FORM_KEYS;
   private destroy$ = new Subject<void>();
 
   constructor(

@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const email = this.loginForm.get(this.authFormKey.EMAIL)?.value;
+      const password = this.loginForm.get(this.authFormKey.PASSWORD)?.value;
       const isAdminAttempt = email === 'admin@test.com';
       const role = isAdminAttempt ? 'admin' : 'user';
 

@@ -21,7 +21,7 @@ import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
   styleUrls: ['./user-dashboard-component.scss'],
 })
 export class UserDashboardComponent implements OnInit {
-  recomendedEvents: Event[] = [];
+  recommendedEvents: Event[] = [];
   events: Event[] = [];
   bookedEvents: Event[] = [];
   route_path = ROUTE_PATHS;
@@ -38,7 +38,7 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit() {
     this.eventService
       .getRandomEvents(3)
-      .subscribe((data) => (this.recomendedEvents = data));
+      .subscribe((data) => (this.recommendedEvents = data));
     this.eventService.getEvents().subscribe((allEvents) => {
       this.events = allEvents;
 

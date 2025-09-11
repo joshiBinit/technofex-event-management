@@ -7,7 +7,9 @@
     >
     <h1 class="text-2xl font-bold">Booking Details</h1>
   </div>
-  <ng-container *ngIf="eventDetail; else noBooking">
+  @if(eventDetail){
+
+  <ng-container>
     <mat-card class="p-6 bg-white shadow-md max-w-2xl mx-auto">
       <h2 class="text-xl font-semibold mb-4">Event Details</h2>
 
@@ -51,8 +53,10 @@
       </div>
     </mat-card>
   </ng-container>
+  } @else {
 
-  <ng-template #noBooking>
+  <ng-template>
     <p class="text-center text-gray-500 mt-6">No booking details found.</p>
   </ng-template>
+  }
 </div>

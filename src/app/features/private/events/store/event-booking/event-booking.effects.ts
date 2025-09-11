@@ -4,7 +4,6 @@ import { AuthService } from '../../../../../core/services/auth-service';
 import * as BookingActions from './event-booking.action';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import * as EventsActions from '../../store/events/event.action';
-import { mapBookingResult } from '../util/event-booking-utils';
 
 @Injectable()
 export class EventBookingEffects {
@@ -19,7 +18,6 @@ export class EventBookingEffects {
         console.log('Effect triggered for booking event:', event);
         return this.authService.addBooking(event).pipe(
           map((result) => {
-            console.log('Booking result:', result);
             if (result === 'duplicate') {
               return BookingActions.bookEventFailure({
                 error: `${event.title} is already booked ❌`,

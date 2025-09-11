@@ -19,7 +19,7 @@ import { PaginationComponent } from '../../../../../shared/components/pagination
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
-import { admin, NORMAL_USER, ADMIN } from '../../types/user.types';
+import { NORMAL_USER, ADMIN, admin } from '../../types/user.types';
 import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
 const { ADMIN: Admin, ADD_EVENT, UPDATE_EVENT } = ROUTE_PATHS;
@@ -37,7 +37,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
-
+  admin = admin;
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;

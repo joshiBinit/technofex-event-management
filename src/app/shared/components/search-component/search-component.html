@@ -8,8 +8,9 @@
       [(ngModel)]="searchTerm"
       (input)="onSearch()"
     />
+    @if(searchTerm){
+
     <button
-      *ngIf="searchTerm"
       matSuffix
       mat-icon-button
       aria-label="Clear"
@@ -17,6 +18,8 @@
     >
       <mat-icon>close</mat-icon>
     </button>
-    <mat-icon *ngIf="!searchTerm" matSuffix>search</mat-icon>
+    } @else{
+    <mat-icon matSuffix>search</mat-icon>
+    }
   </mat-form-field>
 </div>

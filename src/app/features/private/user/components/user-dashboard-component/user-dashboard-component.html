@@ -27,12 +27,12 @@
 
   <h1 class="text-2xl font-bold">My Bookings</h1>
   <div class="bg-gray-100 mb-10">
-    <p *ngIf="bookedEvents.length === 0" class="text-center">
-      No event booked yet
-    </p>
+    @if(bookedEvents.length===0){
+
+    <p class="text-center">No event booked yet</p>
+    } @else{
 
     <mat-table
-      *ngIf="bookedEvents.length > 0"
       [dataSource]="bookedEvents"
       class="mat-elevation-z2 w-full bg-white"
     >
@@ -104,12 +104,15 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>
+    }
   </div>
 
   <div>
     <h2 class="text-lg font-semibold mb-2">Recommended for You</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-card *ngFor="let event of recomendedEvents" class="p-4">
+      @for (event of recommendedEvents ; track $index) {
+
+      <mat-card class="p-4">
         <h3 class="font-semibold">{{ event.title }}</h3>
         <p class="text-sm text-gray-600">
           {{ event.date }} | {{ event.location }}
@@ -124,6 +127,7 @@
           Book Now
         </button>
       </mat-card>
+      }
     </div>
   </div>
 </div>

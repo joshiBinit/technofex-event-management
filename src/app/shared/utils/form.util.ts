@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 
-export function utilHasError(
+export function hasError(
   form: FormGroup,
   controlName: string,
   errorCode: string

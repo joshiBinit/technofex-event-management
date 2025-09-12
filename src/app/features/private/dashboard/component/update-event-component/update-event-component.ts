@@ -8,7 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
-import { utilHasError } from '../../../../../shared/utils/form.util';
+import { hasError } from '../../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-update-event-component',
@@ -22,6 +22,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
   eventId!: string;
   eventFormKeys = EVENT_FORM_KEYS;
   private destroy$ = new Subject<void>();
+  hasError = hasError;
 
   constructor(
     private router: Router,
@@ -43,10 +44,6 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
         this.loadEvent(this.eventId);
       }
     });
-  }
-
-  hasError(controlName: string, errorCode: string): boolean {
-    return utilHasError(this.eventForm, controlName, errorCode);
   }
 
   loadLocations() {

@@ -13,7 +13,7 @@ import { DialogService } from '../../../../../core/services/dialog/dialog.servic
 import { buildEventPayload } from '../../utils/event-utils';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
-import { utilHasError } from '../../../../../shared/utils/form.util';
+import { hasError } from '../../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-add-event',
@@ -43,10 +43,6 @@ export class AddEventComponent {
 
   loadLocations() {
     this.store.dispatch(loadLocations());
-  }
-
-  hasError(controlName: string, errorCode: string): boolean {
-    return utilHasError(this.eventForm, controlName, errorCode);
   }
 
   onSubmit() {

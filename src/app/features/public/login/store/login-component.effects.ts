@@ -5,13 +5,17 @@ import * as LoginActions from './login-component.actions';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
+import { admin } from '../../../private/events/types/user.types';
+import { SnackbarService } from '../../../../shared/services/snackbar/snackbar-service';
 
+const { ADMIN, EVENT, LIST, LOGIN, SIGNUP, DASHBOARD, USER } = ROUTE_PATHS;
 @Injectable()
 export class LoginEffects {
   private actions$ = inject(Actions);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
+  private snackbarService = inject(SnackbarService);
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -32,15 +36,15 @@ export class LoginEffects {
                 if (
                   returnUrl &&
                   returnUrl !== '/' &&
-                  returnUrl !== '/login' &&
-                  returnUrl !== '/signup'
+                  returnUrl !== LOGIN &&
+                  returnUrl !== SIGNUP
                 ) {
                   this.router.navigateByUrl(returnUrl);
                 } else {
-                  if (user.role === 'admin') {
-                    this.router.navigate(['/event/list']);
+                  if (user.role === admin) {
+                    this.router.navigate([EVENT, LIST]);
                   } else {
-                    this.router.navigate(['/user/dashboard']);
+                    this.router.navigate([USER, DASHBOARD]);
                   }
                 }
 
@@ -70,12 +74,7 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.loginSuccess),
         tap(() => {
-          this.snackBar.open('✅ Login Successful!', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
+          this.snackbarService.show('✅ Login Successful!', 'success');
         })
       ),
     { dispatch: false }
@@ -86,12 +85,10 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.loginFailure),
         tap((action) => {
-          this.snackBar.open(`❌ Login Failed: ${action.error}`, 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
+          this.snackbarService.show(
+            `❌ Login Failed: ${action.error}`,
+            'error'
+          );
         })
       ),
     { dispatch: false }

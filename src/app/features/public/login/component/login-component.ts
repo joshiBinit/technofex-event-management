@@ -36,10 +36,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // initialize form
     this.loginForm = this.formService.loginForm();
 
-    // get returnUrl if present
     this.route.queryParams.subscribe((params) => {
       this.returnUrl = params['returnUrl'] || '/';
     });

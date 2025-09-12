@@ -37,8 +37,6 @@ export class SignupComponent implements OnInit {
     this.loading$ = this.store.select(selectSignupLoading);
   }
 
-  // Password matching is now handled by CustomValidators.passwordsMatch()
-
   onSubmit(): void {
     if (this.signupForm.valid) {
       const { username, email, password } = this.signupForm.value;

@@ -13,6 +13,7 @@ import { DialogService } from '../../../../../core/services/dialog/dialog.servic
 import { buildEventPayload } from '../../utils/event-utils';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
+import { hasError } from '../../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-add-event',
@@ -24,6 +25,7 @@ export class AddEventComponent {
   eventForm!: FormGroup;
   locations$: Observable<Location[]>;
   nextId = 10;
+  hasError = hasError;
   eventFormKeys = EVENT_FORM_KEYS;
   constructor(
     private router: Router,
@@ -42,11 +44,6 @@ export class AddEventComponent {
 
   loadLocations() {
     this.store.dispatch(loadLocations());
-  }
-
-  hasError(controlName: string, errorCode: string): boolean {
-    const control = this.eventForm.get(controlName);
-    return !!(control && control.touched && control.hasError(errorCode));
   }
 
   onSubmit() {

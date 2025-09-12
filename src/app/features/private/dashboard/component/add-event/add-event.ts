@@ -25,6 +25,7 @@ export class AddEventComponent {
   eventForm!: FormGroup;
   locations$: Observable<Location[]>;
   nextId = 10;
+  hasError = hasError;
   eventFormKeys = EVENT_FORM_KEYS;
   constructor(
     private router: Router,

@@ -13,6 +13,7 @@ import { DialogService } from '../../../../../core/services/dialog/dialog.servic
 import { buildEventPayload } from '../../utils/event-utils';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
+import { utilHasError } from '../../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-add-event',
@@ -45,8 +46,7 @@ export class AddEventComponent {
   }
 
   hasError(controlName: string, errorCode: string): boolean {
-    const control = this.eventForm.get(controlName);
-    return !!(control && control.touched && control.hasError(errorCode));
+    return utilHasError(this.eventForm, controlName, errorCode);
   }
 
   onSubmit() {

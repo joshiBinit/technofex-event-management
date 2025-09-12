@@ -15,6 +15,7 @@ import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 import { hasError } from '../../../../../shared/utils/form.util';
+import { Location } from '../../../../../shared/model/event.model';
 
 @Component({
   selector: 'app-update-event-component',
@@ -24,7 +25,7 @@ import { hasError } from '../../../../../shared/utils/form.util';
 })
 export class UpdateEventComponent implements OnInit, OnDestroy {
   eventForm!: FormGroup;
-  locations: string[] = [];
+  locations$: Observable<Location[]>;
   eventId!: string;
   eventFormKeys = EVENT_FORM_KEYS;
   private destroy$ = new Subject<void>();
@@ -36,7 +37,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private dialogService: DialogService
   ) {
-    // this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
     this.eventForm = this.formService.buildNewEventForm();
   }
 

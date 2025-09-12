@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -18,7 +18,7 @@ import { hasError } from '../../../../shared/utils/form.util';
   selector: 'app-login-component',
   standalone: false,
   templateUrl: './login-component.html',
-  styleUrl: './login-component.scss',
+  styleUrls: ['./login-component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -28,6 +28,8 @@ export class LoginComponent implements OnInit {
   route_path = ROUTE_PATHS;
   authFormKey = AUTH_FORM_KEYS;
   hasError = hasError;
+  showPassword = false;
+
   constructor(
     private store: Store<{ login: LoginState }>,
     private formService: FormService,
@@ -35,15 +37,17 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // initialize form
     this.loginForm = this.formService.loginForm();
+
+    // get returnUrl if present
     this.route.queryParams.subscribe((params) => {
       this.returnUrl = params['returnUrl'] || '/';
     });
+
     this.error$ = this.store.select(selectLoginError);
     this.loading$ = this.store.select(selectLoginLoading);
   }
-
-  showPassword = false;
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;

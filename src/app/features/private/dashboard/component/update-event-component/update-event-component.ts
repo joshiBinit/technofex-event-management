@@ -1,12 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
-import { EventService } from '../../../../../core/services/event/event-service';
-import { Event } from '../../../../../shared/model/event.model';
+import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
-import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+
+import * as EventsActions from '../../../events/store/events/event.action';
+import * as EventsSelectors from '../../../events/store/events/event.selector';
+import * as LocationsActions from '../../../../../shared/store/location/location.action';
+import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 import { hasError } from '../../../../../shared/utils/form.util';
 
@@ -23,78 +26,44 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
   eventFormKeys = EVENT_FORM_KEYS;
   hasError = hasError;
   private destroy$ = new Subject<void>();
-  hasError = hasError;
 
   constructor(
-    private router: Router,
+    private store: Store,
     private route: ActivatedRoute,
     private formService: FormService,
-    private eventService: EventService,
-    private dialogService: DialogService,
-    private snackbarService: SnackbarService
-  ) {}
+    private dialogService: DialogService
+  ) {
+    // this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    this.eventForm = this.formService.buildNewEventForm();
+  }
 
   ngOnInit(): void {
-    this.eventForm = this.formService.buildNewEventForm();
-    this.loadLocations();
+    this.store.dispatch(LocationsActions.loadLocations());
 
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.eventId = id;
-        this.loadEvent(this.eventId);
+        this.store
+          .select(EventsSelectors.selectEventById(id))
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((event) => {
+            if (event) patchEventForm(this.eventForm, event);
+          });
       }
     });
-  }
 
-  loadLocations() {
-    this.eventService
-      .loadLocations()
+    this.store
+      .select(EventsSelectors.selectEventLoading)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data) => {
-          this.locations = data.map((loc) => loc.name);
-        },
-        error: (err) => console.error('Failed to load locations:', err),
-      });
+      .subscribe();
   }
 
-  loadEvent(id: string) {
-    this.eventService
-      .getEventById(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (event) => {
-          if (event) {
-            if (event.location && !this.locations.includes(event.location)) {
-              this.locations.push(event.location);
-            }
-
-            this.eventForm.patchValue({
-              title: event.title,
-              category: event.category,
-              description: event.description,
-              schedule: {
-                date: event.date ? new Date(event.date) : null,
-                time: event.time,
-              },
-              location: event.location,
-              totalTickets: event.totalTickets,
-              price: event.price,
-            });
-          }
-        },
-        error: (err) => console.error('Failed to load event:', err),
-      });
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     if (!this.eventForm.valid) {
       this.eventForm.markAllAsTouched();
       return;
     }
-
-    const formValue = this.eventForm.value;
 
     this.dialogService
       .openDeleteDialog(
@@ -103,61 +72,12 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
         'Update',
         'Cancel'
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((confirmed) => {
         if (!confirmed) return;
-
-        this.eventService
-          .getEventById(this.eventId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: (currentEvent) => {
-              if (!currentEvent) return;
-
-              const bookedTickets =
-                currentEvent.totalTickets -
-                (currentEvent.availableTickets ?? currentEvent.totalTickets);
-
-              const updatedAvailableTickets =
-                formValue.totalTickets - bookedTickets;
-
-              const payload: Event = {
-                id: this.eventId,
-                title: formValue.title,
-                category: formValue.category,
-                description: formValue.description,
-                date: formValue.schedule.date
-                  ? formValue.schedule.date.toISOString().split('T')[0]
-                  : '',
-                time: formValue.schedule.time,
-                location: formValue.location,
-                totalTickets: formValue.totalTickets,
-                availableTickets: updatedAvailableTickets,
-                price: formValue.price,
-              };
-
-              this.eventService
-                .updateEvent(this.eventId, payload)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                  next: () => {
-                    this.snackbarService.show(
-                      '✅ Event updated successfully',
-                      'success'
-                    );
-                    this.router.navigate(['/event/list']);
-                  },
-                  error: (err) => {
-                    console.error('Failed to update event:', err);
-                    this.snackbarService.show(
-                      '❌ Failed to update event. Please try again.',
-                      'error'
-                    );
-                  },
-                });
-            },
-            error: (err) =>
-              console.error('Failed to fetch current event:', err),
-          });
+        const formValue = this.eventForm.value;
+        const payload = updateEventPayload(this.eventId, formValue);
+        this.store.dispatch(EventsActions.updateEvent({ event: payload }));
       });
   }
 

@@ -2,20 +2,22 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../../../../core/services/auth-service';
 import * as BookingActions from './event-booking.action';
-import { catchError, map, mergeMap, of } from 'rxjs';
 import * as EventsActions from '../../store/events/event.action';
-
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { Store } from '@ngrx/store';
 @Injectable()
 export class EventBookingEffects {
   private actions$ = inject(Actions);
   private authService = inject(AuthService);
+  private snackbarService = inject(SnackbarService);
+  private store = inject(Store);
   constructor() {}
 
   bookEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookingActions.bookEvent),
       mergeMap(({ event }) => {
-        console.log('Effect triggered for booking event:', event);
         return this.authService.addBooking(event).pipe(
           map((result) => {
             if (result === 'duplicate') {
@@ -45,10 +47,35 @@ export class EventBookingEffects {
       })
     )
   );
+
   loadEventsAfterBooking$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BookingActions.bookEventSuccess),
       map(() => EventsActions.loadEvents())
     )
+  );
+
+  showSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BookingActions.bookEventSuccess),
+        tap(() => {
+          this.snackbarService.show('Event booked successfully ✅', 'success');
+          this.store.dispatch(BookingActions.clearBookingMessages());
+        })
+      ),
+    { dispatch: false }
+  );
+
+  showError$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BookingActions.bookEventFailure),
+        tap(({ error }) => {
+          this.snackbarService.show(error, 'error');
+          this.store.dispatch(BookingActions.clearBookingMessages());
+        })
+      ),
+    { dispatch: false }
   );
 }

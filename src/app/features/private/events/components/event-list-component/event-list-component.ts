@@ -6,20 +6,14 @@ import {
   selectAllEvents,
   selectEventLoading,
 } from '../../store/events/event.selector';
-import {
-  selectBookingSuccessMessage,
-  selectBookingError,
-} from '../../store/event-booking/event-booking.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
-import { EventService } from '../../../../../core/services/event/event-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
-import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
-import { NORMAL_USER, ADMIN, admin } from '../../types/user.types';
+import { admin, ADMIN, NORMAL_USER, searchTerm } from '../../types/user.types';
 import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
 const { ADMIN: Admin, ADD_EVENT, UPDATE_EVENT } = ROUTE_PATHS;
@@ -34,29 +28,22 @@ export class EventListComponent implements OnInit, OnDestroy {
   events$: Observable<Event[]> = this.store.select(selectAllEvents);
   loading$: Observable<boolean> = this.store.select(selectEventLoading);
   role$: Observable<string | null> = this.store.select(selectLoginRole);
-
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
   admin = admin;
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
-
-  searchFields: string[] = ['title', 'category', 'location'];
-
+  searchFields: string[] = searchTerm;
   private destroy$ = new Subject<void>();
+  totalItems$ = this.events$.pipe(map((events) => events?.length ?? 0));
 
   @ViewChild('pagination') paginationComponent!: PaginationComponent;
 
-  constructor(
-    private router: Router,
-    private dialogService: DialogService,
-    private snackBarService: SnackbarService,
-    private eventService: EventService
-  ) {}
+  constructor(private router: Router, private dialogService: DialogService) {}
 
   ngOnInit(): void {
-    this.loadEvents();
+    this.store.dispatch(EventsActions.loadEvents());
     this.events$.pipe(takeUntil(this.destroy$)).subscribe((events) => {
       this.allEvents = events;
       this.totalItems = events?.length ?? 0;
@@ -65,28 +52,11 @@ export class EventListComponent implements OnInit, OnDestroy {
         this.paginationComponent.setFilteredData(events);
       }
     });
-    this.store
-      .select(selectBookingSuccessMessage)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((msg) => {
-        if (msg) this.snackBarService.show(msg, 'success');
-      });
-
-    this.store
-      .select(selectBookingError)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((err) => {
-        if (err) this.snackBarService.show(err, 'error');
-      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  loadEvents(): void {
-    this.store.dispatch(EventsActions.loadEvents());
   }
 
   getDisplayedColumns(): Observable<string[]> {
@@ -128,22 +98,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       )
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.eventService.deleteEvent(eventId).subscribe({
-            next: () => {
-              this.snackBarService.show(
-                'Event deleted successfully',
-                'success'
-              );
-              this.loadEvents();
-            },
-            error: (err) => {
-              console.error('Failed to delete event:', err);
-              this.snackBarService.show(
-                'Failed to delete event. Please try again later.',
-                'error'
-              );
-            },
-          });
+          this.store.dispatch(EventsActions.deleteEvent({ eventId }));
         }
       });
   }

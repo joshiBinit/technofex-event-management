@@ -1,7 +1,10 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../../../../shared/model/user.model';
-import { UserService } from '../../../../../core/services/users/user-service';
-import { Subject, takeUntil } from 'rxjs';
+import * as UserSelectors from '../../store/user-detail/user-detail.selector';
+import * as UserActions from '../../store/user-detail/user-detail.action';
+import { Store } from '@ngrx/store';
+import { userListColumn } from '../../utils/types';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-component',
@@ -9,24 +12,17 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './user-component.html',
   styleUrls: ['./user-component.scss'],
 })
-export class UserComponent implements OnDestroy {
-  users: User[] = [];
-  displayedColumns: string[] = ['username', 'email', 'role'];
+export class UserComponent implements OnInit {
+  displayedColumns: string[] = userListColumn;
+  users$: Observable<User[]>;
+  isLoading$: Observable<boolean>;
 
-  private userService = inject(UserService);
-  private destroy$ = new Subject<void>();
-
-  ngOnInit(): void {
-    this.userService
-      .getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.users = data.filter((user) => user.role === 'user');
-      });
+  constructor(private store: Store) {
+    this.users$ = this.store.select(UserSelectors.selectNormalUsers);
+    this.isLoading$ = this.store.select(UserSelectors.selectUserLoading);
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnInit() {
+    this.store.dispatch(UserActions.loadUsers());
   }
 }

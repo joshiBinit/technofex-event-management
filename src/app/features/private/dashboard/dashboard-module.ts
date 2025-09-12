@@ -10,12 +10,14 @@ import { UserComponent } from './component/user-component/user-component';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../../../shared/material.module';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { UpdateEventComponent } from './component/update-event-component/update-event-component';
 import { dashboardEventReducer } from './store/dashboard-event/dashboard-event.reducer';
 import { DashboardEventEffects } from './store/dashboard-event/dashboard-event.effect';
 import { locationReducer } from '../../../shared/store/location/location.reducer';
 import { locationsEffect } from '../../../shared/store/location/location.effect';
+import { usersReducer } from './store/user-detail/user-detail.reducer';
+import { UserEffects } from './store/user-detail/user-detail.effects';
+import { eventsReducer } from '../events/store/events/event.reducer';
 
 @NgModule({
   declarations: [
@@ -29,14 +31,15 @@ import { locationsEffect } from '../../../shared/store/location/location.effect'
     ReactiveFormsModule,
     DashboardRoutingModule,
     StoreModule.forFeature('dashboardEvents', dashboardEventReducer),
-
     StoreModule.forFeature('locations', locationReducer),
+    StoreModule.forFeature('users', usersReducer),
+    StoreModule.forFeature('events', eventsReducer),
     HttpClientModule,
-    NgApexchartsModule,
     EffectsModule.forFeature([
       EventsEffects,
       DashboardEventEffects,
       locationsEffect,
+      UserEffects,
     ]),
 
     MaterialModule,

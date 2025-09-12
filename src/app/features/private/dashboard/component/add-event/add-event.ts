@@ -39,10 +39,6 @@ export class AddEventComponent {
 
   ngOnInit(): void {
     this.eventForm = this.formService.buildNewEventForm();
-    this.loadLocations();
-  }
-
-  loadLocations() {
     this.store.dispatch(loadLocations());
   }
 
@@ -63,9 +59,7 @@ export class AddEventComponent {
         if (confirmed) {
           const payload = buildEventPayload(this.eventForm.value);
           this.store.dispatch(addEvent({ event: payload }));
-
           this.snackbarService.show('✅ Event created', 'success');
-
           this.eventForm.reset();
           this.router.navigate(['/event/list']);
           this.nextId++;

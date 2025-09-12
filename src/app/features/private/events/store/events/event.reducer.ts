@@ -41,5 +41,21 @@ export const eventsReducer = createReducer(
     ...state,
     isLoading: false,
     error,
+  })),
+  on(EventsActions.deleteEvent, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+
+  on(EventsActions.deleteEventSuccess, (state, { eventId }) => ({
+    ...state,
+    isLoading: false,
+    events: state.events.filter((event) => event.id !== eventId),
+  })),
+
+  on(EventsActions.deleteEventFailure, (state, { error }) => ({
+    ...state,
+    isLoading: false,
+    error,
   }))
 );

@@ -12,6 +12,7 @@ import { loadLocations } from '../../../../../shared/store/location/location.act
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import { buildEventPayload } from '../../utils/event-utils';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
+import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 
 @Component({
   selector: 'app-add-event',
@@ -23,7 +24,7 @@ export class AddEventComponent {
   eventForm!: FormGroup;
   locations$: Observable<Location[]>;
   nextId = 10;
-
+  eventFormKeys = EVENT_FORM_KEYS;
   constructor(
     private router: Router,
     private formService: FormService,

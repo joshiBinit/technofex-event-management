@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
 @Injectable()
 export class EventsEffects {
@@ -16,6 +17,8 @@ export class EventsEffects {
   snackbarService = inject(SnackbarService);
   router = inject(Router);
 
+  private readonly EVENT = ROUTE_PATHS.EVENT;
+  private readonly LIST = ROUTE_PATHS.LIST;
   loadEvents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventsActions.loadEvents),
@@ -52,7 +55,7 @@ export class EventsEffects {
         ofType(EventsActions.updateEventSuccess),
         tap(() => {
           this.snackbarService.show('✅ Event updated successfully', 'success');
-          this.router.navigate(['/event/list']);
+          this.router.navigate([`/${this.EVENT}/${this.LIST}`]);
         })
       ),
     { dispatch: false }

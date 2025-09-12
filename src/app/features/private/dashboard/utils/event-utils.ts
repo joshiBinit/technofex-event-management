@@ -73,7 +73,7 @@ export function buildEventPayload(formValue: EventFormValue) {
 
 export function updateEventPayload(
   eventId: string,
-  formValue: any,
+  formValue: EventFormValue,
   bookedTickets: number = 0
 ): Event {
   const totalTickets = formValue.totalTickets;
@@ -84,7 +84,7 @@ export function updateEventPayload(
     category: formValue.category,
     description: formValue.description,
     date: formValue.schedule.date
-      ? formValue.schedule.date.toISOString().split('T')[0]
+      ? formValue.schedule.date.toString().split('T')[0]
       : '',
     time: formValue.schedule.time,
     location: formValue.location,

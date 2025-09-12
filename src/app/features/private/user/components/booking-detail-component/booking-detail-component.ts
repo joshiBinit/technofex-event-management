@@ -10,25 +10,10 @@ import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
   styleUrls: ['./booking-detail-component.scss'],
 })
 export class BookingDetailComponent implements OnInit {
-  eventDetail!: Event;
-  constructor(
-    private route: ActivatedRoute,
-    private eventService: EventService
-  ) {}
+  eventDetail!: Event | null;
+  constructor(private route: ActivatedRoute) {}
   routePaths = ROUTE_PATHS;
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const eventId = params.get('id');
-      if (eventId) {
-        this.eventService.getEventById(eventId).subscribe({
-          next: (event) => {
-            this.eventDetail = event;
-          },
-          error: (err) => {
-            console.error('Failed to fetch event:', err);
-          },
-        });
-      }
-    });
+    this.eventDetail = this.route.snapshot.data['eventDetail'];
   }
 }

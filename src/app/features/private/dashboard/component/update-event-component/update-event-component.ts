@@ -23,6 +23,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
   eventFormKeys = EVENT_FORM_KEYS;
   hasError = hasError;
   private destroy$ = new Subject<void>();
+  hasError = hasError;
 
   constructor(
     private router: Router,

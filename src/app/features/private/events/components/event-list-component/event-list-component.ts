@@ -6,21 +6,14 @@ import {
   selectAllEvents,
   selectEventLoading,
 } from '../../store/events/event.selector';
-import {
-  selectBookingSuccessMessage,
-  selectBookingError,
-} from '../../store/event-booking/event-booking.selector';
 import * as EventsActions from '../../store/events/event.action';
 import { Event } from '../../../../../shared/model/event.model';
 import { selectLoginRole } from '../../../../public/login/store/login-component.selectors';
 import { Router } from '@angular/router';
-import { EventService } from '../../../../../core/services/event/event-service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 import * as BookingActions from '../../store/event-booking/event-booking.action';
-import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { admin, ADMIN, NORMAL_USER, searchTerm } from '../../types/user.types';
-
 import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
 
 const { ADMIN: Admin, ADD_EVENT, UPDATE_EVENT } = ROUTE_PATHS;
@@ -37,6 +30,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   role$: Observable<string | null> = this.store.select(selectLoginRole);
   allEvents: Event[] = [];
   displayedEvents: Event[] = [];
+  admin = admin;
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;

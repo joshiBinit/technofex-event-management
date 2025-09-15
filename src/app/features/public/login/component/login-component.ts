@@ -12,6 +12,7 @@ import {
   selectLoginLoading,
 } from '../store/login-component.selectors';
 import { AUTH_FORM_KEYS } from '../../constant/auth-form-keys.constant';
+import { hasError } from '../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-login-component',
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string = '/';
   route_path = ROUTE_PATHS;
   authFormKey = AUTH_FORM_KEYS;
-
+  hasError = hasError;
   showPassword = false;
 
   constructor(

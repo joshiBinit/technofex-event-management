@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Observable, of, catchError, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Event } from '../../shared/model/event.model';
+import { ROLE } from '../../features/private/events/types/user.types';
+import { ROUTE_PATHS } from '../constants/routes.constant';
 import { authenticate, signupUser } from '../utils/auth-utils';
-import { clearAuthData, getAuthData } from '../utils/local-storage-utils';
+import { getAuthData } from '../utils/local-storage-utils';
 import { loggedInUser } from '../utils/user.type';
 import {
   addEventToUser,
@@ -21,7 +23,6 @@ import { environment } from '../../../Environments/environment';
 export class AuthService {
   private localStorageKey = 'authData';
   private userUrl = ` ${environment.apiUrl}/users`;
-  private bookedEventUrl = `${environment.apiUrl}/events`;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -46,8 +47,8 @@ export class AuthService {
   }
 
   logout(): void {
-    clearAuthData();
-    this.router.navigate(['/login']);
+    localStorage.removeItem(this.localStorageKey);
+    this.router.navigate(['/', ROUTE_PATHS.LOGIN]);
   }
 
   isLoggedIn(): boolean {
@@ -58,7 +59,7 @@ export class AuthService {
     return getAuthData();
   }
 
-  getRole(): 'user' | 'admin' | null {
+  getRole(): ROLE | null {
     const authData = getAuthData();
     return authData ? authData.role : null;
   }

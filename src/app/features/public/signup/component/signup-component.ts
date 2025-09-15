@@ -11,6 +11,7 @@ import {
 import { FormService } from '../../../../core/services/form/form-service';
 import { ROUTE_PATHS } from '../../../../core/constants/routes.constant';
 import { AUTH_FORM_KEYS } from '../../constant/auth-form-keys.constant';
+import { hasError } from '../../../../shared/utils/form.util';
 
 @Component({
   selector: 'app-signup-component',
@@ -26,6 +27,7 @@ export class SignupComponent implements OnInit {
   showConfirmPassword = false;
   route_path = ROUTE_PATHS;
   authFormKey = AUTH_FORM_KEYS;
+  hasError = hasError;
   constructor(
     private formService: FormService,
     private store: Store<{ signup: SignupState }>
@@ -37,11 +39,13 @@ export class SignupComponent implements OnInit {
     this.loading$ = this.store.select(selectSignupLoading);
   }
 
-  // Password matching is now handled by CustomValidators.passwordsMatch()
-
   onSubmit(): void {
     if (this.signupForm.valid) {
-      const { username, email, password } = this.signupForm.value;
+      const email = this.signupForm.get(this.authFormKey.EMAIL)?.value;
+      const username = this.signupForm.get(this.authFormKey.USERNAME)?.value;
+      const password = this.signupForm.get(this.authFormKey.PASSWORD)?.value;
+      console.log(email, username, password);
+
       this.store.dispatch(SignupActions.signup({ username, email, password }));
       console.log('Signup attempt:', {
         username,

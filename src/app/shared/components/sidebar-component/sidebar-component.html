@@ -19,8 +19,9 @@
     <span>Events</span>
   </a>
 
+  @if(role$ |async; as role){
+
   <a
-    *ngIf="role$ | async as role"
     mat-list-item
     [routerLink]="[route_paths.ADMIN, route_paths.USER, route_paths.LIST]"
     routerLinkActive="bg-blue-100 text-blue-600 font-semibold rounded-lg"
@@ -30,4 +31,5 @@
     <mat-icon>people</mat-icon>
     <span>Users</span>
   </a>
+  }
 </mat-nav-list>

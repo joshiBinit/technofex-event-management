@@ -9,13 +9,11 @@ import { DialogService } from '../../../../../core/services/dialog/dialog.servic
 import * as EventsActions from '../../../events/store/events/event.action';
 import * as EventsSelectors from '../../../events/store/events/event.selector';
 import * as LocationsActions from '../../../../../shared/store/location/location.action';
-import * as LocationsSelectors from '../../../../../shared/store/location/location.selector';
 import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
-
-import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 import { hasError } from '../../../../../shared/utils/form.util';
 import { Location } from '../../../../../shared/model/event.model';
+import { selectAllLocations } from '../../../../../shared/store/location/location.selector';
 
 @Component({
   selector: 'app-update-event-component',
@@ -28,8 +26,8 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
   locations$: Observable<Location[]>;
   eventId!: string;
   eventFormKeys = EVENT_FORM_KEYS;
-  private destroy$ = new Subject<void>();
   hasError = hasError;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private store: Store,
@@ -37,7 +35,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private dialogService: DialogService
   ) {
-    this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    this.locations$ = this.store.select(selectAllLocations);
     this.eventForm = this.formService.buildNewEventForm();
   }
 

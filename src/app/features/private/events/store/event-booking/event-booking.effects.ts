@@ -6,7 +6,6 @@ import * as EventsActions from '../../store/events/event.action';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { SnackbarService } from '../../../../../shared/services/snackbar/snackbar-service';
 import { Store } from '@ngrx/store';
-
 @Injectable()
 export class EventBookingEffects {
   private actions$ = inject(Actions);
@@ -21,7 +20,6 @@ export class EventBookingEffects {
       mergeMap(({ event }) => {
         return this.authService.addBooking(event).pipe(
           map((result) => {
-            console.log('Booking result:', result);
             if (result === 'duplicate') {
               return BookingActions.bookEventFailure({
                 error: `${event.title} is already booked ❌`,

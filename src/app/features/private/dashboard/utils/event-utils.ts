@@ -78,14 +78,18 @@ export function updateEventPayload(
 ): Event {
   const totalTickets = formValue.totalTickets;
 
+  let formattedDate = '';
+  if (formValue.schedule.date) {
+    const dateObj = new Date(formValue.schedule.date);
+    formattedDate = dateObj.toISOString().split('T')[0];
+  }
+
   return {
     id: eventId,
     title: formValue.title,
     category: formValue.category,
     description: formValue.description,
-    date: formValue.schedule.date
-      ? formValue.schedule.date.toString().split('T')[0]
-      : '',
+    date: formattedDate,
     time: formValue.schedule.time,
     location: formValue.location,
     totalTickets,

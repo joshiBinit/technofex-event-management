@@ -78,8 +78,8 @@
     <mat-form-field class="w-full">
       <mat-label>Location</mat-label>
       <mat-select [formControlName]="eventFormKeys.LOCATION">
-        @for (loc of locations; track $index) {
-        <mat-option [value]="loc">{{ loc }}</mat-option>
+        @for (loc of (locations$|async); track $index) {
+        <mat-option [value]="loc.name">{{ loc.name }}</mat-option>
         }
       </mat-select>
       @if (hasError(eventForm,eventFormKeys.LOCATION,'required')) {

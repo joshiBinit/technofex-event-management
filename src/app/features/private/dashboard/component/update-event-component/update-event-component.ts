@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FormService } from '../../../../../core/services/form/form-service';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DialogService } from '../../../../../core/services/dialog/dialog.service';
 
 import * as EventsActions from '../../../events/store/events/event.action';
@@ -12,6 +12,8 @@ import * as LocationsActions from '../../../../../shared/store/location/location
 import { updateEventPayload, patchEventForm } from '../../utils/event-utils';
 import { EVENT_FORM_KEYS } from '../../constants/event-form-keys.constant';
 import { hasError } from '../../../../../shared/utils/form.util';
+import { Location } from '../../../../../shared/model/event.model';
+import { selectAllLocations } from '../../../../../shared/store/location/location.selector';
 
 @Component({
   selector: 'app-update-event-component',
@@ -21,7 +23,7 @@ import { hasError } from '../../../../../shared/utils/form.util';
 })
 export class UpdateEventComponent implements OnInit, OnDestroy {
   eventForm!: FormGroup;
-  locations: string[] = [];
+  locations$: Observable<Location[]>;
   eventId!: string;
   eventFormKeys = EVENT_FORM_KEYS;
   hasError = hasError;
@@ -33,7 +35,7 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private dialogService: DialogService
   ) {
-    // this.locations$ = this.store.select(LocationsSelectors.selectAllLocations);
+    this.locations$ = this.store.select(selectAllLocations);
     this.eventForm = this.formService.buildNewEventForm();
   }
 

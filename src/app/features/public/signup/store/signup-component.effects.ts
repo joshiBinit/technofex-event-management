@@ -5,14 +5,14 @@ import { of } from 'rxjs';
 import * as SignupActions from './signup-component.actions';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from './../../../../shared/services/snackbar/snackbar-service';
 
 @Injectable()
 export class SignupEffects {
   private actions$ = inject(Actions);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
+  private snackbarService = inject(SnackbarService);
 
   signup$ = createEffect(() =>
     this.actions$.pipe(
@@ -62,12 +62,10 @@ export class SignupEffects {
       this.actions$.pipe(
         ofType(SignupActions.signupSuccess),
         tap(() => {
-          this.snackBar.open('✅ Signup Successful! Please login.', 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
+          this.snackbarService.show(
+            '✅ Signup Successful! Please login.',
+            'success'
+          );
         })
       ),
     { dispatch: false }
@@ -78,12 +76,10 @@ export class SignupEffects {
       this.actions$.pipe(
         ofType(SignupActions.signupFailure),
         tap((action) => {
-          this.snackBar.open(`❌ Signup Failed: ${action.error}`, 'Close', {
-            duration: 3000,
-            panelClass: ['snackbar-error'],
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
+          this.snackbarService.show(
+            `❌ Signup Failed: ${action.error}`,
+            'error'
+          );
         })
       ),
     { dispatch: false }

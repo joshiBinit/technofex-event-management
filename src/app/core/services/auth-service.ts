@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   signup(user: User): Observable<any> {
-    return this.http.post<User>(`${this.userUrl}/users`, user).pipe(
+    return this.http.post<User>(`${this.userUrl}`, user).pipe(
       map((savedUser) => signupUser(savedUser)),
       catchError((error) => {
         console.error('Signup error:', error);

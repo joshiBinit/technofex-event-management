@@ -20,6 +20,7 @@ import { environment } from '../../../Environments/environment';
 })
 export class AuthService {
   private localStorageKey = 'authData';
+  private baseUrl = ` ${environment.apiUrl}`;
   private userUrl = ` ${environment.apiUrl}/users`;
   private bookedEventUrl = `${environment.apiUrl}/events`;
 
@@ -67,7 +68,7 @@ export class AuthService {
     const currentUser: any = this.getCurrentUser();
     if (!currentUser) return of(null);
 
-    return this.http.get<Event>(`${this.userUrl}/events/${event.id}`).pipe(
+    return this.http.get<Event>(`${this.baseUrl}/events/${event.id}`).pipe(
       switchMap((serverEvent) => {
         const status = canBookEvent(currentUser, serverEvent);
         if (status !== 'ok') return of(status);
@@ -77,12 +78,12 @@ export class AuthService {
         localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
 
         return this.http
-          .patch<Event>(`${this.userUrl}/events/${event.id}`, {
+          .patch<Event>(`${this.baseUrl}/events/${event.id}`, {
             availableTickets: updatedEvent.availableTickets,
           })
           .pipe(
             switchMap(() =>
-              this.http.patch<User>(`${this.userUrl}/users/${currentUser.id}`, {
+              this.http.patch<User>(`${this.baseUrl}/users/${currentUser.id}`, {
                 bookings: updatedUser.bookings,
               })
             ),
@@ -101,7 +102,7 @@ export class AuthService {
     const updatedUser = removeEventFromUser(currentUser, eventId);
     localStorage.setItem(this.localStorageKey, JSON.stringify(updatedUser));
     return this.http
-      .patch<User>(`${this.userUrl}/users/${currentUser.id}`, {
+      .patch<User>(`${this.baseUrl}/users/${currentUser.id}`, {
         bookings: updatedUser.bookings,
       })
       .pipe(

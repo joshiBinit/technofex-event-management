@@ -27,7 +27,9 @@ export class AuthService {
     private http: HttpClient,
     private libApiService: ApiService,
     @Inject(BASE_URL) private baseUrls: string
-  ) {}
+  ) {
+    // console.log(this.baseUrl);
+  }
   private localStorageKey = 'authData';
 
   private get userUrl(): string {

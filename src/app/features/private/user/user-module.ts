@@ -8,7 +8,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { EventBookingEffects } from '../events/store/event-booking/event-booking.effects';
 import { bookingReducer } from '../events/store/event-booking/event-booking.reducer';
 import { BookingDetailComponent } from './components/booking-detail-component/booking-detail-component';
-
+import {
+  EventLibraryModule,
+  EventLibrary,
+} from '@event-management/event-library';
 @NgModule({
   declarations: [UserDashboardComponent, BookingDetailComponent],
   imports: [
@@ -17,6 +20,8 @@ import { BookingDetailComponent } from './components/booking-detail-component/bo
     MaterialModule,
     StoreModule.forFeature('booking', bookingReducer),
     EffectsModule.forFeature([EventBookingEffects]),
+    EventLibraryModule,
+    EventLibrary,
   ],
 })
 export class UserModule {}

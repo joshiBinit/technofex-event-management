@@ -29,6 +29,7 @@
     "@angular/material": "^20.2.1",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@event-management/event-library": "file:public/assets/library/event-management-event-library-0.0.1.tgz",
     "@ngrx/effects": "^20.0.1",
     "@ngrx/store": "^20.0.1",
     "@ngrx/store-devtools": "^20.0.1",

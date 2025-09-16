@@ -10,7 +10,7 @@ import { ROUTE_PATHS } from '../../../../../core/constants/routes.constant';
   styleUrls: ['./booking-detail-component.scss'],
 })
 export class BookingDetailComponent implements OnInit {
-  eventDetail!: Event | null;
+  eventDetail?: Event;
   constructor(private route: ActivatedRoute) {}
   routePaths = ROUTE_PATHS;
   ngOnInit(): void {

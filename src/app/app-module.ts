@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { BASE_URL } from '@event-management/event-library';
 @NgModule({
   declarations: [App],
   imports: [
@@ -27,7 +28,11 @@ import { MatListModule } from '@angular/material/list';
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
   ],
-  providers: [provideBrowserGlobalErrorListeners(), provideStoreDevtools()],
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideStoreDevtools(),
+    { provide: BASE_URL, useValue: 'http://localhost:3000' },
+  ],
   bootstrap: [App],
 })
 export class AppModule {}

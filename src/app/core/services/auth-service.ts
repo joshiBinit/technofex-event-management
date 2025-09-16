@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { User } from '../../shared/model/user.model';
 import { Router } from '@angular/router';
 import { Observable, of, catchError, map, switchMap } from 'rxjs';
@@ -16,16 +16,26 @@ import {
   removeEventFromUser,
 } from '../utils/booking-utiils';
 import { environment } from '../../../Environments/environment';
+import { ApiService, BASE_URL } from '@event-management/event-library';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private libApiService: ApiService,
+    @Inject(BASE_URL) private baseUrls: string
+  ) {}
   private localStorageKey = 'authData';
-  private baseUrl = ` ${environment.apiUrl}`;
-  private userUrl = ` ${environment.apiUrl}/users`;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  private get userUrl(): string {
+    return this.libApiService.getUrl('users');
+  }
+  private get baseUrl(): string {
+    return this.baseUrls;
+  }
 
   login(user: loggedInUser): Observable<any> {
     return this.http.get<User[]>(`${this.userUrl}`).pipe(

@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { BASE_URL } from '@event-management/event-library';
+import { environment } from '../Environments/environment';
 @NgModule({
   declarations: [App],
   imports: [
@@ -31,7 +32,7 @@ import { BASE_URL } from '@event-management/event-library';
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideStoreDevtools(),
-    { provide: BASE_URL, useValue: 'http://localhost:3000' },
+    { provide: BASE_URL, useValue: environment.apiUrl },
   ],
   bootstrap: [App],
 })
